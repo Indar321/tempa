@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <title>DIGITAL.TRADE | Precision Architecture</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* ==========================================
+           1. CORE VARIABLES & BRUTALIST SETUP (INVERTED)
+           ========================================== */
+        :root {
+            --bg-color: #000000;
+            --text-color: #ffffff;
+            --muted-bg: #111111;
+            --font-heading: 'Space Grotesk', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+            --header-height: 80px;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        html, body { width: 100%; max-width: 100vw; overflow-x: hidden; scroll-behavior: smooth; background-color: var(--bg-color); color: var(--text-color); font-family: var(--font-body); line-height: 1.6; cursor: none; -webkit-tap-highlight-color: transparent; }
+        
+        body {
+            display: flex; flex-direction: column; min-height: 100vh;
+            background-image: linear-gradient(#222 1px, transparent 1px), linear-gradient(90deg, #222 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        body.no-scroll { overflow: hidden; }
+        
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-color); border-left: 2px solid var(--text-color); }
+        ::-webkit-scrollbar-thumb { background: var(--text-color); }
+
+        a { color: inherit; text-decoration: none; transition: var(--transition); cursor: none; }
+        ul { list-style: none; }
+        img { max-width: 100%; height: auto; display: block; object-fit: cover; filter: grayscale(100%) contrast(1.1); transition: filter 0.4s; }
+        img:hover { filter: grayscale(0%) contrast(1); }
+        button, input, textarea, select { font-family: var(--font-mono); cursor: none; background: none; border: none; outline: none; color: inherit; border-radius: 0; -webkit-appearance: none; }
+
+        .container { width: 100%; max-width: 1400px; margin: 0 auto; position: relative; padding: 0 5%; }
+        main { flex: 1 0 auto; width: 100%; }
+
+        /* ==========================================
+           2. ADVANCED CANVAS CURSOR & EFFECTS
+           ========================================== */
+        #cursor-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 999999; mix-blend-mode: difference; }
+        .custom-cursor-dot { position: fixed; width: 12px; height: 12px; background: var(--text-color); border-radius: 50%; transform: translate(-50%, -50%); pointer-events: none; z-index: 999999; mix-blend-mode: difference; transition: width 0.2s, height 0.2s, border-radius 0.2s; }
+        .custom-cursor-dot.active { width: 45px; height: 45px; border-radius: 0; }
+
+        .glitch-text { position: relative; display: inline-block; font-weight: 800; font-family: var(--font-heading);}
+        .glitch-text::before, .glitch-text::after { content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: inherit; opacity: 0; pointer-events: none; }
+        .glitch-text:hover::before { left: 3px; text-shadow: -2px 0 var(--text-color); background: var(--bg-color); animation: glitch-anim 0.2s infinite linear alternate-reverse; opacity: 1; z-index: -1; }
+        .glitch-text:hover::after { left: -3px; text-shadow: 2px 0 var(--text-color); background: var(--bg-color); animation: glitch-anim2 0.3s infinite linear alternate-reverse; opacity: 1; z-index: -1; }
+        
+        @keyframes glitch-anim { 0% { clip-path: inset(20% 0 80% 0); } 50% { clip-path: inset(60% 0 10% 0); } 100% { clip-path: inset(10% 0 50% 0); } }
+        @keyframes glitch-anim2 { 0% { clip-path: inset(10% 0 60% 0); } 50% { clip-path: inset(30% 0 20% 0); } 100% { clip-path: inset(80% 0 5% 0); } }
+
+        /* BLINK EFFECT */
+        @keyframes terminalBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        .blink { animation: terminalBlink 1.2s step-end infinite; }
+
+        .toast-container { position: fixed; bottom: 30px; right: 30px; z-index: 99999; display: flex; flex-direction: column; gap: 15px; pointer-events: none; align-items: flex-end; }
+        .toast { background: var(--text-color); color: var(--bg-color); padding: 15px 25px; font-family: var(--font-mono); font-weight: 800; text-transform: uppercase; font-size: 0.9rem; border: 3px solid var(--bg-color); box-shadow: -6px 6px 0 var(--text-color); transform: translateX(150%); transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1); }
+        .toast.show { transform: translateX(0); }
+
+        /* ==========================================
+           3. DESKTOP HEADER
+           ========================================== */
+        header { position: fixed; top: 0; left: 0; width: 100%; height: var(--header-height); display: flex; justify-content: center; align-items: center; z-index: 90000; background: var(--bg-color); border-bottom: 4px solid var(--text-color); transition: var(--transition); }
+        .header-inner { display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 1400px; padding: 0 5%;}
+        
+        .logo a { font-family: var(--font-heading); font-size: 2rem; font-weight: 800; letter-spacing: -2px; text-transform: uppercase; display: flex; align-items: center; }
+        
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a { font-family: var(--font-mono); font-size: 1.1rem; font-weight: 800; text-transform: uppercase; position: relative; padding: 5px 0; color: var(--text-color); }
+        .nav-links a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 4px; background: var(--text-color); transform: scaleX(0); transform-origin: right; transition: transform 0.3s cubic-bezier(0.19, 1, 0.22, 1); }
+        .nav-links a:hover::after, .nav-links a.active-link::after { transform: scaleX(1); transform-origin: left; }
+
+        .header-actions { display: flex; gap: 20px; align-items: center; }
+        
+        /* BRUTALIST MOBILE TOGGLE */
+        .mobile-toggle { display: none; width: 42px; height: 42px; border: 3px solid var(--text-color); background: var(--bg-color); position: relative; z-index: 90001; transition: var(--transition); box-shadow: 4px 4px 0 var(--text-color); }
+        .mobile-toggle:active { transform: translate(4px, 4px); box-shadow: 0 0 0 transparent; }
+        .mobile-toggle span { position: absolute; left: 8px; height: 3px; background: var(--text-color); transition: var(--transition); pointer-events: none; width: 20px; }
+        .mobile-toggle span:nth-child(1) { top: 12px; }
+        .mobile-toggle span:nth-child(2) { top: 22px; }
+        .mobile-toggle.active { background: var(--text-color); }
+        .mobile-toggle.active span { background: var(--bg-color); }
+        .mobile-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(4px, 4px); }
+        .mobile-toggle.active span:nth-child(2) { transform: rotate(-45deg) translate(3px, -3px); }
+
+        .nav-overlay-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.9); backdrop-filter: blur(5px); z-index: 89999; opacity: 0; visibility: hidden; transition: var(--transition); }
+        body.nav-active .nav-overlay-bg { opacity: 1; visibility: visible; }
+
+        /* ==========================================
+           4. GLOBAL COMPONENTS & LAYOUTS
+           ========================================== */
+        .view-section { display: none; min-height: 100vh; padding-top: var(--header-height); opacity: 0; width: 100%; }
+        .view-section.active { display: block; opacity: 1; animation: smoothFadeUp 0.6s cubic-bezier(0.19, 1, 0.22, 1) forwards; }
+        #view-home.active { padding-top: var(--header-height); } 
+        @keyframes smoothFadeUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
+
+        .section-padding { padding: 80px 0; width: 100%; position: relative; }
+        @media(min-width: 1024px) { .section-padding { padding: 120px 0; } }
+        
+        .section-header { margin-bottom: 50px; display: flex; flex-direction: column; gap: 15px; border-bottom: 6px solid var(--text-color); padding-bottom: 20px;}
+        .section-header h2 { font-family: var(--font-heading); font-size: clamp(2.5rem, 8vw, 5rem); font-weight: 800; text-transform: uppercase; line-height: 1; letter-spacing: -2px; margin: 0;}
+        .section-header h2 span { background: var(--text-color); color: var(--bg-color); padding: 0 10px; }
+        .section-header p { font-family: var(--font-mono); font-size: 1.1rem; font-weight: 800; text-transform: uppercase; }
+        .text-body { font-size: 1.1rem; color: #ddd; margin-bottom: 25px; line-height: 1.7; }
+
+        /* Brutalist Buttons */
+        .magnetic-wrap { display: inline-block; position: relative; }
+        .btn-primary { display: inline-flex; justify-content: center; align-items: center; padding: 20px 35px; background: var(--text-color); color: var(--bg-color); font-family: var(--font-mono); font-size: 1.1rem; font-weight: 800; text-transform: uppercase; border: 4px solid var(--text-color); box-shadow: 6px 6px 0 var(--muted-bg); transition: var(--transition); cursor: pointer; }
+        .btn-primary:hover { transform: translate(4px, 4px); box-shadow: 0 0 0 transparent; background: var(--bg-color); color: var(--text-color); border-color: var(--text-color); }
+        
+        .btn-outline { display: inline-flex; justify-content: center; align-items: center; padding: 20px 35px; background: var(--bg-color); color: var(--text-color); font-family: var(--font-mono); font-size: 1.1rem; font-weight: 800; text-transform: uppercase; border: 4px solid var(--text-color); box-shadow: 6px 6px 0 var(--text-color); transition: var(--transition); cursor: pointer; }
+        .btn-outline:hover { transform: translate(4px, 4px); box-shadow: 0 0 0 transparent; background: var(--text-color); color: var(--bg-color); }
+
+        /* Forms */
+        .form-group { margin-bottom: 25px; width: 100%; }
+        .form-label { display: block; text-transform: uppercase; font-family: var(--font-mono); font-size: 0.9rem; font-weight: 800; margin-bottom: 10px; color: #ccc; }
+        .form-input { width: 100%; padding: 18px; background: var(--bg-color); border: 3px solid var(--text-color); color: var(--text-color); font-size: 1rem; font-family: var(--font-body); transition: var(--transition); box-shadow: 4px 4px 0 var(--muted-bg); border-radius: 0; }
+        .form-input:focus { box-shadow: 6px 6px 0 var(--text-color); outline: none; }
+
+        /* Grids */
+        .grid-2 { display: grid; grid-template-columns: 1fr; gap: 40px; width: 100%; }
+        @media(min-width: 768px) { .grid-2 { grid-template-columns: 1fr 1fr; gap: 50px; } } 
+        
+        .grid-3 { display: grid; grid-template-columns: 1fr; gap: 30px; width: 100%; }
+        @media(min-width: 768px) { .grid-3 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px;} } 
+        
+        .grid-4 { display: grid; grid-template-columns: 1fr; gap: 20px; width: 100%; }
+        @media(min-width: 768px) { .grid-4 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; } }
+
+        /* Accordion / Interactive List */
+        .interactive-list { width: 100%; }
+        .interactive-item { border: 4px solid var(--text-color); margin-bottom: 15px; background: var(--bg-color); box-shadow: 6px 6px 0 var(--text-color); transition: var(--transition); position: relative;}
+        .interactive-header { width: 100%; text-align: left; padding: 25px; font-family: var(--font-heading); font-weight: 800; font-size: 1.2rem; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; cursor: pointer; color: var(--text-color); background: transparent; z-index: 2; position: relative;}
+        .interactive-header:hover { background: var(--text-color); color: var(--bg-color); padding-left: 30px;}
+        .interactive-icon { font-size: 1.5rem; font-weight: 800; font-family: var(--font-mono); transition: transform 0.4s; }
+        .interactive-content { max-height: 0; overflow: hidden; padding: 0 25px; transition: max-height 0.4s ease; background: var(--muted-bg); }
+        .interactive-item.active { box-shadow: 0 0 0 transparent; transform: translate(6px, 6px); }
+        .interactive-item.active .interactive-content { max-height: 800px; padding-bottom: 25px; border-top: 4px dashed var(--text-color); padding-top: 25px; }
+
+        /* --- UI CARDS (Process, Stats, Work) --- */
+        .process-box, .stat-box { border: 5px solid var(--text-color); padding: 40px; background: var(--bg-color); transition: var(--transition); width: 100%; box-shadow: 8px 8px 0 var(--text-color); }
+        .process-box:hover, .stat-box:hover { background: var(--text-color); color: var(--bg-color); transform: translateY(-4px); box-shadow: 12px 12px 0 var(--text-color); }
+        .process-box:hover h3, .process-box:hover p, .process-box:hover .text-body, .stat-box:hover .stat-number, .stat-box:hover .stat-label { color: var(--bg-color) !important; }
+        .process-num { font-size: 2.5rem; font-weight: 800; border-bottom: 3px solid var(--text-color); display: inline-block; padding-bottom: 10px; margin-bottom: 20px; font-family: var(--font-mono); }
+        .process-box:hover .process-num { border-color: var(--bg-color); color: var(--bg-color);}
+
+        .stat-number { font-size: clamp(2.5rem, 5vw, 4rem); font-family: var(--font-heading); font-weight: 800; line-height: 1; }
+        .stat-label { font-size: 1rem; font-family: var(--font-mono); text-transform: uppercase; margin-top: 10px; font-weight: 800; border-top: 2px dashed var(--text-color); padding-top: 10px;}
+
+        /* --- HERO VIEW --- */
+        .hero { min-height: 80vh; display: flex; align-items: center; border-bottom: 6px solid var(--text-color); width: 100%; padding: 5% 0;}
+        .hero-layout { display: grid; grid-template-columns: 1fr; gap: 40px; align-items: center; }
+        @media(min-width: 1024px) { .hero-layout { grid-template-columns: 1.2fr 1fr; gap: 60px; } }
+        
+        .hero-content { background: var(--bg-color); padding: 40px; border: 6px solid var(--text-color); box-shadow: 15px 15px 0 var(--text-color); position: relative; z-index: 2;}
+        .hero-tagline { font-family: var(--font-mono); font-size: 0.9rem; font-weight: 800; text-transform: uppercase; padding: 8px 15px; border: 3px solid var(--text-color); display: inline-block; margin-bottom: 30px; box-shadow: 4px 4px 0 var(--muted-bg); }
+        .hero h1 { font-family: var(--font-heading); font-size: clamp(3rem, 7vw, 6rem); font-weight: 800; line-height: 0.9; margin-bottom: 30px; text-transform: uppercase; letter-spacing: -3px; }
+        .hero p { font-size: 1.2rem; font-weight: 600; max-width: 500px; color: #ddd; margin-bottom: 40px; border-left: 4px solid var(--text-color); padding-left: 20px; }
+
+        .hero-img-box { position: relative; border: 6px solid var(--text-color); box-shadow: 15px 15px 0 var(--text-color); height: 100%; min-height: 400px; overflow: hidden; background: var(--text-color); }
+        .hero-img-box img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.8;}
+        .hero-img-box:hover img { transform: scale(1.05); opacity: 1; }
+
+        /* --- MARQUEE --- */
+        .marquee-container { width: 100%; overflow: hidden; padding: 40px 0; display: block; box-sizing: border-box; }
+        .marquee { background: var(--text-color); color: var(--bg-color); padding: 20px 0; white-space: nowrap; border-top: 4px solid var(--text-color); border-bottom: 4px solid var(--text-color); transform: rotate(-1deg) scale(1.05); box-shadow: 0 10px 0 rgba(255,255,255,0.15); width: 100%; }
+        .marquee-content { display: inline-block; font-family: var(--font-mono); font-size: 1.5rem; font-weight: 800; animation: scrollMarquee 20s linear infinite; text-transform: uppercase; }
+        .marquee-content span { color: var(--bg-color); padding: 0 20px; }
+        @keyframes scrollMarquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* --- WORK GRID --- */
+        .work-card { display: flex; flex-direction: column; border: 5px solid var(--text-color); background: var(--bg-color); box-shadow: 8px 8px 0 var(--text-color); transition: var(--transition); cursor: pointer; overflow: hidden; }
+        .work-img-wrapper { width: 100%; height: 350px; border-bottom: 4px solid var(--text-color); background: var(--text-color); overflow: hidden; }
+        .work-card:hover { transform: translate(-6px, -6px); box-shadow: 14px 14px 0 var(--text-color); background: var(--text-color); color: var(--bg-color);}
+        .work-card:hover .work-img { opacity: 0.8; }
+        
+        .work-info { padding: 25px; transition: var(--transition); }
+        .work-client { font-family: var(--font-heading); font-size: 1.8rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px; line-height: 1.1; letter-spacing: -1px;}
+        .work-card:hover .work-client, .work-card:hover .work-tags { color: var(--bg-color); }
+        .work-tags { font-family: var(--font-mono); font-size: 0.9rem; font-weight: 800; padding: 5px 10px; border: 2px solid var(--text-color); display: inline-block; background: var(--bg-color); color: var(--text-color); }
+        .work-card:hover .work-tags { border-color: var(--bg-color); }
+
+        .featured-study { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr; border: 6px solid var(--text-color); background: var(--bg-color); box-shadow: 12px 12px 0 var(--text-color); transition: var(--transition); }
+        @media(min-width: 1024px) { .featured-study { grid-template-columns: 1.5fr 1fr; } }
+        .featured-study:hover { transform: translate(-6px, -6px); box-shadow: 18px 18px 0 var(--text-color); }
+        .fs-img { width: 100%; height: 100%; object-fit: cover; border-bottom: 4px solid var(--text-color); min-height: 350px; }
+        @media(min-width: 1024px) { .fs-img { border-bottom: none; border-right: 4px solid var(--text-color); } }
+        .fs-content { padding: 40px; display: flex; flex-direction: column; justify-content: center; }
+
+        /* --- PRICING CARDS --- */
+        .tier-card { border: 5px solid var(--text-color); background: var(--bg-color); padding: 40px; display: flex; flex-direction: column; transition: var(--transition); box-shadow: 8px 8px 0 var(--text-color); width: 100%; }
+        .tier-card:hover { transform: translate(-4px, -4px); box-shadow: 12px 12px 0 var(--text-color); background: var(--text-color); color: var(--bg-color);}
+        .tier-card.featured { background: var(--text-color); color: var(--bg-color); box-shadow: 8px 8px 0 var(--muted-bg); }
+        .tier-card.featured:hover { background: var(--bg-color); color: var(--text-color); box-shadow: 12px 12px 0 var(--text-color); }
+        
+        .tier-name { font-family: var(--font-mono); font-size: 1.2rem; font-weight: 800; text-transform: uppercase; margin-bottom: 20px; border-bottom: 3px dashed var(--text-color); padding-bottom: 10px; transition: var(--transition); }
+        .tier-card:hover .tier-name { border-color: var(--bg-color); }
+        .tier-card.featured .tier-name { border-color: var(--bg-color); }
+        .tier-card.featured:hover .tier-name { border-color: var(--text-color); }
+
+        .tier-price { font-family: var(--font-heading); font-size: 3.5rem; font-weight: 800; line-height: 1; margin-bottom: 15px; letter-spacing: -2px;}
+        .tier-price span { font-family: var(--font-mono); font-size: 1.1rem; font-weight: 800; text-transform: uppercase; }
+        .tier-desc { font-size: 1rem; font-weight: 600; margin-bottom: 30px; }
+        
+        .tier-list { flex-grow: 1; margin-bottom: 40px; font-weight: 600; font-size: 0.95rem; line-height: 1.6;}
+        .tier-list li { margin-bottom: 15px; display: flex; align-items: flex-start; gap: 12px; }
+        .tier-list li::before { content: '>'; font-family: var(--font-mono); font-weight: 800; }
+
+        /* --- TERMINAL A LA CARTE --- */
+        .terminal-block { background: var(--bg-color); border: 5px solid var(--text-color); padding: 40px; font-family: var(--font-mono); width: 100%; box-shadow: 10px 10px 0 var(--text-color); transition: var(--transition); }
+        .terminal-block:hover { transform: translate(-4px,-4px); box-shadow: 14px 14px 0 var(--text-color); }
+        .terminal-header { display: flex; justify-content: space-between; border-bottom: 4px solid var(--text-color); padding-bottom: 20px; margin-bottom: 30px; font-size: 1.1rem; font-weight: 800; text-transform: uppercase; }
+        .terminal-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 20px; border-bottom: 2px dashed var(--text-color); padding-bottom: 10px; }
+        .t-service { font-size: 1rem; font-weight: 800; text-transform: uppercase; }
+        .t-price { font-size: 1.1rem; font-weight: 800; background: var(--text-color); color: var(--bg-color); padding: 2px 8px; }
+
+        /* --- ABOUT & CONTACT LAYOUTS --- */
+        .split-layout { display: grid; grid-template-columns: 1fr; border: 6px solid var(--text-color); width: 100%; box-shadow: 12px 12px 0 var(--text-color); background: var(--bg-color);}
+        @media(min-width: 1024px) { .split-layout { grid-template-columns: 1.2fr 1fr; } }
+        .split-main { padding: 40px 5%; border-bottom: 6px solid var(--text-color); }
+        @media(min-width: 1024px) { .split-main { padding: 60px; border-bottom: none; border-right: 6px solid var(--text-color); } }
+        .split-sidebar { display: flex; flex-direction: column; background: var(--muted-bg); }
+        .sidebar-block { padding: 40px 5%; border-bottom: 4px solid var(--text-color); flex-grow: 1; display: flex; flex-direction: column; justify-content: center; transition: var(--transition); }
+        @media(min-width: 1024px) { .sidebar-block { padding: 50px; } }
+        .sidebar-block:last-child { border-bottom: none; }
+        .sidebar-block:hover { background: var(--text-color); color: var(--bg-color); }
+        .sidebar-block:hover h4, .sidebar-block:hover p, .sidebar-block:hover a { color: var(--bg-color); }
+
+        /* --- FOOTER FIXED ALIGNMENT --- */
+        footer { background: var(--bg-color); color: var(--text-color); padding: 60px 5% 40px; width: 100vw; overflow-x: hidden; box-sizing: border-box; margin-top: auto;}
+        .footer-grid { display: flex; flex-direction: column; gap: 40px; margin-bottom: 60px; width: 100%; max-width: 1400px; margin: 0 auto 60px auto;}
+        @media(min-width: 768px) { .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; } }
+
+        .footer-brand h3 { font-family: var(--font-heading); font-size: 2.5rem; font-weight: 800; margin-bottom: 20px; text-transform: uppercase; letter-spacing: -2px; }
+        .footer-brand p { font-family: var(--font-body); font-size: 0.95rem; font-weight: 500; color: #ccc; margin-bottom: 40px; line-height: 1.6; max-width: 400px; }
+        
+        .footer-links h4 { font-family: var(--font-mono); font-size: 1.1rem; font-weight: 800; margin-bottom: 25px; text-transform: uppercase; color: var(--text-color); letter-spacing: 1px; }
+        .footer-links ul li { margin-bottom: 12px; }
+        .footer-links ul li a { font-family: var(--font-mono); font-size: 0.95rem; font-weight: 800; color: #aaa; transition: color 0.3s; cursor: pointer; text-transform: uppercase; }
+        .footer-links ul li a:hover { color: var(--text-color); }
+
+        .footer-bottom { border-top: 1px solid #333; padding-top: 25px; display: flex; flex-direction: column; gap: 15px; font-family: var(--font-mono); font-size: 0.8rem; font-weight: 800; text-transform: uppercase; color: #666; width: 100%; max-width: 1400px; margin: 0 auto;}
+        @media(min-width: 768px) { .footer-bottom { flex-direction: row; justify-content: space-between; align-items: center; } }
+
+        /* --- MOBILE SIDEBAR --- */
+        @media (max-width: 768px) {
+            .mobile-toggle { display: block; }
+            .header-actions .btn-outline { display: none; }
+            
+            .nav-links { position: fixed; top: 0; left: -100%; width: 85vw; max-width: 400px; height: 100vh; background: var(--bg-color); border-right: 6px solid var(--text-color); flex-direction: column; padding: 100px 30px 40px 30px; z-index: 90000; transition: left 0.4s cubic-bezier(0.19, 1, 0.22, 1); box-shadow: 15px 0 0 rgba(255,255,255,0.1); overflow-y: auto;}
+            .nav-links.active { left: 0; }
+            
+            .nav-links a { 
+                font-family: var(--font-heading); font-size: 2rem; width: 100%; border-bottom: 3px solid var(--muted-bg); padding: 20px 0; 
+                color: var(--text-color); transition: var(--transition);
+            }
+            .nav-links a::after { display: none !important; } 
+            .nav-links a:hover, .nav-links a.active-link { padding-left: 15px; border-color: var(--text-color); }
+            
+            .mobile-only-link { background: var(--text-color); color: var(--bg-color) !important; text-align: center; padding: 20px !important; margin-top: 20px; font-family: var(--font-mono) !important; font-size: 1.2rem !important; }
+        }
+        @media (min-width: 769px) { .mobile-only-link { display: none !important; } }
+
+    </style>
+</head>
+<body>
+
+    <canvas id="cursor-canvas"></canvas>
+    <div class="custom-cursor-dot" id="cursor-dot"></div>
+    
+    <div class="toast-container" id="toast-container"></div>
+    <div class="nav-overlay-bg" id="nav-overlay-bg"></div>
+
+    <header id="header">
+        <div class="header-inner">
+            <div class="logo magnetic-wrap">
+                <a href="#home" class="nav-trigger magnetic" data-target="view-home">DIGITAL<span class="blink">_</span>TRADE</a>
+            </div>
+            
+            <nav class="nav-links" id="nav-links">
+                <a href="#home" class="nav-trigger scrambler active-link" data-target="view-home">Home</a>
+                <a href="#services" class="nav-trigger scrambler" data-target="view-services">Services</a>
+                <a href="#work" class="nav-trigger scrambler" data-target="view-work">Work</a>
+                <a href="#pricing" class="nav-trigger scrambler" data-target="view-pricing">Pricing</a>
+                <a href="#shop" class="nav-trigger scrambler" data-target="view-shop">Shop</a>
+                <a href="#about" class="nav-trigger scrambler" data-target="view-about">Ethos</a>
+                <a href="#faq" class="nav-trigger scrambler" data-target="view-faq">FAQ</a>
+                <a href="#contact" class="nav-trigger scrambler mobile-only-link" data-target="view-contact">Start Project</a>
+            </nav>
+            
+            <div class="header-actions">
+                <div class="magnetic-wrap">
+                    <button class="btn-outline nav-trigger magnetic scrambler" data-target="view-contact">START PROJECT</button>
+                </div>
+                <button class="mobile-toggle magnetic" id="mobile-toggle" aria-label="Toggle Mobile Menu">
+                    <span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main id="main-content">
+        
+        <section id="view-home" class="view-section active">
+            
+            <section class="hero container">
+                <div class="hero-layout">
+                    <div class="hero-content">
+                        <span class="hero-tagline scrambler">System Status: Active</span>
+                        <h1 class="glitch-text" data-text="PRECISION ARCHITECTURE">PRECISION<br>ARCHITECTURE</h1>
+                        <p>We engineer brand experiences. From pixel-perfect website design to structural graphic identities, we build aesthetics that convert.</p>
+                        <div class="magnetic-wrap" style="margin-top: 10px;">
+                            <button class="btn-primary nav-trigger magnetic scrambler" data-target="view-work">EXPLORE ARCHIVE</button>
+                        </div>
+                    </div>
+                    <div class="hero-img-box magnetic-wrap">
+                        <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?q=80&w=2000&auto=format&fit=crop" class="magnetic" alt="Digital Trade Concept">
+                    </div>
+                </div>
+            </section>
+
+            <div class="marquee-container">
+                <div class="marquee">
+                    <div class="marquee-content">
+                        Web Design <span>//</span> Graphic Systems <span>//</span> E-Commerce Architecture <span>//</span> Brand Identity <span>//</span> UI/UX Layouts <span>//</span> Web Design <span>//</span> Graphic Systems <span>//</span> E-Commerce Architecture <span>//</span> Brand Identity <span>//</span> UI/UX Layouts <span>//</span>
+                    </div>
+                </div>
+            </div>
+
+            <section class="section-padding">
+                <div class="container">
+                    <div class="section-header">
+                        <h2 class="glitch-text" data-text="THE METHODOLOGY">THE <span>METHODOLOGY</span></h2>
+                        <p>How we deploy digital infrastructure from concept to launch.</p>
+                    </div>
+                    <div class="grid-3">
+                        <div class="process-box">
+                            <div class="process-num">01</div>
+                            <h3 style="font-family: var(--font-heading); font-size: 1.5rem; text-transform: uppercase; margin-bottom: 15px; font-weight: 800;">Discovery</h3>
+                            <p class="text-body">We analyze your market, competitors, and structural requirements to blueprint a strategy that guarantees conversion.</p>
+                        </div>
+                        <div class="process-box">
+                            <div class="process-num">02</div>
+                            <h3 style="font-family: var(--font-heading); font-size: 1.5rem; text-transform: uppercase; margin-bottom: 15px; font-weight: 800;">Architecture</h3>
+                            <p class="text-body">Our team develops wireframes, vector logos, and design systems, ensuring perfect visual hierarchy across all devices.</p>
+                        </div>
+                        <div class="process-box">
+                            <div class="process-num">03</div>
+                            <h3 style="font-family: var(--font-heading); font-size: 1.5rem; text-transform: uppercase; margin-bottom: 15px; font-weight: 800;">Deployment</h3>
+                            <p class="text-body">We push the code live. Integrating Shopify, optimized graphics, and analytics to track your new digital ecosystem.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section-padding" style="padding-top: 0;">
+                <div class="container">
+                    <div class="section-header">
+                        <h2 class="glitch-text" data-text="CLIENT NETWORK">CLIENT <span>NETWORK</span></h2>
+                        <p>A global roster of brands running on our framework.</p>
+                    </div>
+                    <div class="grid-4">
+                        <div class="stat-box" style="padding: 25px; text-align: center;"><h3 class="scrambler" style="font-family: var(--font-mono); font-size: 1.2rem; font-weight: 800; text-transform: uppercase;">Virox Apparel</h3></div>
+                        <div class="stat-box" style="padding: 25px; text-align: center;"><h3 class="scrambler" style="font-family: var(--font-mono); font-size: 1.2rem; font-weight: 800; text-transform: uppercase;">Athrex Energy</h3></div>
+                        <div class="stat-box" style="padding: 25px; text-align: center;"><h3 class="scrambler" style="font-family: var(--font-mono); font-size: 1.2rem; font-weight: 800; text-transform: uppercase;">Nirvaan Store</h3></div>
+                        <div class="stat-box" style="padding: 25px; text-align: center;"><h3 class="scrambler" style="font-family: var(--font-mono); font-size: 1.2rem; font-weight: 800; text-transform: uppercase;">Apparel Vault</h3></div>
+                    </div>
+                </div>
+            </section>
+
+            <div style="width: 100%; border-top: 6px solid var(--text-color); border-bottom: 6px solid var(--text-color); background: var(--muted-bg);">
+                <div class="container">
+                    <div class="grid-4" style="gap: 0;">
+                        <div class="stat-box" style="border: none; border-right: 4px dashed var(--text-color); box-shadow: none; background: transparent; padding: 60px 20px;"><div class="stat-number glitch-text" data-text="200+">200+</div><div class="stat-label">Projects Deployed</div></div>
+                        <div class="stat-box" style="border: none; border-right: 4px dashed var(--text-color); box-shadow: none; background: transparent; padding: 60px 20px;"><div class="stat-number glitch-text" data-text="100%">100%</div><div class="stat-label">Bespoke Design</div></div>
+                        <div class="stat-box" style="border: none; border-right: 4px dashed var(--text-color); box-shadow: none; background: transparent; padding: 60px 20px;"><div class="stat-number glitch-text" data-text="Global">Global</div><div class="stat-label">Client Roster</div></div>
+                        <div class="stat-box" style="border: none; box-shadow: none; background: transparent; padding: 60px 20px;"><div class="stat-number glitch-text" data-text="24/7">24/7</div><div class="stat-label">Creative Support</div></div>
+                    </div>
+                </div>
+            </div>
+
+            <section class="section-padding">
+                <div class="container">
+                    <div class="grid-2">
+                        <div>
+                            <h2 style="font-family: var(--font-heading); font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800; text-transform: uppercase; margin-bottom: 30px; line-height: 1; letter-spacing: -2px;">Constructing digital dominance.</h2>
+                            <p class="text-body">At Digital Trade, we don't just create images; we build structural visual systems. Founded by Indrajeet Pisda and headquartered in Teknaar Chowk, Awarbhata Dantewada, our studio bridges the gap between raw creativity and engineered functionality.</p>
+                            <p class="text-body" style="font-weight: 700; border-left: 4px solid var(--text-color); padding-left: 15px;">Clutter kills conversion. We strip away the unnecessary to deploy high-performance websites and striking graphic identities that scale brands globally.</p>
+                            <div class="magnetic-wrap" style="margin-top: 30px;">
+                                <button class="btn-outline nav-trigger magnetic scrambler" data-target="view-about">READ MANIFESTO</button>
+                            </div>
+                        </div>
+                        <div style="border: 6px solid var(--text-color); box-shadow: 15px 15px 0 var(--text-color); height: 100%; min-height: 400px; overflow: hidden; background: var(--text-color);">
+                            <img src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=2070&auto=format&fit=crop" style="width: 100%; height: 100%; object-fit: cover;" alt="Studio Workspace">
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <section id="view-services" class="view-section">
+            <div class="section-padding">
+                <div class="container">
+                    <div class="section-header">
+                        <h2 class="glitch-text" data-text="CORE INFRASTRUCTURE">CORE <span>INFRASTRUCTURE</span></h2>
+                        <p>Our studio specializes in the structural execution of visual identities.</p>
+                    </div>
+                    
+                    <div class="grid-3">
+                        <div class="process-box">
+                            <h3 style="font-family: var(--font-heading); font-size: 1.6rem; text-transform: uppercase; margin-bottom: 15px; font-weight: 800; border-bottom: 3px solid var(--text-color); padding-bottom: 10px;">Web Architecture</h3>
+                            <p class="text-body">High-performance, responsive websites built with clean code and intuitive user experiences. We specialize in custom CMS integration, specifically Shopify and Blogger.</p>
+                            <ul style="border-top: 3px dashed var(--text-color); padding-top: 20px; margin-top: auto; font-family: var(--font-mono); font-weight: 800; font-size: 0.9rem;">
+                                <li style="margin-bottom: 10px;">> UI/UX Wireframing</li>
+                                <li style="margin-bottom: 10px;">> Front-End Dev</li>
+                                <li style="margin-bottom: 10px;">> Shopify Stores</li>
+                            </ul>
+                        </div>
+                        <div class="process-box">
+                            <h3 style="font-family: var(--font-heading); font-size: 1.6rem; text-transform: uppercase; margin-bottom: 15px; font-weight: 800; border-bottom: 3px solid var(--text-color); padding-bottom: 10px;">Graphic Systems</h3>
+                            <p class="text-body">Striking visual assets engineered for digital platforms and physical print media. We create everything from web banners to custom T-shirt print layouts optimized for DTG.</p>
+                            <ul style="border-top: 3px dashed var(--text-color); padding-top: 20px; margin-top: auto; font-family: var(--font-mono); font-weight: 800; font-size: 0.9rem;">
+                                <li style="margin-bottom: 10px;">> Apparel Graphics</li>
+                                <li style="margin-bottom: 10px;">> Marketing Banners</li>
+                                <li style="margin-bottom: 10px;">> Print Layouts</li>
+                            </ul>
+                        </div>
+                        <div class="process-box">
+                            <h3 style="font-family: var(--font-heading); font-size: 1.6rem; text-transform: uppercase; margin-bottom: 15px; font-weight: 800; border-bottom: 3px solid var(--text-color); padding-bottom: 10px;">Brand Identity</h3>
+                            <p class="text-body">Comprehensive branding strategies that establish market presence. We forge logos, define typography structures, and create brand guidelines.</p>
+                            <ul style="border-top: 3px dashed var(--text-color); padding-top: 20px; margin-top: auto; font-family: var(--font-mono); font-weight: 800; font-size: 0.9rem;">
+                                <li style="margin-bottom: 10px;">> Logo Design</li>
+                                <li style="margin-bottom: 10px;">> Brand Guidelines</li>
+                                <li style="margin-bottom: 10px;">> Color Systems</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="section-header" style="margin-top: 100px;">
+                        <h2 class="glitch-text" data-text="OPERATIONAL WORKFLOW">OPERATIONAL <span>WORKFLOW</span></h2>
+                        <p>Our systematic approach to service delivery.</p>
+                    </div>
+                    <div class="interactive-list">
+                        <div class="interactive-item">
+                            <button class="interactive-header">Phase 1: Blueprint <span class="interactive-icon">+</span></button>
+                            <div class="interactive-content"><p class="text-body" style="padding-top: 20px; font-weight: 700;">We gather your raw data, business goals, and asset constraints. This phase establishes the exact timeline and structural requirements of the deliverables.</p></div>
+                        </div>
+                        <div class="interactive-item">
+                            <button class="interactive-header">Phase 2: Construction <span class="interactive-icon">+</span></button>
+                            <div class="interactive-content"><p class="text-body" style="padding-top: 20px; font-weight: 700;">Our architects begin drafting code and vectorizing layouts. You will receive milestone updates and staging links to review the progress in real-time.</p></div>
+                        </div>
+                        <div class="interactive-item">
+                            <button class="interactive-header">Phase 3: Handover <span class="interactive-icon">+</span></button>
+                            <div class="interactive-content"><p class="text-body" style="padding-top: 20px; font-weight: 700;">Final quality assurance. Once approved, the master files, root access, and operational documentation are transferred to your secure servers.</p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-work" class="view-section">
+            <div class="section-padding">
+                <div class="container">
+                    <div class="section-header">
+                        <h2 class="glitch-text" data-text="THE ARCHIVE">THE <span>ARCHIVE</span></h2>
+                        <p>An indexed log of deployed visual identities and graphic systems.</p>
+                    </div>
+                    
+                    <div class="grid-2">
+                        <div class="featured-study" onclick="navigateTo('view-contact')" style="cursor: pointer;">
+                            <img src="https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=1500&auto=format&fit=crop" class="fs-img" alt="Virox Case Study">
+                            <div class="fs-content">
+                                <span class="scrambler" style="font-family: var(--font-mono); font-weight: 800; border: 3px solid var(--text-color); padding: 5px 10px; display: inline-block; margin-bottom: 20px; width: fit-content; font-size: 0.8rem; box-shadow: 4px 4px 0 var(--muted-bg);">FEATURED BUILD</span>
+                                <h3 class="glitch-text" data-text="VIROX APPAREL" style="font-size: 2.5rem; text-transform: uppercase; line-height: 1; margin-bottom: 20px;">Virox Apparel Ecosystem</h3>
+                                <p class="text-body" style="margin-bottom: 30px; font-weight: 700;">Complete architectural overhaul for an emerging streetwear brand. Custom Shopify theme, vector logo suite, and print-ready graphic assets.</p>
+                                <button class="btn-outline scrambler" style="pointer-events: none; width: fit-content; padding: 12px 25px;">INITIALIZE SIMILAR</button>
+                            </div>
+                        </div>
+
+                        <div class="work-card" onclick="navigateTo('view-contact')">
+                            <div class="work-img-wrapper"><img src="https://images.unsplash.com/photo-1634942537034-2531766767d1?q=80&w=1000&auto=format&fit=crop" alt="Athrex Energy"></div>
+                            <div class="work-info">
+                                <div class="work-client glitch-text" data-text="ATHREX ENERGY">Athrex Energy Pvt. Ltd.</div>
+                                <div class="work-tags scrambler">Corporate Brand // Print Graphics</div>
+                            </div>
+                        </div>
+                        
+                        <div class="work-card" onclick="navigateTo('view-contact')">
+                            <div class="work-img-wrapper"><img src="https://images.unsplash.com/photo-1611532736597-de2d4265fba3?q=80&w=1000&auto=format&fit=crop" alt="Nirvaan Store"></div>
+                            <div class="work-info">
+                                <div class="work-client glitch-text" data-text="NIRVAAN STORE">Nirvaan.Store</div>
+                                <div class="work-tags scrambler">Logo Design // Web Infrastructure</div>
+                            </div>
+                        </div>
+                        
+                        <div class="work-card" onclick="navigateTo('view-contact')">
+                            <div class="work-img-wrapper"><img src="https://images.unsplash.com/photo-1541462608143-67571c6738dd?q=80&w=1000&auto=format&fit=crop" alt="Editorial"></div>
+                            <div class="work-info">
+                                <div class="work-client glitch-text" data-text="DIGITAL TRADE EDITORIAL">Digital Trade Editorial</div>
+                                <div class="work-tags scrambler">Print Media // Layout Design</div>
+                            </div>
+                        </div>
+
+                        <div class="work-card" onclick="navigateTo('view-contact')">
+                            <div class="work-img-wrapper"><img src="https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=1000&auto=format&fit=crop" alt="Vector Vault"></div>
+                            <div class="work-info">
+                                <div class="work-client glitch-text" data-text="APPAREL PRINT VAULT">Apparel Print Vault</div>
+                                <div class="work-tags scrambler">Vector Illustrations // DTG Layouts</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-pricing" class="view-section">
+            <div class="section-padding">
+                <div class="container">
+                    <div class="section-header">
+                        <h2 class="glitch-text" data-text="DEPLOYMENT TIERS">DEPLOYMENT <span>TIERS</span></h2>
+                        <p>Transparent pricing models. No hidden fees. No scope creep.</p>
+                    </div>
+                    
+                    <div class="grid-3">
+                        <div class="tier-card">
+                            <div class="tier-name scrambler">Identity Starter</div>
+                            <div class="tier-price">₹1,499<br><span>FLAT FEE</span></div>
+                            <div class="tier-desc">Core foundation for emerging brands. Establish your visual language.</div>
+                            <ul class="tier-list">
+                                <li>Primary & Secondary Logo</li>
+                                <li>Basic Color Palette Definition</li>
+                                <li>Typography Selection</li>
+                                <li>High-Res Vector Export</li>
+                                <li>2 Revision Rounds</li>
+                            </ul>
+                            <div class="magnetic-wrap" style="width: 100%;"><button class="btn-outline magnetic nav-trigger scrambler" data-target="view-contact" style="width: 100%;">SELECT TIER</button></div>
+                        </div>
+                        
+                        <div class="tier-card featured">
+                            <div class="tier-name scrambler" style="color: var(--bg-color); border-color: var(--bg-color);">Digital Platform</div>
+                            <div class="tier-price">₹14,990<br><span>FLAT FEE</span></div>
+                            <div class="tier-desc">Complete web presence engineered for speed and conversion.</div>
+                            <ul class="tier-list">
+                                <li>Full Brand Identity System</li>
+                                <li>Custom Website Architecture</li>
+                                <li>Responsive UI/UX Design</li>
+                                <li>Basic SEO Implementation</li>
+                                <li>CMS Training Handover</li>
+                            </ul>
+                            <div class="magnetic-wrap" style="width: 100%;"><button class="btn-outline magnetic nav-trigger scrambler" data-target="view-contact" style="width: 100%; color: var(--text-color); border-color: var(--bg-color); background: var(--bg-color);">SELECT TIER</button></div>
+                        </div>
+
+                        <div class="tier-card">
+                            <div class="tier-name scrambler">Scale & E-Commerce</div>
+                            <div class="tier-price">Custom<br><span>BY SCOPE</span></div>
+                            <div class="tier-desc">Advanced infrastructure for high-volume sales and custom functionality.</div>
+                            <ul class="tier-list">
+                                <li>Shopify Advanced Setup</li>
+                                <li>Payment Gateway Integration</li>
+                                <li>Complex UI Animations</li>
+                                <li>Ongoing Graphic Support</li>
+                                <li>Priority 24/7 SLA</li>
+                            </ul>
+                            <div class="magnetic-wrap" style="width: 100%;"><button class="btn-primary magnetic nav-trigger scrambler" data-target="view-contact" style="width: 100%;">CONSULT SALES</button></div>
+                        </div>
+                    </div>
+
+                    <div class="grid-2" style="margin-top: 100px;">
+                        <div>
+                            <h3 style="font-family: var(--font-heading); font-size: 2.5rem; font-weight: 800; margin-bottom: 20px; text-transform: uppercase; letter-spacing: -1px;">A La Carte Modules</h3>
+                            <p class="text-body" style="font-weight: 700;">Need specific structural upgrades without a full retainer? We offer modular pricing for individual deliverables.</p>
+                            
+                            <div class="stat-box" style="margin-top: 40px;">
+                                <h4 style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px;">Enterprise Retainer</h4>
+                                <p class="text-body" style="font-size: 0.95rem;">For brands requiring constant architectural updates and high-volume graphic output. We integrate directly into your workflow.</p>
+                                <button class="btn-outline nav-trigger scrambler" data-target="view-contact" style="padding: 10px 20px; font-size: 0.9rem;">REQUEST PROPOSAL</button>
+                            </div>
+                        </div>
+                        
+                        <div class="terminal-block">
+                            <div class="terminal-header"><span>Module</span><span>Starting At</span></div>
+                            <div class="terminal-row"><span class="t-service scrambler">Video Ad Production</span><span class="t-price">₹2,500</span></div>
+                            <div class="terminal-row"><span class="t-service scrambler">T-Shirt Print Artwork</span><span class="t-price">₹999</span></div>
+                            <div class="terminal-row"><span class="t-service scrambler">Logo Digitization</span><span class="t-price">₹1,200</span></div>
+                            <div class="terminal-row"><span class="t-service scrambler">Web Banner Set (x3)</span><span class="t-price">₹1,500</span></div>
+                            <div class="terminal-row" style="border:none; margin-bottom:0; padding-bottom:0;"><span class="t-service scrambler">Landing Page Dev</span><span class="t-price">₹4,999</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-shop" class="view-section">
+            <div class="section-padding">
+                <div class="container">
+                    <div class="section-header">
+                        <h2 class="glitch-text" data-text="THE ASSET VAULT">THE <span>ASSET VAULT</span></h2>
+                        <p>Engineered digital products. High-fidelity mockups, textures, and structural planners for creative professionals.</p>
+                    </div>
+                    
+                    <h3 style="font-family: var(--font-heading); font-size: 2rem; font-weight: 800; text-transform: uppercase; margin-bottom: 30px; border-bottom: 3px solid var(--text-color); padding-bottom: 10px;">> Productivity & Planners</h3>
+                    <div class="grid-3" style="margin-bottom: 80px;">
+                        
+                        <div class="work-card">
+                            <div class="work-img-wrapper">
+                                <img src="https://images.unsplash.com/photo-1611224885990-ab7363d1f2a9?q=80&w=1000&auto=format&fit=crop" class="work-img" alt="Monthly Planner">
+                            </div>
+                            <div class="work-info" style="display: flex; flex-direction: column; height: 100%;">
+                                <div class="work-client glitch-text" data-text="ARCHITECT PLANNER">Architect Monthly Planner</div>
+                                <div class="work-tags scrambler">PDF // A4 & US LETTER</div>
+                                <p class="text-body" style="margin-top: 15px; flex-grow: 1; font-size: 0.95rem;">A brutalist, monochrome monthly and weekly planner system. Designed for maximum focus and structural day-mapping.</p>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; border-top: 2px dashed var(--text-color); padding-top: 15px;">
+                                    <span style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800;">₹299</span>
+                                    <button class="btn-primary scrambler buy-btn" data-product="Architect Monthly Planner" data-price="299" style="padding: 10px 20px; font-size: 0.9rem;">ACQUIRE</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="work-card">
+                            <div class="work-img-wrapper">
+                                <img src="https://images.unsplash.com/photo-1581287053822-fd7bf4f4bfec?q=80&w=1000&auto=format&fit=crop" class="work-img" alt="Content Grid">
+                            </div>
+                            <div class="work-info" style="display: flex; flex-direction: column; height: 100%;">
+                                <div class="work-client glitch-text" data-text="SOCIAL GRID SYSTEM">Social Grid System</div>
+                                <div class="work-tags scrambler">PSD // FIGMA</div>
+                                <p class="text-body" style="margin-top: 15px; flex-grow: 1; font-size: 0.95rem;">30 high-end, minimalist social media templates. Engineered for agencies and streetwear brands.</p>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; border-top: 2px dashed var(--text-color); padding-top: 15px;">
+                                    <span style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800;">₹499</span>
+                                    <button class="btn-primary scrambler buy-btn" data-product="Social Grid System" data-price="499" style="padding: 10px 20px; font-size: 0.9rem;">ACQUIRE</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <h3 style="font-family: var(--font-heading); font-size: 2rem; font-weight: 800; text-transform: uppercase; margin-bottom: 30px; border-bottom: 3px solid var(--text-color); padding-bottom: 10px;">> Visual Architecture (PS / AI)</h3>
+                    <div class="grid-3" style="margin-bottom: 80px;">
+                        
+                        <div class="work-card">
+                            <div class="work-img-wrapper">
+                                <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop" class="work-img" alt="Texture Pack">
+                            </div>
+                            <div class="work-info" style="display: flex; flex-direction: column; height: 100%;">
+                                <div class="work-client glitch-text" data-text="INDUSTRIAL GRUNGE">Industrial Grunge Textures</div>
+                                <div class="work-tags scrambler">4K PNG // OVERLAYS</div>
+                                <p class="text-body" style="margin-top: 15px; flex-grow: 1; font-size: 0.95rem;">50 high-resolution distress overlays. Perfect for degrading typography and creating raw, vintage apparel graphics.</p>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; border-top: 2px dashed var(--text-color); padding-top: 15px;">
+                                    <span style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800;">₹399</span>
+                                    <button class="btn-primary scrambler buy-btn" data-product="Industrial Grunge Textures" data-price="399" style="padding: 10px 20px; font-size: 0.9rem;">ACQUIRE</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="work-card">
+                            <div class="work-img-wrapper">
+                                <img src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=1000&auto=format&fit=crop" class="work-img" alt="Vector Elements">
+                            </div>
+                            <div class="work-info" style="display: flex; flex-direction: column; height: 100%;">
+                                <div class="work-client glitch-text" data-text="CYBER VECTOR SHAPES">Cyber Vector Shapes</div>
+                                <div class="work-tags scrambler">AI // SVG // EPS</div>
+                                <p class="text-body" style="margin-top: 15px; flex-grow: 1; font-size: 0.95rem;">100+ precision-engineered geometric vectors, crosshairs, and UI elements for futuristic poster design.</p>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; border-top: 2px dashed var(--text-color); padding-top: 15px;">
+                                    <span style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800;">₹599</span>
+                                    <button class="btn-primary scrambler buy-btn" data-product="Cyber Vector Shapes" data-price="599" style="padding: 10px 20px; font-size: 0.9rem;">ACQUIRE</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="work-card">
+                            <div class="work-img-wrapper">
+                                <img src="https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?q=80&w=1000&auto=format&fit=crop" class="work-img" alt="Halftone Brushes">
+                            </div>
+                            <div class="work-info" style="display: flex; flex-direction: column; height: 100%;">
+                                <div class="work-client glitch-text" data-text="HALFTONE SYSTEM">Halftone Brush System</div>
+                                <div class="work-tags scrambler">ABR // PHOTOSHOP</div>
+                                <p class="text-body" style="margin-top: 15px; flex-grow: 1; font-size: 0.95rem;">A professional-grade brush suite for rendering comic-book style halftones and screen-print effects.</p>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; border-top: 2px dashed var(--text-color); padding-top: 15px;">
+                                    <span style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800;">₹449</span>
+                                    <button class="btn-primary scrambler buy-btn" data-product="Halftone Brush System" data-price="449" style="padding: 10px 20px; font-size: 0.9rem;">ACQUIRE</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <h3 style="font-family: var(--font-heading); font-size: 2rem; font-weight: 800; text-transform: uppercase; margin-bottom: 30px; border-bottom: 3px solid var(--text-color); padding-bottom: 10px;">> Physical Mockups</h3>
+                    <div class="grid-2">
+                        
+                        <div class="featured-study" style="cursor: default;">
+                            <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=1500&auto=format&fit=crop" class="fs-img" alt="Oversized Tee Mockup">
+                            <div class="fs-content">
+                                <span class="scrambler" style="font-family: var(--font-mono); font-weight: 800; border: 3px solid var(--text-color); padding: 5px 10px; display: inline-block; margin-bottom: 20px; width: fit-content; font-size: 0.8rem; box-shadow: 4px 4px 0 var(--muted-bg);">BEST SELLER</span>
+                                <h3 class="glitch-text" data-text="HEAVYWEIGHT TEE" style="font-size: 2.5rem; text-transform: uppercase; line-height: 1; margin-bottom: 20px;">Heavyweight Oversized Tee</h3>
+                                <p class="text-body" style="margin-bottom: 10px; font-weight: 700;">Photorealistic 4K PSD mockup featuring displacement maps for perfect graphic wrapping.</p>
+                                <div class="work-tags scrambler" style="margin-bottom: 30px; width: fit-content;">FRONT & BACK // 4K PSD</div>
+                                <div style="display: flex; align-items: center; gap: 20px;">
+                                    <span style="font-family: var(--font-heading); font-size: 2rem; font-weight: 800;">₹899</span>
+                                    <button class="btn-outline scrambler buy-btn" data-product="Heavyweight Oversized Tee Mockup" data-price="899" style="padding: 15px 30px;">ACQUIRE ASSET</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section id="view-about" class="view-section">
+            <div class="section-padding">
+                <div class="container">
+                    <div class="split-layout">
+                        <div class="split-main">
+                            <h2 class="glitch-text" data-text="THE ARCHITECT" style="font-size: clamp(3rem, 6vw, 5rem); font-weight: 800; text-transform: uppercase; margin-bottom: 30px; line-height: 1; letter-spacing: -2px;">THE ARCHITECT<span class="blink">_</span></h2>
+                            <p class="text-body" style="font-size: 1.3rem; font-weight: 800; border-left: 6px solid var(--text-color); padding-left: 20px;">Digital Trade is helmed by Indrajeet Pisda, operating out of Dantewada, Chhattisgarh.</p>
+                            <p class="text-body">We reject the notion that design should be purely aesthetic. True design is an engineered solution to a structural business problem. Whether we are building a complex Shopify ecosystem for an apparel brand like Virox, or drafting corporate identity for Athrex Energy, our methodology remains identical: aggressive precision.</p>
+                            <p class="text-body">Our studio is located at Teknaar Chowk, Awarbhata. We serve a global client base, transmitting high-fidelity code and vector architecture across timezones.</p>
+                            
+                            <div style="margin-top: 50px; padding-top: 40px; border-top: 4px dashed var(--text-color);">
+                                <h4 style="font-family: var(--font-mono); font-size: 1rem; font-weight: 800; text-transform: uppercase; margin-bottom: 20px;">STUDIO CAPABILITIES</h4>
+                                <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                                    <span class="scrambler" style="font-family: var(--font-mono); font-weight: 800; border: 3px solid var(--text-color); padding: 8px 15px; box-shadow: 4px 4px 0 var(--text-color);">Web Architecture</span>
+                                    <span class="scrambler" style="font-family: var(--font-mono); font-weight: 800; border: 3px solid var(--text-color); padding: 8px 15px; box-shadow: 4px 4px 0 var(--text-color);">Shopify Liquid</span>
+                                    <span class="scrambler" style="font-family: var(--font-mono); font-weight: 800; border: 3px solid var(--text-color); padding: 8px 15px; box-shadow: 4px 4px 0 var(--text-color);">Vector Logos</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="split-sidebar">
+                            <div class="sidebar-block">
+                                <h4 style="font-family: var(--font-mono); font-size: 0.9rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px;">FOUNDED</h4>
+                                <p style="font-family: var(--font-heading); font-size: 2rem; font-weight: 800;">2025</p>
+                            </div>
+                            <div class="sidebar-block">
+                                <h4 style="font-family: var(--font-mono); font-size: 0.9rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px;">PRIMARY NODE</h4>
+                                <p style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800;">Dantewada, CG, India</p>
+                            </div>
+                            <div class="sidebar-block" style="background: var(--text-color); color: var(--bg-color);">
+                                <h4 style="font-family: var(--font-mono); font-size: 0.9rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px; color: var(--bg-color);">CURRENT STATUS</h4>
+                                <p style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800; display: flex; align-items: center; gap: 10px;">
+                                    <span class="blink" style="display:inline-block; width:15px; height:15px; background:var(--bg-color); border: 3px solid var(--text-color);"></span> Accepting Projects
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-faq" class="view-section">
+            <div class="section-padding">
+                <div class="container">
+                    <div class="section-header">
+                        <h2 class="glitch-text" data-text="KNOWLEDGE BASE">KNOWLEDGE <span>BASE</span></h2>
+                        <p>Standard operating procedures and frequent queries.</p>
+                    </div>
+                    
+                    <div class="interactive-list" style="max-width: 900px;">
+                        <div class="interactive-item">
+                            <button class="interactive-header">STANDARD TURNAROUND TIME? <span class="interactive-icon">+</span></button>
+                            <div class="interactive-content"><p class="text-body" style="padding-top: 20px; font-weight: 700;">Brand identities and logo systems typically require 1-2 weeks. Full-scale web platforms and e-commerce builds take between 3-6 weeks depending on architectural complexity.</p></div>
+                        </div>
+                        <div class="interactive-item">
+                            <button class="interactive-header">DO YOU PROVIDE SOURCE FILES? <span class="interactive-icon">+</span></button>
+                            <div class="interactive-content"><p class="text-body" style="padding-top: 20px; font-weight: 700;">Yes. We don't hold brands hostage. Upon final payment, all intellectual property rights and raw source files (Figma, Illustrator, complete codebases) are securely transferred.</p></div>
+                        </div>
+                        <div class="interactive-item">
+                            <button class="interactive-header">WHAT PLATFORMS DO YOU BUILD ON? <span class="interactive-icon">+</span></button>
+                            <div class="interactive-content"><p class="text-body" style="padding-top: 20px; font-weight: 700;">We engineer custom front-end solutions. For e-commerce, we specialize in Shopify. For simpler content sites, we utilize platforms like Blogger based on client budget.</p></div>
+                        </div>
+                        <div class="interactive-item">
+                            <button class="interactive-header">HOW DOES COMMUNICATION WORK? <span class="interactive-icon">+</span></button>
+                            <div class="interactive-content"><p class="text-body" style="padding-top: 20px; font-weight: 700;">Direct and efficient. We primarily utilize our secure WhatsApp line for quick updates, and formal email transmissions for asset delivery and milestone approvals.</p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-contact" class="view-section">
+            <div class="section-padding">
+                <div class="container">
+                    <div class="section-header">
+                        <h2 class="glitch-text" data-text="INITIATE SEQUENCE">INITIATE <span>SEQUENCE</span></h2>
+                        <p>Transmit your project parameters directly to our secure line.</p>
+                    </div>
+                    
+                    <div class="split-layout">
+                        <div class="split-main">
+                            <form id="whatsapp-form">
+                                <div class="form-group">
+                                    <label class="form-label">NAME / CALLSIGN</label>
+                                    <input type="text" id="wa-name" class="form-input" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">TRANSMISSION EMAIL</label>
+                                    <input type="email" id="wa-email" class="form-input" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">PROJECT PARAMETERS</label>
+                                    <textarea id="wa-message" class="form-input" style="height: 150px; resize: vertical;" required></textarea>
+                                </div>
+                                <button type="submit" class="btn-primary scrambler" style="width: 100%;">TRANSMIT VIA WHATSAPP</button>
+                            </form>
+                        </div>
+                        
+                        <div class="split-sidebar">
+                            <div class="sidebar-block" style="background: var(--text-color); color: var(--bg-color);">
+                                <h4 style="font-family: var(--font-mono); font-size: 0.9rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px; color: var(--bg-color);">TRANSMISSION SLA</h4>
+                                <p style="font-size: 1rem; font-weight: 700;">All inquiries receive a structural review and response within 12 operating hours.</p>
+                            </div>
+
+                            <div class="sidebar-block">
+                                <h4 style="font-family: var(--font-mono); font-size: 0.9rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px;">DIRECT COMMS</h4>
+                                <p class="scrambler" style="font-family: var(--font-heading); font-size: 1.3rem; font-weight: 800; cursor: pointer;">trade@digital.com</p>
+                                <p class="scrambler" style="font-family: var(--font-heading); font-size: 1.3rem; font-weight: 800; margin-top: 10px; cursor: pointer;">+91 7646846030</p>
+                            </div>
+                            <div class="sidebar-block">
+                                <h4 style="font-family: var(--font-mono); font-size: 0.9rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px;">HEADQUARTERS</h4>
+                                <p style="font-family: var(--font-heading); font-size: 1.3rem; font-weight: 800;">Teknaar Chowk, Awarbhata<br>Dantewada, Chhattisgarh</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="footer-grid">
+            <div>
+                <h3 class="footer-brand" style="font-family: var(--font-heading); font-size: 2.5rem; font-weight: 800; margin-bottom: 20px; text-transform: uppercase; letter-spacing: -2px;">DIGITAL<span class="blink">_</span>TRADE</h3>
+                <p style="font-family: var(--font-body); font-size: 0.95rem; font-weight: 500; color: #ccc; margin-bottom: 40px; line-height: 1.6; max-width: 400px;">A minimalist design and development agency engineering future-proof brand architectures.</p>
+                <div class="terminal-block" style="background: var(--text-color); border-color: var(--bg-color); color: var(--bg-color); padding: 20px; box-shadow: 6px 6px 0 var(--bg-color);">
+                    > SYSTEM_CHECK: CREATIVE_OK<br>> SERVER_NODE: DANTEWADA_HQ<br>> STATUS: ACTIVE<span class="blink">_</span>
+                </div>
+            </div>
+
+            <div>
+                <h4 class="footer-links">DISCIPLINES</h4>
+                <ul class="footer-links">
+                    <li><a href="#services" class="nav-trigger scrambler" data-target="view-services">Web Architecture</a></li>
+                    <li><a href="#services" class="nav-trigger scrambler" data-target="view-services">Shopify Dev</a></li>
+                    <li><a href="#services" class="nav-trigger scrambler" data-target="view-services">Brand Identity</a></li>
+                    <li><a href="#services" class="nav-trigger scrambler" data-target="view-services">Graphic Systems</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="footer-links">RESOURCES</h4>
+                <ul class="footer-links">
+                    <li><a href="#work" class="nav-trigger scrambler" data-target="view-work">The Archive</a></li>
+                    <li><a href="#pricing" class="nav-trigger scrambler" data-target="view-pricing">Deployment Tiers</a></li>
+                    <li><a href="#shop" class="nav-trigger scrambler" data-target="view-shop">The Asset Vault</a></li>
+                    <li><a href="#about" class="nav-trigger scrambler" data-target="view-about">Agency Ethos</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4 class="footer-links">SOCIAL GRID</h4>
+                <ul class="footer-links">
+                    <li><a href="#" class="scrambler" target="_blank">Instagram</a></li>
+                    <li><a href="#" class="scrambler" target="_blank">Behance</a></li>
+                    <li><a href="#" class="scrambler" target="_blank">LinkedIn</a></li>
+                    <li><a href="#" class="scrambler" target="_blank">X (Twitter)</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2026 DIGITAL TRADE. ALL RIGHTS RESERVED.</p>
+            <p>ARCHITECT: INDRAJEET PISDA | BUILD 2.1.0 (DARK + COMMERCE)</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            const isTouchDevice = (('ontouchstart' in window) || (navigator.maxTouchPoints > 0));
+
+            // --- SCRAMBLER EFFECT ---
+            const chars = '!<>-_\\\\/[]{}—=+*^?#_';
+            document.querySelectorAll('.scrambler').forEach(el => {
+                const originalText = el.innerText;
+                el.addEventListener('mouseover', () => {
+                    let iterations = 0;
+                    const interval = setInterval(() => {
+                        el.innerText = originalText.split('').map((letter, index) => {
+                            if(index < iterations) return originalText[index];
+                            return chars[Math.floor(Math.random() * chars.length)];
+                        }).join('');
+                        if(iterations >= originalText.length) {
+                            clearInterval(interval);
+                            el.innerText = originalText;
+                        }
+                        iterations += 1/2; // Adjust speed here
+                    }, 30);
+                });
+            });
+
+            // --- 1. ADVANCED CANVAS TRAIL CURSOR (Virox Style) ---
+            if (!isTouchDevice && window.innerWidth > 768) {
+                const canvas = document.getElementById('cursor-canvas');
+                const ctx = canvas.getContext('2d');
+                const dot = document.getElementById('cursor-dot');
+                
+                let width, height;
+                function resize() {
+                    width = window.innerWidth;
+                    height = window.innerHeight;
+                    canvas.width = width;
+                    canvas.height = height;
+                }
+                window.addEventListener('resize', resize);
+                resize();
+
+                let mouse = { x: width/2, y: height/2 };
+                let trail = [];
+
+                window.addEventListener('mousemove', (e) => {
+                    mouse.x = e.clientX;
+                    mouse.y = e.clientY;
+                    dot.style.left = mouse.x + 'px';
+                    dot.style.top = mouse.y + 'px';
+                    
+                    trail.push({ x: mouse.x, y: mouse.y, age: 0 });
+                    
+                    const isHoverable = e.target.closest('a, button, .magnetic, .work-card, .tier-card, input, textarea, .interactive-header, .scrambler');
+                    if (isHoverable) dot.classList.add('active');
+                    else dot.classList.remove('active');
+                });
+
+                function renderTrail() {
+                    ctx.clearRect(0, 0, width, height);
+                    
+                    ctx.beginPath();
+                    for(let i = 0; i < trail.length; i++) {
+                        let p = trail[i];
+                        p.age += 1;
+                        
+                        if(i === 0) ctx.moveTo(p.x, p.y);
+                        else ctx.lineTo(p.x, p.y);
+                        
+                        if(p.age > 20) {
+                            trail.splice(i, 1);
+                            i--;
+                        }
+                    }
+                    
+                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+                    ctx.lineWidth = 4;
+                    ctx.lineCap = 'square';
+                    ctx.lineJoin = 'miter';
+                    ctx.stroke();
+
+                    trail.forEach((p, index) => {
+                        if(index % 3 === 0) {
+                            let size = Math.max(0, 10 - (p.age * 0.5));
+                            ctx.fillStyle = '#fff';
+                            ctx.fillRect(p.x - size/2, p.y - size/2, size, size);
+                        }
+                    });
+
+                    requestAnimationFrame(renderTrail);
+                }
+                renderTrail();
+
+                // Magnetic Buttons
+                document.querySelectorAll('.magnetic-wrap').forEach(wrap => {
+                    const magneticBtn = wrap.querySelector('.magnetic');
+                    if(!magneticBtn) return;
+                    
+                    wrap.addEventListener('mousemove', (e) => {
+                        const rect = wrap.getBoundingClientRect();
+                        const x = e.clientX - rect.left - rect.width / 2;
+                        const y = e.clientY - rect.top - rect.height / 2;
+                        magneticBtn.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px)`;
+                    });
+                    
+                    wrap.addEventListener('mouseleave', () => {
+                        magneticBtn.style.transform = `translate(0px, 0px)`;
+                    });
+                });
+            } else {
+                document.getElementById('cursor-canvas').style.display = 'none';
+                document.getElementById('cursor-dot').style.display = 'none';
+                document.body.style.cursor = 'auto';
+            }
+
+            // --- 2. TOAST NOTIFICATIONS ---
+            window.showToast = function(msg) {
+                const container = document.getElementById('toast-container');
+                const toast = document.createElement('div');
+                toast.className = 'toast glitch-text';
+                toast.setAttribute('data-text', msg);
+                toast.innerText = msg;
+                container.appendChild(toast);
+                setTimeout(() => toast.classList.add('show'), 10);
+                setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 500); }, 3000);
+            };
+
+            // --- 3. HEADER & MOBILE NAV ---
+            const mobileToggle = document.getElementById('mobile-toggle');
+            const navLinks = document.getElementById('nav-links');
+            const navOverlayBg = document.getElementById('nav-overlay-bg');
+
+            function openMobileNav() {
+                mobileToggle.classList.add('active'); navLinks.classList.add('active');
+                document.body.classList.add('nav-active'); document.body.classList.add('no-scroll');
+            }
+
+            function closeMobileNav() {
+                mobileToggle.classList.remove('active'); navLinks.classList.remove('active');
+                document.body.classList.remove('nav-active'); document.body.classList.remove('no-scroll');
+            }
+
+            mobileToggle.addEventListener('click', () => {
+                if(navLinks.classList.contains('active')) closeMobileNav(); else openMobileNav();
+            });
+            navOverlayBg.addEventListener('click', closeMobileNav);
+
+            // --- 4. ADVANCED SPA ROUTING (Virox Glitch Style) ---
+            const views = document.querySelectorAll('.view-section');
+
+            window.navigateTo = function(targetId) {
+                const targetView = document.getElementById(targetId);
+                if(!targetView) return;
+
+                // Virox style glitch flash - Since it's dark mode, invert makes it flash white!
+                document.body.style.filter = 'invert(1) hue-rotate(180deg)';
+                
+                setTimeout(() => {
+                    document.body.style.filter = 'none';
+                    
+                    views.forEach(v => {
+                        v.classList.remove('active');
+                        v.style.animation = 'none'; 
+                    });
+                    
+                    targetView.classList.add('active');
+                    void targetView.offsetWidth; 
+                    targetView.style.animation = 'smoothFadeUp 0.4s cubic-bezier(0.19, 1, 0.22, 1) forwards';
+
+                    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active-link'));
+                    const activeLink = document.querySelector(`.nav-links a[data-target="${targetId}"]`);
+                    if(activeLink) activeLink.classList.add('active-link');
+
+                    window.scrollTo(0, 0);
+                    closeMobileNav();
+                }, 150);
+            }
+
+            document.querySelectorAll('.nav-trigger').forEach(trigger => {
+                trigger.addEventListener('click', function(e) {
+                    if(this.getAttribute('target') !== '_blank') {
+                        e.preventDefault();
+                        const targetId = this.getAttribute('data-target');
+                        if(document.getElementById(targetId) && document.getElementById(targetId).classList.contains('active')){ closeMobileNav(); return; }
+                        navigateTo(targetId);
+                        history.pushState(null, null, `#${targetId.replace('view-', '')}`);
+                    }
+                });
+            });
+
+            if(window.location.hash) {
+                const target = `view-${window.location.hash.substring(1)}`;
+                if(document.getElementById(target)) navigateTo(target);
+            }
+
+            // --- 5. ACCORDION / INTERACTIVE LIST ---
+            document.querySelectorAll('.interactive-header').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const item = btn.parentElement;
+                    const isActive = item.classList.contains('active');
+                    document.querySelectorAll('.interactive-item').forEach(i => i.classList.remove('active'));
+                    if(!isActive) item.classList.add('active');
+                });
+            });
+
+            // --- 6. WHATSAPP FORM LOGIC ---
+            const waForm = document.getElementById('whatsapp-form');
+            if (waForm) {
+                waForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    showToast("INITIALIZING TRANSMISSION...");
+
+                    const name = document.getElementById('wa-name').value;
+                    const email = document.getElementById('wa-email').value;
+                    const message = document.getElementById('wa-message').value;
+                    
+                    const whatsappNumber = "917646846030";
+                    const whatsappText = `*NEW PROJECT TRANSMISSION*%0A%0A*Name:* ${name}%0A*Email:* ${email}%0A%0A*Project Parameters:*%0A${message}`;
+                    const whatsappURL = `https://wa.me/${whatsappNumber}?text=${whatsappText}`;
+
+                    setTimeout(() => { window.open(whatsappURL, '_blank'); }, 800);
+                });
+            }
+
+            // --- 7. DIGITAL COMMERCE WHATSAPP ROUTING ---
+            document.querySelectorAll('.buy-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Trigger glitch toast notification
+                    if(window.showToast) window.showToast("INITIATING SECURE CHECKOUT...");
+                    
+                    // Extract product payload
+                    const product = this.getAttribute('data-product');
+                    const price = this.getAttribute('data-price');
+                    
+                    // Construct the WhatsApp payload
+                    const whatsappNumber = "917646846030"; 
+                    const whatsappText = `*DIGITAL TRADE ASSET ACQUISITION*%0A%0A> *ASSET:* ${product}%0A> *PRICE:* ₹${price}%0A%0A_System Status: Ready to transfer funds. Please provide UPI details. Once the transaction is verified, please transmit the secure download link for the files._`;
+                    
+                    const whatsappURL = `https://wa.me/${whatsappNumber}?text=${whatsappText}`;
+                    
+                    // Execute transmission
+                    setTimeout(() => { window.open(whatsappURL, '_blank'); }, 800);
+                });
+            });
+            
+        });
+    </script>
+</body>
+</html>
