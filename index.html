@@ -139,6 +139,7 @@
         }
         .magnetic-btn:hover { background: var(--text-color); color: #fff; transform: translate(3px, 3px); box-shadow: 0 0 0 transparent; }
 
+        /* BRUTALIST TEXT-BASED MOBILE TOGGLE */
         .mobile-icon-btn { 
             display: none; width: 42px; height: 42px; border: 3px solid var(--text-color); 
             background: #fff; position: relative; z-index: 90001; 
@@ -159,70 +160,56 @@
         }
 
         /* ==========================================
-           4. MOBILE NAVIGATION (DARK GRADIENT LAYOUT)
+           4. MOBILE NAVIGATION (UPDATED MINIMALIST LAYOUT)
            ========================================== */
-        #nav-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 99998; opacity: 0; visibility: hidden; transition: var(--transition); backdrop-filter: blur(4px); }
+        #nav-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 89999; opacity: 0; visibility: hidden; transition: var(--transition); backdrop-filter: blur(4px); }
         
         .mobile-nav-drawer {
-            position: fixed; top: 0; right: -100vw; width: 100vw; max-width: 100vw; height: 100vh;
-            background: linear-gradient(180deg, #717171 0%, #222222 100%);
-            z-index: 100000; transition: right 0.4s cubic-bezier(0.19, 1, 0.22, 1);
-            display: flex; flex-direction: column; overflow-y: auto; overflow-x: hidden;
-            border-left: none; box-shadow: none; color: #fff;
+            position: fixed; top: 0; right: -100vw; width: 85vw; max-width: 400px; height: 100vh;
+            background: #111111; color: #ffffff; z-index: 90000; transition: right 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+            display: flex; flex-direction: column; padding: 40px; overflow-y: auto; overflow-x: hidden;
+            border-left: 2px solid #333; box-shadow: -10px 0 0 var(--text-color);
         }
         
         body.mobile-nav-open #nav-overlay { opacity: 1; visibility: visible; }
         body.mobile-nav-open .mobile-nav-drawer { right: 0; }
 
-        .menu-top-bar {
-            padding: 20px 30px; display: flex; justify-content: space-between; align-items: center;
+        /* Top Decorative Elements */
+        .mobile-nav-drawer .top-decor {
+            display: flex; justify-content: space-between; align-items: flex-start;
+            margin-top: 20px; margin-bottom: 60px;
         }
-        
-        .menu-top-bar span { font-family: var(--font-mono); font-size: 0.9rem; font-weight: 800; color: #fff; }
-        
-        .menu-close-btn {
-            font-family: var(--font-mono); font-size: 1.2rem; font-weight: 800; color: #fff; background: none; border: none; cursor: pointer; padding: 0; transition: color 0.3s;
-        }
-        .menu-close-btn:hover { color: #ff5e00; }
+        .mobile-nav-drawer .star-icon { font-size: 40px; line-height: 1; color: #fff;}
+        .mobile-nav-drawer .line-decor { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; margin-top: 15px; }
+        .mobile-nav-drawer .line-decor span { display: block; height: 1.5px; background-color: #ffffff; }
+        .mobile-nav-drawer .line-decor span:first-child { width: 35px; }
+        .mobile-nav-drawer .line-decor span:last-child { width: 55px; }
 
-        .menu-header-block { padding: 10px 30px 40px 30px; }
+        /* Main Menu Navigation */
+        .mobile-nav-drawer .main-nav { flex-grow: 1; display: flex; flex-direction: column; }
+        .mobile-nav-drawer .nav-item {
+            font-family: var(--font-heading); font-size: 32px; text-transform: uppercase; text-decoration: none; color: #ffffff; font-weight: 800;
+            padding: 20px 0; border-bottom: 1.5px solid rgba(255, 255, 255, 0.9);
+            display: flex; justify-content: space-between; align-items: center; letter-spacing: 1px; transition: var(--transition);
+        }
+        .mobile-nav-drawer .nav-item:last-of-type { border-bottom: none; }
+        .mobile-nav-drawer .nav-item:hover, .mobile-nav-drawer .nav-item.active-link { padding-left: 15px; color: #ccc;}
 
-        .menu-active-title {
-            font-family: var(--font-heading); font-size: 3.2rem; font-weight: 800; text-transform: uppercase; letter-spacing: -1px; margin-bottom: 5px; color: #fff; line-height: 1;
+        /* Arrow Icon */
+        .mobile-nav-drawer .arrow-circle {
+            width: 32px; height: 32px; border: 1.5px solid #ffffff; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center; transition: var(--transition);
         }
+        .mobile-nav-drawer .nav-item:hover .arrow-circle { background: #fff; }
+        .mobile-nav-drawer .nav-item:hover .arrow-circle svg { fill: #111; }
+        .mobile-nav-drawer .arrow-circle svg { width: 14px; height: 14px; fill: #ffffff; margin-left: 3px; transition: var(--transition);}
 
-        .menu-subtitle {
-            font-family: var(--font-body); font-size: 0.95rem; color: rgba(255,255,255,0.7); margin-bottom: 30px;
-        }
-
-        .menu-checkbox-item {
-            display: flex; align-items: center; gap: 15px; margin-bottom: 12px; cursor: pointer;
-        }
-
-        .menu-chk {
-            appearance: none; width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.5); border-radius: 4px; outline: none; position: relative; background: transparent; transition: all 0.2s; cursor: pointer; flex-shrink: 0;
-        }
-        
-        .menu-chk:checked { background: #ff5e00; border-color: #ff5e00; }
-        .menu-chk:checked::after {
-            content: ''; position: absolute; left: 5px; top: 2px; width: 5px; height: 10px; border: solid white; border-width: 0 2px 2px 0; transform: rotate(45deg);
-        }
-
-        .menu-chk-label {
-            font-family: var(--font-body); font-size: 1.05rem; color: #ddd; text-decoration: none; transition: color 0.2s;
-        }
-        .menu-chk-label:hover { color: #fff; }
-        .menu-chk:checked ~ .menu-chk-label { color: #ff5e00; font-weight: 600;}
-
-        .menu-large-block {
-            padding: 30px; font-family: var(--font-heading); font-size: 2.5rem; font-weight: 800; text-transform: uppercase; color: #fff; text-decoration: none; display: block;
-            background: rgba(0, 0, 0, 0.15); transition: background 0.3s, padding-left 0.3s; border: none; text-align: left; width: 100%; cursor: pointer;
-        }
-        .menu-large-block:nth-of-type(1) { background: rgba(0, 0, 0, 0.2); }
-        .menu-large-block:nth-of-type(2) { background: rgba(0, 0, 0, 0.3); }
-        .menu-large-block:nth-of-type(3) { background: rgba(0, 0, 0, 0.4); }
-        .menu-large-block:nth-of-type(4) { background: rgba(0, 0, 0, 0.5); }
-        .menu-large-block:hover { background: rgba(0,0,0,0.8); padding-left: 40px; color: #fff;}
+        /* Bottom Section */
+        .mobile-nav-drawer .bottom-section { margin-top: auto; display: flex; flex-direction: column; align-items: center; gap: 40px; padding-bottom: 10px; }
+        .mobile-nav-drawer .social-links { display: flex; gap: 25px; }
+        .mobile-nav-drawer .social-links a { font-family: var(--font-mono); color: #ffffff; text-decoration: none; font-size: 14px; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 800; transition: var(--transition);}
+        .mobile-nav-drawer .social-links a:hover { color: #ccc;}
+        .mobile-nav-drawer .copyright { font-family: var(--font-mono); text-align: center; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; line-height: 1.5; color: #888; font-weight: 600;}
 
         @media(max-width: 1024px) {
             .nav-links-desktop { display: none; }
@@ -269,7 +256,7 @@
         .accordion-item.active { box-shadow: 0 0 0 transparent; transform: translate(4px, 4px);}
         .accordion-item.active .accordion-content { max-height: 800px; padding-bottom: 20px; border-top: 3px dashed var(--text-color); padding-top: 20px;}
 
-        /* FIX HOVER CONTRAST */
+        /* FIX HOVER CONTRAST (Cards turn black -> Text turns white) */
         .data-block, .journal-card { transition: all 0.3s ease; }
         .data-block *, .journal-card * { transition: color 0.3s ease, border-color 0.3s ease, background 0.3s ease; }
         
@@ -469,40 +456,39 @@
 
     <div id="nav-overlay"></div>
     <div class="mobile-nav-drawer" id="nav-menu">
-        <div class="menu-top-bar">
-            <span>VIROX_OS</span>
-            <button class="menu-close-btn" id="close-mobile-menu">[X]</button>
-        </div>
-        
-        <div class="menu-header-block">
-            <h2 class="menu-active-title">MAIN</h2>
-            <div class="menu-subtitle">System Architecture - Core Operations</div>
-            
-            <div style="display: flex; flex-direction: column; gap: 5px;">
-                <label class="menu-checkbox-item">
-                    <input type="checkbox" class="menu-chk" checked>
-                    <a href="#home" class="nav-btn menu-chk-label" data-target="view-home">Initialize System (Home)</a>
-                </label>
-                <label class="menu-checkbox-item">
-                    <input type="checkbox" class="menu-chk">
-                    <a href="#faq" class="nav-btn menu-chk-label" data-target="view-faq">Access Intel / FAQ</a>
-                </label>
-                <label class="menu-checkbox-item">
-                    <input type="checkbox" class="menu-chk">
-                    <a href="#contact" class="nav-btn menu-chk-label" data-target="view-contact">Transmit Message</a>
-                </label>
-                <label class="menu-checkbox-item">
-                    <input type="checkbox" class="menu-chk">
-                    <a href="#account" class="nav-btn menu-chk-label" data-target="view-account">Login / Authentication</a>
-                </label>
+        <div class="top-decor">
+            <div class="star-icon">✦</div>
+            <div class="line-decor">
+                <span></span>
+                <span></span>
             </div>
         </div>
-        
-        <div style="display: flex; flex-direction: column; margin-top: auto;">
-            <button class="nav-btn menu-large-block" data-target="view-shop">CATALOG</button>
-            <button class="nav-btn menu-large-block" data-target="view-campaigns">ARCHIVE</button>
-            <button class="nav-btn menu-large-block" data-target="view-journal">LOGS</button>
-            <button class="nav-btn menu-large-block" data-target="view-about">CORE</button>
+
+        <nav class="main-nav">
+            <a href="#home" class="nav-item nav-btn" data-target="view-home">Home</a>
+            <a href="#shop" class="nav-item nav-btn" data-target="view-shop">Catalog</a>
+            <a href="#campaigns" class="nav-item nav-btn" data-target="view-campaigns">
+                Archive
+                <div class="arrow-circle">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                </div>
+            </a>
+            <a href="#journal" class="nav-item nav-btn" data-target="view-journal">Logs</a>
+            <a href="#about" class="nav-item nav-btn" data-target="view-about">Ethos</a>
+        </nav>
+
+        <div class="bottom-section">
+            <div class="social-links">
+                <a href="#account" class="nav-btn" data-target="view-account">Login</a>
+                <a href="#contact" class="nav-btn" data-target="view-contact">Contact</a>
+            </div>
+            <div class="copyright">
+                VIROX<br>
+                — SYSTEM CORE<br>
+                COPYRIGHTS © 2026
+            </div>
         </div>
     </div>
 
@@ -974,7 +960,6 @@
             const mobileMenu = document.getElementById('nav-menu');
             const mobileToggle = document.getElementById('mobile-toggle');
             const navOverlay = document.getElementById('nav-overlay');
-            const closeMobileBtn = document.getElementById('close-mobile-menu');
 
             function openMobileNav() {
                 mobileToggle.classList.add('active');
@@ -994,7 +979,6 @@
             });
             
             if(navOverlay) navOverlay.addEventListener('click', closeMobileNav);
-            if(closeMobileBtn) closeMobileBtn.addEventListener('click', closeMobileNav);
 
             window.navigateTo = function(targetId) {
                 const targetView = document.getElementById(targetId);
