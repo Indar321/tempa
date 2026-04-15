@@ -88,17 +88,6 @@
 
         .header-actions { display: flex; gap: 20px; align-items: center; }
         
-        /* BRUTALIST MOBILE TOGGLE */
-        .mobile-toggle { display: none; width: 42px; height: 42px; border: 3px solid var(--text-color); background: var(--bg-color); position: relative; z-index: 90001; transition: var(--transition); box-shadow: 4px 4px 0 var(--text-color); }
-        .mobile-toggle:active { transform: translate(4px, 4px); box-shadow: 0 0 0 transparent; }
-        .mobile-toggle span { position: absolute; left: 8px; height: 3px; background: var(--text-color); transition: var(--transition); pointer-events: none; width: 20px; }
-        .mobile-toggle span:nth-child(1) { top: 12px; }
-        .mobile-toggle span:nth-child(2) { top: 22px; }
-        .mobile-toggle.active { background: var(--text-color); }
-        .mobile-toggle.active span { background: var(--bg-color); }
-        .mobile-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(4px, 4px); }
-        .mobile-toggle.active span:nth-child(2) { transform: rotate(-45deg) translate(3px, -3px); }
-
         .nav-overlay-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.9); backdrop-filter: blur(5px); z-index: 89999; opacity: 0; visibility: hidden; transition: var(--transition); }
         body.nav-active .nav-overlay-bg { opacity: 1; visibility: visible; }
 
@@ -258,24 +247,158 @@
         .footer-bottom { border-top: 1px solid #333; padding-top: 25px; display: flex; flex-direction: column; gap: 15px; font-family: var(--font-mono); font-size: 0.8rem; font-weight: 800; text-transform: uppercase; color: #666; width: 100%; max-width: 1400px; margin: 0 auto;}
         @media(min-width: 768px) { .footer-bottom { flex-direction: row; justify-content: space-between; align-items: center; } }
 
+        .mobile-menu-footer { display: none; }
+
         /* --- MOBILE SIDEBAR --- */
         @media (max-width: 768px) {
-            .mobile-toggle { display: block; }
             .header-actions .btn-outline { display: none; }
             
-            .nav-links { position: fixed; top: 0; left: -100%; width: 85vw; max-width: 400px; height: 100vh; background: var(--bg-color); border-right: 6px solid var(--text-color); flex-direction: column; padding: 100px 30px 40px 30px; z-index: 90000; transition: left 0.4s cubic-bezier(0.19, 1, 0.22, 1); box-shadow: 15px 0 0 rgba(255,255,255,0.1); overflow-y: auto;}
+            /* Toggle Button - Redesigned to match reference (Circle with minus) */
+            .mobile-toggle { 
+                display: block; 
+                width: 45px; 
+                height: 45px; 
+                border-radius: 50%; 
+                border: 2px solid var(--text-color); 
+                background: transparent; 
+                position: relative; 
+                z-index: 90001; 
+                transition: var(--transition); 
+                box-shadow: none; 
+            }
+            .mobile-toggle:active { transform: scale(0.95); }
+            .mobile-toggle span { 
+                position: absolute; 
+                left: 10px; 
+                height: 2px; 
+                background: var(--text-color); 
+                transition: var(--transition); 
+                pointer-events: none; 
+                width: 21px; 
+            }
+            .mobile-toggle span:nth-child(1) { top: 16px; }
+            .mobile-toggle span:nth-child(2) { top: 24px; }
+            
+            /* Active state (Turns into a single minus line) */
+            .mobile-toggle.active { background: transparent; border-color: var(--text-color); }
+            .mobile-toggle.active span { background: var(--text-color); }
+            .mobile-toggle.active span:nth-child(1) { transform: translateY(5px); }
+            .mobile-toggle.active span:nth-child(2) { opacity: 0; }
+
+            /* Nav Container Redesign */
+            .nav-links { 
+                position: fixed; 
+                top: 0; 
+                left: -100%; 
+                width: 100vw; 
+                max-width: 100vw; 
+                height: 100vh; 
+                background: var(--bg-color); 
+                border-right: none; 
+                flex-direction: column; 
+                padding: 120px 40px 40px 40px; 
+                z-index: 90000; 
+                transition: left 0.5s cubic-bezier(0.19, 1, 0.22, 1); 
+                box-shadow: none; 
+                overflow-y: auto;
+                justify-content: flex-start;
+            }
             .nav-links.active { left: 0; }
             
-            .nav-links a { 
-                font-family: var(--font-heading); font-size: 2rem; width: 100%; border-bottom: 3px solid var(--muted-bg); padding: 20px 0; 
-                color: var(--text-color); transition: var(--transition);
+            /* Clean Link Typography */
+            .nav-links > a.nav-trigger { 
+                font-family: var(--font-body); 
+                font-size: 2.5rem; 
+                font-weight: 500; 
+                text-transform: capitalize; 
+                width: 100%; 
+                border-bottom: none; 
+                padding: 8px 0; 
+                color: var(--text-color); 
+                transition: opacity 0.3s ease;
+                line-height: 1.2;
             }
-            .nav-links a::after { display: none !important; } 
-            .nav-links a:hover, .nav-links a.active-link { padding-left: 15px; border-color: var(--text-color); }
+            .nav-links > a.nav-trigger::after { display: none !important; } 
+            .nav-links > a.nav-trigger:hover, 
+            .nav-links > a.nav-trigger.active-link { 
+                padding-left: 0; 
+                border-color: transparent; 
+                opacity: 0.6;
+            }
+
+            /* New Mobile Footer Layout */
+            .mobile-menu-footer {
+                margin-top: auto;
+                padding-top: 40px;
+                display: flex;
+                flex-direction: column;
+                font-family: var(--font-body);
+                width: 100%;
+            }
+
+            .mobile-address {
+                font-size: 0.8rem;
+                color: #a0a0a0;
+                line-height: 1.6;
+                text-transform: uppercase;
+                font-weight: 500;
+                letter-spacing: 0.5px;
+                margin-bottom: 25px;
+            }
+
+            a.mobile-email {
+                font-size: 0.8rem;
+                color: var(--text-color) !important;
+                text-transform: uppercase;
+                text-decoration: none;
+                font-weight: 600;
+                letter-spacing: 0.5px;
+                padding: 0 0 5px 0 !important;
+                margin-bottom: 30px;
+                display: inline-block;
+                width: fit-content;
+                border-bottom: 1px solid var(--text-color) !important;
+            }
+
+            .mobile-legal-wrap {
+                border-top: 1px solid #222;
+                padding-top: 20px;
+                width: 100%;
+            }
+
+            .mobile-legal-row {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-end;
+                margin-bottom: 5px;
+            }
+
+            .legal-muted {
+                font-size: 0.6rem;
+                color: #666;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+            .legal-highlight {
+                font-size: 0.6rem;
+                color: #fff;
+                text-transform: uppercase;
+                text-align: right;
+                font-weight: 600;
+                letter-spacing: 0.5px;
+                line-height: 1.4;
+            }
+
+            .mobile-copyright {
+                font-size: 0.6rem;
+                color: #666;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
             
-            .mobile-only-link { background: var(--text-color); color: var(--bg-color) !important; text-align: center; padding: 20px !important; margin-top: 20px; font-family: var(--font-mono) !important; font-size: 1.2rem !important; }
+            .mobile-only-link { display: none !important; }
         }
-        @media (min-width: 769px) { .mobile-only-link { display: none !important; } }
 
     </style>
 </head>
@@ -298,10 +421,28 @@
                 <a href="#services" class="nav-trigger scrambler" data-target="view-services">Services</a>
                 <a href="#work" class="nav-trigger scrambler" data-target="view-work">Work</a>
                 <a href="#pricing" class="nav-trigger scrambler" data-target="view-pricing">Pricing</a>
-                <a href="#shop" class="nav-trigger scrambler" data-target="view-shop">Shop</a>
                 <a href="#about" class="nav-trigger scrambler" data-target="view-about">Ethos</a>
                 <a href="#faq" class="nav-trigger scrambler" data-target="view-faq">FAQ</a>
-                <a href="#contact" class="nav-trigger scrambler mobile-only-link" data-target="view-contact">Start Project</a>
+                <a href="#contact" class="nav-trigger scrambler" data-target="view-contact">Contact</a>
+
+                <div class="mobile-menu-footer">
+                    <div class="mobile-address">
+                        TEKNAAR CHOWK,<br>
+                        AWARBHATA<br>
+                        DANTEWADA, CG
+                    </div>
+                    <a href="#contact" class="mobile-email nav-trigger" data-target="view-contact">EMAIL US</a>
+                    
+                    <div class="mobile-legal-wrap">
+                        <div class="mobile-legal-row">
+                            <span class="legal-muted">LEGAL NOTICE</span>
+                            <span class="legal-highlight">WEBSITE BY<br>DIGITAL TRADE</span>
+                        </div>
+                        <div class="mobile-copyright">
+                            ©2026 DIGITAL TRADE
+                        </div>
+                    </div>
+                </div>
             </nav>
             
             <div class="header-actions">
@@ -606,122 +747,6 @@
             </div>
         </section>
 
-        <section id="view-shop" class="view-section">
-            <div class="section-padding">
-                <div class="container">
-                    <div class="section-header">
-                        <h2 class="glitch-text" data-text="THE ASSET VAULT">THE <span>ASSET VAULT</span></h2>
-                        <p>Engineered digital products. High-fidelity mockups, textures, and structural planners for creative professionals.</p>
-                    </div>
-                    
-                    <h3 style="font-family: var(--font-heading); font-size: 2rem; font-weight: 800; text-transform: uppercase; margin-bottom: 30px; border-bottom: 3px solid var(--text-color); padding-bottom: 10px;">> Productivity & Planners</h3>
-                    <div class="grid-3" style="margin-bottom: 80px;">
-                        
-                        <div class="work-card">
-                            <div class="work-img-wrapper">
-                                <img src="https://images.unsplash.com/photo-1611224885990-ab7363d1f2a9?q=80&w=1000&auto=format&fit=crop" class="work-img" alt="Monthly Planner">
-                            </div>
-                            <div class="work-info" style="display: flex; flex-direction: column; height: 100%;">
-                                <div class="work-client glitch-text" data-text="ARCHITECT PLANNER">Architect Monthly Planner</div>
-                                <div class="work-tags scrambler">PDF // A4 & US LETTER</div>
-                                <p class="text-body" style="margin-top: 15px; flex-grow: 1; font-size: 0.95rem;">A brutalist, monochrome monthly and weekly planner system. Designed for maximum focus and structural day-mapping.</p>
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; border-top: 2px dashed var(--text-color); padding-top: 15px;">
-                                    <span style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800;">₹299</span>
-                                    <button class="btn-primary scrambler buy-btn" data-product="Architect Monthly Planner" data-price="299" style="padding: 10px 20px; font-size: 0.9rem;">ACQUIRE</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="work-card">
-                            <div class="work-img-wrapper">
-                                <img src="https://images.unsplash.com/photo-1581287053822-fd7bf4f4bfec?q=80&w=1000&auto=format&fit=crop" class="work-img" alt="Content Grid">
-                            </div>
-                            <div class="work-info" style="display: flex; flex-direction: column; height: 100%;">
-                                <div class="work-client glitch-text" data-text="SOCIAL GRID SYSTEM">Social Grid System</div>
-                                <div class="work-tags scrambler">PSD // FIGMA</div>
-                                <p class="text-body" style="margin-top: 15px; flex-grow: 1; font-size: 0.95rem;">30 high-end, minimalist social media templates. Engineered for agencies and streetwear brands.</p>
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; border-top: 2px dashed var(--text-color); padding-top: 15px;">
-                                    <span style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800;">₹499</span>
-                                    <button class="btn-primary scrambler buy-btn" data-product="Social Grid System" data-price="499" style="padding: 10px 20px; font-size: 0.9rem;">ACQUIRE</button>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <h3 style="font-family: var(--font-heading); font-size: 2rem; font-weight: 800; text-transform: uppercase; margin-bottom: 30px; border-bottom: 3px solid var(--text-color); padding-bottom: 10px;">> Visual Architecture (PS / AI)</h3>
-                    <div class="grid-3" style="margin-bottom: 80px;">
-                        
-                        <div class="work-card">
-                            <div class="work-img-wrapper">
-                                <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop" class="work-img" alt="Texture Pack">
-                            </div>
-                            <div class="work-info" style="display: flex; flex-direction: column; height: 100%;">
-                                <div class="work-client glitch-text" data-text="INDUSTRIAL GRUNGE">Industrial Grunge Textures</div>
-                                <div class="work-tags scrambler">4K PNG // OVERLAYS</div>
-                                <p class="text-body" style="margin-top: 15px; flex-grow: 1; font-size: 0.95rem;">50 high-resolution distress overlays. Perfect for degrading typography and creating raw, vintage apparel graphics.</p>
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; border-top: 2px dashed var(--text-color); padding-top: 15px;">
-                                    <span style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800;">₹399</span>
-                                    <button class="btn-primary scrambler buy-btn" data-product="Industrial Grunge Textures" data-price="399" style="padding: 10px 20px; font-size: 0.9rem;">ACQUIRE</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="work-card">
-                            <div class="work-img-wrapper">
-                                <img src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=1000&auto=format&fit=crop" class="work-img" alt="Vector Elements">
-                            </div>
-                            <div class="work-info" style="display: flex; flex-direction: column; height: 100%;">
-                                <div class="work-client glitch-text" data-text="CYBER VECTOR SHAPES">Cyber Vector Shapes</div>
-                                <div class="work-tags scrambler">AI // SVG // EPS</div>
-                                <p class="text-body" style="margin-top: 15px; flex-grow: 1; font-size: 0.95rem;">100+ precision-engineered geometric vectors, crosshairs, and UI elements for futuristic poster design.</p>
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; border-top: 2px dashed var(--text-color); padding-top: 15px;">
-                                    <span style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800;">₹599</span>
-                                    <button class="btn-primary scrambler buy-btn" data-product="Cyber Vector Shapes" data-price="599" style="padding: 10px 20px; font-size: 0.9rem;">ACQUIRE</button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="work-card">
-                            <div class="work-img-wrapper">
-                                <img src="https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?q=80&w=1000&auto=format&fit=crop" class="work-img" alt="Halftone Brushes">
-                            </div>
-                            <div class="work-info" style="display: flex; flex-direction: column; height: 100%;">
-                                <div class="work-client glitch-text" data-text="HALFTONE SYSTEM">Halftone Brush System</div>
-                                <div class="work-tags scrambler">ABR // PHOTOSHOP</div>
-                                <p class="text-body" style="margin-top: 15px; flex-grow: 1; font-size: 0.95rem;">A professional-grade brush suite for rendering comic-book style halftones and screen-print effects.</p>
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; border-top: 2px dashed var(--text-color); padding-top: 15px;">
-                                    <span style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800;">₹449</span>
-                                    <button class="btn-primary scrambler buy-btn" data-product="Halftone Brush System" data-price="449" style="padding: 10px 20px; font-size: 0.9rem;">ACQUIRE</button>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <h3 style="font-family: var(--font-heading); font-size: 2rem; font-weight: 800; text-transform: uppercase; margin-bottom: 30px; border-bottom: 3px solid var(--text-color); padding-bottom: 10px;">> Physical Mockups</h3>
-                    <div class="grid-2">
-                        
-                        <div class="featured-study" style="cursor: default;">
-                            <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=1500&auto=format&fit=crop" class="fs-img" alt="Oversized Tee Mockup">
-                            <div class="fs-content">
-                                <span class="scrambler" style="font-family: var(--font-mono); font-weight: 800; border: 3px solid var(--text-color); padding: 5px 10px; display: inline-block; margin-bottom: 20px; width: fit-content; font-size: 0.8rem; box-shadow: 4px 4px 0 var(--muted-bg);">BEST SELLER</span>
-                                <h3 class="glitch-text" data-text="HEAVYWEIGHT TEE" style="font-size: 2.5rem; text-transform: uppercase; line-height: 1; margin-bottom: 20px;">Heavyweight Oversized Tee</h3>
-                                <p class="text-body" style="margin-bottom: 10px; font-weight: 700;">Photorealistic 4K PSD mockup featuring displacement maps for perfect graphic wrapping.</p>
-                                <div class="work-tags scrambler" style="margin-bottom: 30px; width: fit-content;">FRONT & BACK // 4K PSD</div>
-                                <div style="display: flex; align-items: center; gap: 20px;">
-                                    <span style="font-family: var(--font-heading); font-size: 2rem; font-weight: 800;">₹899</span>
-                                    <button class="btn-outline scrambler buy-btn" data-product="Heavyweight Oversized Tee Mockup" data-price="899" style="padding: 15px 30px;">ACQUIRE ASSET</button>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
         <section id="view-about" class="view-section">
             <div class="section-padding">
                 <div class="container">
@@ -867,7 +892,7 @@
                 <ul class="footer-links">
                     <li><a href="#work" class="nav-trigger scrambler" data-target="view-work">The Archive</a></li>
                     <li><a href="#pricing" class="nav-trigger scrambler" data-target="view-pricing">Deployment Tiers</a></li>
-                    <li><a href="#shop" class="nav-trigger scrambler" data-target="view-shop">The Asset Vault</a></li>
+                    <li><a href="#faq" class="nav-trigger scrambler" data-target="view-faq">Knowledge Base</a></li>
                     <li><a href="#about" class="nav-trigger scrambler" data-target="view-about">Agency Ethos</a></li>
                 </ul>
             </div>
@@ -885,7 +910,7 @@
 
         <div class="footer-bottom">
             <p>© 2026 DIGITAL TRADE. ALL RIGHTS RESERVED.</p>
-            <p>ARCHITECT: INDRAJEET PISDA | BUILD 2.1.0 (DARK + COMMERCE)</p>
+            <p>ARCHITECT: INDRAJEET PISDA | BUILD 2.0.0 (DARK)</p>
         </div>
     </footer>
 
@@ -1111,30 +1136,6 @@
                     setTimeout(() => { window.open(whatsappURL, '_blank'); }, 800);
                 });
             }
-
-            // --- 7. DIGITAL COMMERCE WHATSAPP ROUTING ---
-            document.querySelectorAll('.buy-btn').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    // Trigger glitch toast notification
-                    if(window.showToast) window.showToast("INITIATING SECURE CHECKOUT...");
-                    
-                    // Extract product payload
-                    const product = this.getAttribute('data-product');
-                    const price = this.getAttribute('data-price');
-                    
-                    // Construct the WhatsApp payload
-                    const whatsappNumber = "917646846030"; 
-                    const whatsappText = `*DIGITAL TRADE ASSET ACQUISITION*%0A%0A> *ASSET:* ${product}%0A> *PRICE:* ₹${price}%0A%0A_System Status: Ready to transfer funds. Please provide UPI details. Once the transaction is verified, please transmit the secure download link for the files._`;
-                    
-                    const whatsappURL = `https://wa.me/${whatsappNumber}?text=${whatsappText}`;
-                    
-                    // Execute transmission
-                    setTimeout(() => { window.open(whatsappURL, '_blank'); }, 800);
-                });
-            });
-            
         });
     </script>
 </body>
