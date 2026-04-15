@@ -174,6 +174,23 @@
         body.mobile-nav-open #nav-overlay { opacity: 1; visibility: visible; }
         body.mobile-nav-open .mobile-nav-drawer { right: 0; }
 
+        /* Mobile Drawer Close Button */
+        .drawer-close-btn {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            font-size: 1.5rem;
+            font-family: var(--font-mono);
+            color: #fff;
+            background: transparent;
+            border: none;
+            font-weight: 800;
+            cursor: pointer;
+            z-index: 90002;
+            transition: var(--transition);
+        }
+        .drawer-close-btn:hover { color: #888; transform: scale(1.1); }
+
         /* Top Decorative Elements */
         .mobile-nav-drawer .top-decor {
             display: flex; justify-content: space-between; align-items: flex-start;
@@ -195,10 +212,14 @@
         .mobile-nav-drawer .nav-item:last-of-type { border-bottom: none; }
         .mobile-nav-drawer .nav-item:hover, .mobile-nav-drawer .nav-item.active-link { padding-left: 15px; color: #ccc;}
 
-        /* Arrow Icon */
+        /* Arrow Icon (Dynamic Visibility) */
         .mobile-nav-drawer .arrow-circle {
             width: 32px; height: 32px; border: 1.5px solid #ffffff; border-radius: 50%;
             display: flex; justify-content: center; align-items: center; transition: var(--transition);
+            opacity: 0; visibility: hidden; transform: translateX(-10px);
+        }
+        .mobile-nav-drawer .nav-item.active-link .arrow-circle {
+            opacity: 1; visibility: visible; transform: translateX(0);
         }
         .mobile-nav-drawer .nav-item:hover .arrow-circle { background: #fff; }
         .mobile-nav-drawer .nav-item:hover .arrow-circle svg { fill: #111; }
@@ -456,6 +477,9 @@
 
     <div id="nav-overlay"></div>
     <div class="mobile-nav-drawer" id="nav-menu">
+        
+        <button class="drawer-close-btn" id="drawer-close-btn">X</button>
+
         <div class="top-decor">
             <div class="star-icon">✦</div>
             <div class="line-decor">
@@ -465,18 +489,26 @@
         </div>
 
         <nav class="main-nav">
-            <a href="#home" class="nav-item nav-btn" data-target="view-home">Home</a>
-            <a href="#shop" class="nav-item nav-btn" data-target="view-shop">Catalog</a>
+            <a href="#home" class="nav-item nav-btn active-link" data-target="view-home">
+                Home
+                <div class="arrow-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            </a>
+            <a href="#shop" class="nav-item nav-btn" data-target="view-shop">
+                Catalog
+                <div class="arrow-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            </a>
             <a href="#campaigns" class="nav-item nav-btn" data-target="view-campaigns">
                 Archive
-                <div class="arrow-circle">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z"/>
-                    </svg>
-                </div>
+                <div class="arrow-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
             </a>
-            <a href="#journal" class="nav-item nav-btn" data-target="view-journal">Logs</a>
-            <a href="#about" class="nav-item nav-btn" data-target="view-about">Ethos</a>
+            <a href="#journal" class="nav-item nav-btn" data-target="view-journal">
+                Logs
+                <div class="arrow-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            </a>
+            <a href="#about" class="nav-item nav-btn" data-target="view-about">
+                Ethos
+                <div class="arrow-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            </a>
         </nav>
 
         <div class="bottom-section">
@@ -956,19 +988,23 @@
 
             // --- 1. ROBUST ROUTING SYSTEM WITH CSS FLASH ---
             const views = document.querySelectorAll('.view-section');
-            const navLinks = document.querySelectorAll('.nav-link');
+            // UPDATED: Now queries BOTH desktop nav links and mobile nav items so the state stays synced
+            const navLinks = document.querySelectorAll('.nav-link, .mobile-nav-drawer .nav-item');
             const mobileMenu = document.getElementById('nav-menu');
             const mobileToggle = document.getElementById('mobile-toggle');
             const navOverlay = document.getElementById('nav-overlay');
+            const drawerCloseBtn = document.getElementById('drawer-close-btn');
 
             function openMobileNav() {
                 mobileToggle.classList.add('active');
+                mobileToggle.innerText = 'CLOSE'; // Toggle text to CLOSE
                 document.body.classList.add('mobile-nav-open');
                 document.body.classList.add('no-scroll');
             }
 
             function closeMobileNav() {
                 mobileToggle.classList.remove('active');
+                mobileToggle.innerText = 'MENU'; // Toggle text back to MENU
                 document.body.classList.remove('mobile-nav-open');
                 document.body.classList.remove('no-scroll');
             }
@@ -979,6 +1015,7 @@
             });
             
             if(navOverlay) navOverlay.addEventListener('click', closeMobileNav);
+            if(drawerCloseBtn) drawerCloseBtn.addEventListener('click', closeMobileNav);
 
             window.navigateTo = function(targetId) {
                 const targetView = document.getElementById(targetId);
@@ -1002,7 +1039,8 @@
 
                     if(targetId === 'view-checkout') renderCheckout();
 
-                    // Update active nav state
+                    // Update active nav state for BOTH desktop and mobile. 
+                    // This triggers the play mark to show up on the newly active item.
                     navLinks.forEach(link => {
                         link.classList.remove('active-link');
                         if(link.getAttribute('data-target') === targetId) {
