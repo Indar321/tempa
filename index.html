@@ -174,33 +174,46 @@
         body.mobile-nav-open #nav-overlay { opacity: 1; visibility: visible; }
         body.mobile-nav-open .mobile-nav-drawer { right: 0; }
 
-        /* Mobile Drawer Close Button */
-        .drawer-close-btn {
-            position: absolute;
-            top: 30px;
-            right: 30px;
-            font-size: 1.5rem;
-            font-family: var(--font-mono);
-            color: #fff;
-            background: transparent;
-            border: none;
-            font-weight: 800;
-            cursor: pointer;
-            z-index: 90002;
-            transition: var(--transition);
-        }
-        .drawer-close-btn:hover { color: #888; transform: scale(1.1); }
-
         /* Top Decorative Elements */
         .mobile-nav-drawer .top-decor {
             display: flex; justify-content: space-between; align-items: flex-start;
-            margin-top: 20px; margin-bottom: 60px;
+            margin-top: 10px; margin-bottom: 60px;
         }
         .mobile-nav-drawer .star-icon { font-size: 40px; line-height: 1; color: #fff;}
-        .mobile-nav-drawer .line-decor { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; margin-top: 15px; }
-        .mobile-nav-drawer .line-decor span { display: block; height: 1.5px; background-color: #ffffff; }
-        .mobile-nav-drawer .line-decor span:first-child { width: 35px; }
-        .mobile-nav-drawer .line-decor span:last-child { width: 55px; }
+        
+        /* Animated Close Lines */
+        .mobile-nav-drawer .line-decor {
+            position: relative;
+            width: 55px;
+            height: 30px;
+            cursor: pointer;
+            margin-top: 5px;
+            z-index: 90002;
+        }
+        .mobile-nav-drawer .line-decor span {
+            position: absolute;
+            display: block;
+            height: 1.5px;
+            background-color: #ffffff;
+            right: 0;
+            transform-origin: center;
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            transition-delay: 0.1s; /* Slight delay to animate smoothly while opening */
+        }
+        .mobile-nav-drawer .line-decor span:first-child { width: 35px; top: 8px; transform: rotate(0deg); }
+        .mobile-nav-drawer .line-decor span:last-child { width: 55px; bottom: 8px; transform: rotate(0deg); }
+
+        /* The X Animation State (Triggered when drawer opens) */
+        body.mobile-nav-open .mobile-nav-drawer .line-decor span:first-child {
+            width: 40px;
+            top: 14px;
+            transform: rotate(45deg);
+        }
+        body.mobile-nav-open .mobile-nav-drawer .line-decor span:last-child {
+            width: 40px;
+            bottom: 14.5px;
+            transform: rotate(-45deg);
+        }
 
         /* Main Menu Navigation */
         .mobile-nav-drawer .main-nav { flex-grow: 1; display: flex; flex-direction: column; }
@@ -478,11 +491,9 @@
     <div id="nav-overlay"></div>
     <div class="mobile-nav-drawer" id="nav-menu">
         
-        <button class="drawer-close-btn" id="drawer-close-btn">X</button>
-
         <div class="top-decor">
             <div class="star-icon">✦</div>
-            <div class="line-decor">
+            <div class="line-decor" id="drawer-close-lines">
                 <span></span>
                 <span></span>
             </div>
@@ -988,12 +999,11 @@
 
             // --- 1. ROBUST ROUTING SYSTEM WITH CSS FLASH ---
             const views = document.querySelectorAll('.view-section');
-            // UPDATED: Now queries BOTH desktop nav links and mobile nav items so the state stays synced
             const navLinks = document.querySelectorAll('.nav-link, .mobile-nav-drawer .nav-item');
             const mobileMenu = document.getElementById('nav-menu');
             const mobileToggle = document.getElementById('mobile-toggle');
             const navOverlay = document.getElementById('nav-overlay');
-            const drawerCloseBtn = document.getElementById('drawer-close-btn');
+            const drawerCloseLines = document.getElementById('drawer-close-lines');
 
             function openMobileNav() {
                 mobileToggle.classList.add('active');
@@ -1015,7 +1025,7 @@
             });
             
             if(navOverlay) navOverlay.addEventListener('click', closeMobileNav);
-            if(drawerCloseBtn) drawerCloseBtn.addEventListener('click', closeMobileNav);
+            if(drawerCloseLines) drawerCloseLines.addEventListener('click', closeMobileNav);
 
             window.navigateTo = function(targetId) {
                 const targetView = document.getElementById(targetId);
