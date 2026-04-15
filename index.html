@@ -249,41 +249,44 @@
 
         .mobile-menu-footer { display: none; }
 
-        /* --- MOBILE SIDEBAR --- */
-        @media (max-width: 768px) {
+        /* --- MOBILE MENU & TABLET FIX --- */
+        @media (max-width: 1024px) {
             .header-actions .btn-outline { display: none; }
             
-            /* Toggle Button - Redesigned to match reference (Circle with minus) */
+            /* Toggle Button - Square Brutalist with Shadow */
             .mobile-toggle { 
                 display: block; 
-                width: 45px; 
-                height: 45px; 
-                border-radius: 50%; 
-                border: 2px solid var(--text-color); 
-                background: transparent; 
+                width: 42px; 
+                height: 42px; 
+                border: 3px solid var(--text-color); 
+                background: var(--bg-color); 
                 position: relative; 
                 z-index: 90001; 
                 transition: var(--transition); 
-                box-shadow: none; 
+                box-shadow: 4px 4px 0 var(--text-color); 
+                cursor: none;
             }
-            .mobile-toggle:active { transform: scale(0.95); }
+            .mobile-toggle:active { 
+                transform: translate(4px, 4px); 
+                box-shadow: 0 0 0 transparent; 
+            }
             .mobile-toggle span { 
                 position: absolute; 
-                left: 10px; 
-                height: 2px; 
+                left: 8px; 
+                height: 3px; 
                 background: var(--text-color); 
                 transition: var(--transition); 
                 pointer-events: none; 
-                width: 21px; 
+                width: 20px; 
             }
-            .mobile-toggle span:nth-child(1) { top: 16px; }
-            .mobile-toggle span:nth-child(2) { top: 24px; }
+            .mobile-toggle span:nth-child(1) { top: 12px; }
+            .mobile-toggle span:nth-child(2) { top: 22px; }
             
-            /* Active state (Turns into a single minus line) */
-            .mobile-toggle.active { background: transparent; border-color: var(--text-color); }
-            .mobile-toggle.active span { background: var(--text-color); }
-            .mobile-toggle.active span:nth-child(1) { transform: translateY(5px); }
-            .mobile-toggle.active span:nth-child(2) { opacity: 0; }
+            /* Active state (Cross configuration) */
+            .mobile-toggle.active { background: var(--text-color); }
+            .mobile-toggle.active span { background: var(--bg-color); }
+            .mobile-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(4px, 4px); }
+            .mobile-toggle.active span:nth-child(2) { transform: rotate(-45deg) translate(3px, -3px); }
 
             /* Nav Container Redesign */
             .nav-links { 
@@ -328,9 +331,9 @@
 
             /* New Mobile Footer Layout */
             .mobile-menu-footer {
+                display: flex;
                 margin-top: auto;
                 padding-top: 40px;
-                display: flex;
                 flex-direction: column;
                 font-family: var(--font-body);
                 width: 100%;
@@ -399,7 +402,7 @@
             
             .mobile-only-link { display: none !important; }
         }
-
+        @media (min-width: 1025px) { .mobile-only-link { display: none !important; } }
     </style>
 </head>
 <body>
