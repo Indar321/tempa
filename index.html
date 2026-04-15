@@ -3,786 +3,730 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    
-    <title>DIGITAL.TRADE | Precision Architecture</title>
+    <title>VIROX | Advanced Core System</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
 
     <style>
         /* ==========================================
-           1. CORE VARIABLES & BRUTALIST SETUP (INVERTED)
+           1. CORE VARIABLES & BRUTALIST SETUP
            ========================================== */
         :root {
-            --bg-color: #000000;
-            --text-color: #ffffff;
-            --muted-bg: #111111;
+            --bg-color: #ffffff;
+            --text-color: #000000;
+            --muted-bg: #f4f4f4;
             --font-heading: 'Space Grotesk', sans-serif;
+            --font-wide: 'Syne', sans-serif;
             --font-body: 'Inter', sans-serif;
             --font-mono: 'JetBrains Mono', monospace;
             --transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
             --header-height: 80px;
         }
 
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        *, *::before, *::after { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+        }
         
-        html, body { width: 100%; max-width: 100vw; overflow-x: hidden; scroll-behavior: smooth; background-color: var(--bg-color); color: var(--text-color); font-family: var(--font-body); line-height: 1.6; cursor: none; -webkit-tap-highlight-color: transparent; }
+        /* STRICT OVERFLOW CONTROL */
+        html, body {
+            width: 100%;
+            max-width: 100vw;
+            overflow-x: hidden;
+            scroll-behavior: auto; 
+            font-size: 16px; 
+            -webkit-tap-highlight-color: transparent;
+            background-color: var(--bg-color); 
+            color: var(--text-color);
+            font-family: var(--font-body);
+        }
         
         body {
-            display: flex; flex-direction: column; min-height: 100vh;
-            background-image: linear-gradient(#222 1px, transparent 1px), linear-gradient(90deg, #222 1px, transparent 1px);
+            line-height: 1.6;
+            cursor: none; 
+            background-image: 
+                linear-gradient(#e0e0e0 1px, transparent 1px),
+                linear-gradient(90deg, #e0e0e0 1px, transparent 1px);
             background-size: 40px 40px;
         }
 
         body.no-scroll { overflow: hidden; }
-        
+        body.glitch-flash { filter: invert(1) hue-rotate(180deg); }
+
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: var(--bg-color); border-left: 2px solid var(--text-color); }
         ::-webkit-scrollbar-thumb { background: var(--text-color); }
 
-        a { color: inherit; text-decoration: none; transition: var(--transition); cursor: none; }
-        ul { list-style: none; }
-        img { max-width: 100%; height: auto; display: block; object-fit: cover; filter: grayscale(100%) contrast(1.1); transition: filter 0.4s; }
+        a, button { cursor: none; color: inherit; text-decoration: none; border: none; outline: none; background: none;}
+        img { max-width: 100%; display: block; object-fit: cover; filter: grayscale(100%) contrast(1.1); transition: filter 0.4s; }
         img:hover { filter: grayscale(0%) contrast(1); }
-        button, input, textarea, select { font-family: var(--font-mono); cursor: none; background: none; border: none; outline: none; color: inherit; border-radius: 0; -webkit-appearance: none; }
-
-        .container { width: 100%; max-width: 1400px; margin: 0 auto; position: relative; padding: 0 5%; }
-        main { flex: 1 0 auto; width: 100%; }
+        ul { list-style: none; }
 
         /* ==========================================
-           2. ADVANCED CANVAS CURSOR & EFFECTS
+           2. ADVANCED CANVAS CURSOR & TEXT GLITCH
            ========================================== */
-        #cursor-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 999999; mix-blend-mode: difference; }
-        .custom-cursor-dot { position: fixed; width: 12px; height: 12px; background: var(--text-color); border-radius: 50%; transform: translate(-50%, -50%); pointer-events: none; z-index: 999999; mix-blend-mode: difference; transition: width 0.2s, height 0.2s, border-radius 0.2s; }
+        #cursor-canvas {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none; z-index: 999999; mix-blend-mode: difference;
+        }
+
+        .custom-cursor-dot {
+            position: fixed; width: 12px; height: 12px; background: #fff;
+            border-radius: 50%; transform: translate(-50%, -50%);
+            pointer-events: none; z-index: 999999; mix-blend-mode: difference;
+            transition: width 0.2s, height 0.2s, border-radius 0.2s;
+        }
         .custom-cursor-dot.active { width: 45px; height: 45px; border-radius: 0; }
 
         .glitch-text { position: relative; display: inline-block; font-weight: 800; font-family: var(--font-heading);}
-        .glitch-text::before, .glitch-text::after { content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: inherit; opacity: 0; pointer-events: none; }
-        .glitch-text:hover::before { left: 3px; text-shadow: -2px 0 var(--text-color); background: var(--bg-color); animation: glitch-anim 0.2s infinite linear alternate-reverse; opacity: 1; z-index: -1; }
-        .glitch-text:hover::after { left: -3px; text-shadow: 2px 0 var(--text-color); background: var(--bg-color); animation: glitch-anim2 0.3s infinite linear alternate-reverse; opacity: 1; z-index: -1; }
-        
+        .glitch-text::before, .glitch-text::after {
+            content: attr(data-text); position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%; background: inherit; opacity: 0; pointer-events: none;
+        }
+        .glitch-text:hover::before {
+            left: 3px; text-shadow: -2px 0 var(--text-color); background: var(--bg-color);
+            animation: glitch-anim 0.2s infinite linear alternate-reverse; opacity: 1; z-index: -1;
+        }
+        .glitch-text:hover::after {
+            left: -3px; text-shadow: 2px 0 var(--text-color); background: var(--bg-color);
+            animation: glitch-anim2 0.3s infinite linear alternate-reverse; opacity: 1; z-index: -1;
+        }
         @keyframes glitch-anim { 0% { clip-path: inset(20% 0 80% 0); } 50% { clip-path: inset(60% 0 10% 0); } 100% { clip-path: inset(10% 0 50% 0); } }
         @keyframes glitch-anim2 { 0% { clip-path: inset(10% 0 60% 0); } 50% { clip-path: inset(30% 0 20% 0); } 100% { clip-path: inset(80% 0 5% 0); } }
 
-        /* BLINK EFFECT */
-        @keyframes terminalBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-        .blink { animation: terminalBlink 1.2s step-end infinite; }
-
-        .toast-container { position: fixed; bottom: 30px; right: 30px; z-index: 99999; display: flex; flex-direction: column; gap: 15px; pointer-events: none; align-items: flex-end; }
-        .toast { background: var(--text-color); color: var(--bg-color); padding: 15px 25px; font-family: var(--font-mono); font-weight: 800; text-transform: uppercase; font-size: 0.9rem; border: 3px solid var(--bg-color); box-shadow: -6px 6px 0 var(--text-color); transform: translateX(150%); transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1); }
-        .toast.show { transform: translateX(0); }
+        .page-transition {
+            position: fixed; inset: 0; background: var(--text-color); z-index: 100000;
+            transform: translateY(100%); transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            border-top: 10px solid #fff; border-bottom: 10px solid #fff;
+        }
+        .page-transition.active { transform: translateY(0); }
+        .page-transition.exit { transform: translateY(-100%); }
 
         /* ==========================================
            3. DESKTOP HEADER
            ========================================== */
-        header { position: fixed; top: 0; left: 0; width: 100%; height: var(--header-height); display: flex; justify-content: center; align-items: center; z-index: 90000; background: var(--bg-color); border-bottom: 4px solid var(--text-color); transition: var(--transition); }
-        .header-inner { display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 1400px; padding: 0 5%;}
-        
-        .logo a { font-family: var(--font-heading); font-size: 2rem; font-weight: 800; letter-spacing: -2px; text-transform: uppercase; display: flex; align-items: center; }
-        
-        .nav-links { display: flex; gap: 30px; }
-        .nav-links a { font-family: var(--font-mono); font-size: 1.1rem; font-weight: 800; text-transform: uppercase; position: relative; padding: 5px 0; color: var(--text-color); }
-        .nav-links a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 4px; background: var(--text-color); transform: scaleX(0); transform-origin: right; transition: transform 0.3s cubic-bezier(0.19, 1, 0.22, 1); }
-        .nav-links a:hover::after, .nav-links a.active-link::after { transform: scaleX(1); transform-origin: left; }
+        header {
+            position: fixed; top: 0; left: 0; width: 100%; height: var(--header-height);
+            display: flex; justify-content: space-between; align-items: center; padding: 0 4%;
+            z-index: 90000; background: var(--bg-color);
+            border-bottom: 4px solid var(--text-color);
+            transition: var(--transition);
+        }
 
-        .header-actions { display: flex; gap: 20px; align-items: center; }
+        .logo { font-family: var(--font-heading); font-size: 2.8rem; font-weight: 800; letter-spacing: -2px; text-transform: uppercase; display: flex; align-items: center; }
+
+        .nav-links-desktop { display: flex; gap: 30px; align-items: center; }
+        .nav-links-desktop .nav-link {
+            font-family: var(--font-mono); font-size: 1.1rem; font-weight: 800; text-transform: uppercase;
+            position: relative; padding: 5px 0; display: inline-block;
+        }
+        .nav-links-desktop .nav-link::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 4px;
+            background: var(--text-color); transform: scaleX(0); transform-origin: right; transition: transform 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        .nav-links-desktop .nav-link:hover::after, .nav-links-desktop .nav-link.active-link::after { transform: scaleX(1); transform-origin: left; }
+
+        .header-actions { display: flex; gap: 10px; align-items: center; height: 100%; }
         
-        .nav-overlay-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.9); backdrop-filter: blur(5px); z-index: 89999; opacity: 0; visibility: hidden; transition: var(--transition); }
-        body.nav-active .nav-overlay-bg { opacity: 1; visibility: visible; }
+        .btn-action {
+            font-family: var(--font-mono); font-weight: 800; font-size: 1rem;
+            padding: 10px 20px; border: 3px solid var(--text-color); background: #fff;
+            box-shadow: 4px 4px 0 var(--text-color); transition: var(--transition); display: flex; align-items: center; gap: 10px; cursor: pointer; text-transform: uppercase;
+        }
+        .magnetic-btn:hover { background: var(--text-color); color: #fff; transform: translate(3px, 3px); box-shadow: 0 0 0 transparent; }
+
+        .mobile-icon-btn { 
+            display: none; width: 42px; height: 42px; border: 3px solid var(--text-color); 
+            background: #fff; position: relative; z-index: 90001; 
+            justify-content: center; align-items: center; transition: var(--transition); padding: 0;
+            box-shadow: 4px 4px 0 var(--text-color); cursor: pointer;
+        }
+        .mobile-icon-btn:active { transform: translate(4px, 4px); box-shadow: 0 0 0 transparent; }
+
+        .mobile-toggle-text {
+            display: none; font-family: var(--font-mono); font-size: 1rem; font-weight: 800;
+            background: #fff; color: var(--text-color); border: 3px solid var(--text-color);
+            padding: 8px 15px; box-shadow: 4px 4px 0 var(--text-color); cursor: pointer; 
+            text-transform: uppercase; transition: var(--transition); z-index: 99999;
+        }
+        .mobile-toggle-text.active { 
+            background: var(--text-color); color: #fff; 
+            transform: translate(4px, 4px); box-shadow: 0 0 0 transparent; 
+        }
 
         /* ==========================================
-           4. GLOBAL COMPONENTS & LAYOUTS
+           4. MOBILE NAVIGATION (DARK GRADIENT LAYOUT)
            ========================================== */
-        .view-section { display: none; min-height: 100vh; padding-top: var(--header-height); opacity: 0; width: 100%; }
-        .view-section.active { display: block; opacity: 1; animation: smoothFadeUp 0.6s cubic-bezier(0.19, 1, 0.22, 1) forwards; }
-        #view-home.active { padding-top: var(--header-height); } 
-        @keyframes smoothFadeUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
-
-        .section-padding { padding: 80px 0; width: 100%; position: relative; }
-        @media(min-width: 1024px) { .section-padding { padding: 120px 0; } }
+        #nav-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 99998; opacity: 0; visibility: hidden; transition: var(--transition); backdrop-filter: blur(4px); }
         
-        .section-header { margin-bottom: 50px; display: flex; flex-direction: column; gap: 15px; border-bottom: 6px solid var(--text-color); padding-bottom: 20px;}
-        .section-header h2 { font-family: var(--font-heading); font-size: clamp(2.5rem, 8vw, 5rem); font-weight: 800; text-transform: uppercase; line-height: 1; letter-spacing: -2px; margin: 0;}
-        .section-header h2 span { background: var(--text-color); color: var(--bg-color); padding: 0 10px; }
-        .section-header p { font-family: var(--font-mono); font-size: 1.1rem; font-weight: 800; text-transform: uppercase; }
-        .text-body { font-size: 1.1rem; color: #ddd; margin-bottom: 25px; line-height: 1.7; }
-
-        /* Brutalist Buttons */
-        .magnetic-wrap { display: inline-block; position: relative; }
-        .btn-primary { display: inline-flex; justify-content: center; align-items: center; padding: 20px 35px; background: var(--text-color); color: var(--bg-color); font-family: var(--font-mono); font-size: 1.1rem; font-weight: 800; text-transform: uppercase; border: 4px solid var(--text-color); box-shadow: 6px 6px 0 var(--muted-bg); transition: var(--transition); cursor: pointer; }
-        .btn-primary:hover { transform: translate(4px, 4px); box-shadow: 0 0 0 transparent; background: var(--bg-color); color: var(--text-color); border-color: var(--text-color); }
+        .mobile-nav-drawer {
+            position: fixed; top: 0; right: -100vw; width: 100vw; max-width: 100vw; height: 100vh;
+            background: linear-gradient(180deg, #717171 0%, #222222 100%);
+            z-index: 100000; transition: right 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+            display: flex; flex-direction: column; overflow-y: auto; overflow-x: hidden;
+            border-left: none; box-shadow: none; color: #fff;
+        }
         
-        .btn-outline { display: inline-flex; justify-content: center; align-items: center; padding: 20px 35px; background: var(--bg-color); color: var(--text-color); font-family: var(--font-mono); font-size: 1.1rem; font-weight: 800; text-transform: uppercase; border: 4px solid var(--text-color); box-shadow: 6px 6px 0 var(--text-color); transition: var(--transition); cursor: pointer; }
-        .btn-outline:hover { transform: translate(4px, 4px); box-shadow: 0 0 0 transparent; background: var(--text-color); color: var(--bg-color); }
+        body.mobile-nav-open #nav-overlay { opacity: 1; visibility: visible; }
+        body.mobile-nav-open .mobile-nav-drawer { right: 0; }
 
-        /* Forms */
+        .menu-top-bar {
+            padding: 20px 30px; display: flex; justify-content: space-between; align-items: center;
+        }
+        
+        .menu-top-bar span { font-family: var(--font-mono); font-size: 0.9rem; font-weight: 800; color: #fff; }
+        
+        .menu-close-btn {
+            font-family: var(--font-mono); font-size: 1.2rem; font-weight: 800; color: #fff; background: none; border: none; cursor: pointer; padding: 0; transition: color 0.3s;
+        }
+        .menu-close-btn:hover { color: #ff5e00; }
+
+        .menu-header-block { padding: 10px 30px 40px 30px; }
+
+        .menu-active-title {
+            font-family: var(--font-heading); font-size: 3.2rem; font-weight: 800; text-transform: uppercase; letter-spacing: -1px; margin-bottom: 5px; color: #fff; line-height: 1;
+        }
+
+        .menu-subtitle {
+            font-family: var(--font-body); font-size: 0.95rem; color: rgba(255,255,255,0.7); margin-bottom: 30px;
+        }
+
+        .menu-checkbox-item {
+            display: flex; align-items: center; gap: 15px; margin-bottom: 12px; cursor: pointer;
+        }
+
+        .menu-chk {
+            appearance: none; width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.5); border-radius: 4px; outline: none; position: relative; background: transparent; transition: all 0.2s; cursor: pointer; flex-shrink: 0;
+        }
+        
+        .menu-chk:checked { background: #ff5e00; border-color: #ff5e00; }
+        .menu-chk:checked::after {
+            content: ''; position: absolute; left: 5px; top: 2px; width: 5px; height: 10px; border: solid white; border-width: 0 2px 2px 0; transform: rotate(45deg);
+        }
+
+        .menu-chk-label {
+            font-family: var(--font-body); font-size: 1.05rem; color: #ddd; text-decoration: none; transition: color 0.2s;
+        }
+        .menu-chk-label:hover { color: #fff; }
+        .menu-chk:checked ~ .menu-chk-label { color: #ff5e00; font-weight: 600;}
+
+        .menu-large-block {
+            padding: 30px; font-family: var(--font-heading); font-size: 2.5rem; font-weight: 800; text-transform: uppercase; color: #fff; text-decoration: none; display: block;
+            background: rgba(0, 0, 0, 0.15); transition: background 0.3s, padding-left 0.3s; border: none; text-align: left; width: 100%; cursor: pointer;
+        }
+        .menu-large-block:nth-of-type(1) { background: rgba(0, 0, 0, 0.2); }
+        .menu-large-block:nth-of-type(2) { background: rgba(0, 0, 0, 0.3); }
+        .menu-large-block:nth-of-type(3) { background: rgba(0, 0, 0, 0.4); }
+        .menu-large-block:nth-of-type(4) { background: rgba(0, 0, 0, 0.5); }
+        .menu-large-block:hover { background: rgba(0,0,0,0.8); padding-left: 40px; color: #fff;}
+
+        @media(max-width: 1024px) {
+            .nav-links-desktop { display: none; }
+            .header-actions .btn-action { display: none; }
+            .mobile-icon-btn, .mobile-toggle-text { display: flex; }
+        }
+
+        /* ==========================================
+           5. GLOBAL LAYOUTS & COMPONENTS
+           ========================================== */
+        main { padding-top: var(--header-height); min-height: 100vh; width: 100%;}
+        
+        .view-section { display: none; opacity: 0; width: 100%; }
+        .view-section.active { display: block; animation: brutalReveal 0.4s cubic-bezier(0.19, 1, 0.22, 1) forwards; }
+        @keyframes brutalReveal {
+            0% { opacity: 0; transform: translateY(15px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-padding { padding: 80px 5%; width: 100%; }
+        @media(min-width: 768px) { .section-padding { padding: 120px 5%; } }
+
+        .section-title { font-family: var(--font-heading); font-size: clamp(2.5rem, 8vw, 5rem); font-weight: 800; line-height: 1; margin-bottom: 40px; text-transform: uppercase; letter-spacing: -2px; border-bottom: 6px solid var(--text-color); padding-bottom: 15px;}
+        .text-body { font-size: 1.1rem; margin-bottom: 25px; line-height: 1.7; max-width: 800px; color: #222;}
+
+        .primary-btn { display: inline-block; padding: 20px 35px; background: var(--text-color); color: #fff; font-family: var(--font-mono); font-size: 1.1rem; font-weight: 800; border: 4px solid var(--text-color); box-shadow: 6px 6px 0 rgba(0,0,0,0.15); transition: var(--transition); text-transform: uppercase; text-align: center; cursor: pointer;}
+        .primary-btn:hover { transform: translate(4px, 4px); box-shadow: 0 0 0 transparent; background: #fff; color: var(--text-color);}
+        
+        .outline-btn { display: inline-block; padding: 20px 35px; background: #fff; color: var(--text-color); font-family: var(--font-mono); font-size: 1.1rem; font-weight: 800; border: 4px solid var(--text-color); box-shadow: 6px 6px 0 var(--text-color); transition: var(--transition); text-transform: uppercase; text-align: center; cursor: pointer;}
+        .outline-btn:hover { transform: translate(4px, 4px); box-shadow: 0 0 0 transparent; background: var(--text-color); color: #fff;}
+
+        .grid-layout { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; width: 100%;}
+        @media(min-width: 768px) { .grid-layout { gap: 50px; } }
+
         .form-group { margin-bottom: 25px; width: 100%; }
-        .form-label { display: block; text-transform: uppercase; font-family: var(--font-mono); font-size: 0.9rem; font-weight: 800; margin-bottom: 10px; color: #ccc; }
-        .form-input { width: 100%; padding: 18px; background: var(--bg-color); border: 3px solid var(--text-color); color: var(--text-color); font-size: 1rem; font-family: var(--font-body); transition: var(--transition); box-shadow: 4px 4px 0 var(--muted-bg); border-radius: 0; }
+        .form-label { display: block; text-transform: uppercase; font-family: var(--font-mono); font-size: 0.9rem; font-weight: 800; margin-bottom: 10px; color: #444;}
+        .form-input { width: 100%; padding: 18px; background: #fff; border: 3px solid var(--text-color); color: var(--text-color); font-size: 1rem; font-family: var(--font-body); transition: var(--transition); box-shadow: 4px 4px 0 var(--muted-bg); border-radius: 0; -webkit-appearance: none;}
         .form-input:focus { box-shadow: 6px 6px 0 var(--text-color); outline: none; }
 
-        /* Grids */
-        .grid-2 { display: grid; grid-template-columns: 1fr; gap: 40px; width: 100%; }
-        @media(min-width: 768px) { .grid-2 { grid-template-columns: 1fr 1fr; gap: 50px; } } 
+        .accordion-item { border: 3px solid var(--text-color); margin-bottom: 15px; background: #fff; box-shadow: 4px 4px 0 var(--text-color); transition: var(--transition);}
+        .accordion-btn { width: 100%; text-align: left; padding: 20px; font-family: var(--font-heading); font-weight: 800; font-size: 1.2rem; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; cursor: pointer; color: var(--text-color); background: transparent;}
+        .accordion-btn:hover { background: var(--text-color); color: #fff; padding-left: 25px;}
+        .accordion-content { max-height: 0; overflow: hidden; padding: 0 20px; transition: max-height 0.4s ease; background: var(--muted-bg);}
+        .accordion-item.active { box-shadow: 0 0 0 transparent; transform: translate(4px, 4px);}
+        .accordion-item.active .accordion-content { max-height: 800px; padding-bottom: 20px; border-top: 3px dashed var(--text-color); padding-top: 20px;}
+
+        /* FIX HOVER CONTRAST */
+        .data-block, .journal-card { transition: all 0.3s ease; }
+        .data-block *, .journal-card * { transition: color 0.3s ease, border-color 0.3s ease, background 0.3s ease; }
         
-        .grid-3 { display: grid; grid-template-columns: 1fr; gap: 30px; width: 100%; }
-        @media(min-width: 768px) { .grid-3 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px;} } 
+        .data-block:hover { background: var(--text-color); color: #fff; transform: translateY(-4px); box-shadow: 12px 12px 0 var(--text-color);}
+        .data-block:hover h3, .data-block:hover p, .data-block:hover .text-body { color: #fff !important; }
+        .data-block:hover h3 { border-color: #fff; }
+
+        .journal-card:hover { background: var(--text-color); color: #fff; transform: translate(-6px,-6px); box-shadow: 16px 16px 0 var(--text-color);}
+        .journal-card:hover h3, .journal-card:hover p, .journal-card:hover .text-body { color: #fff !important; }
+        .journal-card:hover .journal-tag { background: #fff; color: var(--text-color) !important; border-color: #fff; }
+
+        /* ==========================================
+           6. HERO & MARQUEE
+           ========================================== */
+        .hero { display: grid; grid-template-columns: 1fr; min-height: calc(100vh - var(--header-height)); border-bottom: 6px solid var(--text-color); width: 100%;}
+        @media(min-width: 1024px) { .hero { grid-template-columns: 1.2fr 1fr; } }
         
-        .grid-4 { display: grid; grid-template-columns: 1fr; gap: 20px; width: 100%; }
-        @media(min-width: 768px) { .grid-4 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; } }
-
-        /* Accordion / Interactive List */
-        .interactive-list { width: 100%; }
-        .interactive-item { border: 4px solid var(--text-color); margin-bottom: 15px; background: var(--bg-color); box-shadow: 6px 6px 0 var(--text-color); transition: var(--transition); position: relative;}
-        .interactive-header { width: 100%; text-align: left; padding: 25px; font-family: var(--font-heading); font-weight: 800; font-size: 1.2rem; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; cursor: pointer; color: var(--text-color); background: transparent; z-index: 2; position: relative;}
-        .interactive-header:hover { background: var(--text-color); color: var(--bg-color); padding-left: 30px;}
-        .interactive-icon { font-size: 1.5rem; font-weight: 800; font-family: var(--font-mono); transition: transform 0.4s; }
-        .interactive-content { max-height: 0; overflow: hidden; padding: 0 25px; transition: max-height 0.4s ease; background: var(--muted-bg); }
-        .interactive-item.active { box-shadow: 0 0 0 transparent; transform: translate(6px, 6px); }
-        .interactive-item.active .interactive-content { max-height: 800px; padding-bottom: 25px; border-top: 4px dashed var(--text-color); padding-top: 25px; }
-
-        /* --- UI CARDS (Process, Stats, Work) --- */
-        .process-box, .stat-box { border: 5px solid var(--text-color); padding: 40px; background: var(--bg-color); transition: var(--transition); width: 100%; box-shadow: 8px 8px 0 var(--text-color); }
-        .process-box:hover, .stat-box:hover { background: var(--text-color); color: var(--bg-color); transform: translateY(-4px); box-shadow: 12px 12px 0 var(--text-color); }
-        .process-box:hover h3, .process-box:hover p, .process-box:hover .text-body, .stat-box:hover .stat-number, .stat-box:hover .stat-label { color: var(--bg-color) !important; }
-        .process-num { font-size: 2.5rem; font-weight: 800; border-bottom: 3px solid var(--text-color); display: inline-block; padding-bottom: 10px; margin-bottom: 20px; font-family: var(--font-mono); }
-        .process-box:hover .process-num { border-color: var(--bg-color); color: var(--bg-color);}
-
-        .stat-number { font-size: clamp(2.5rem, 5vw, 4rem); font-family: var(--font-heading); font-weight: 800; line-height: 1; }
-        .stat-label { font-size: 1rem; font-family: var(--font-mono); text-transform: uppercase; margin-top: 10px; font-weight: 800; border-top: 2px dashed var(--text-color); padding-top: 10px;}
-
-        /* --- HERO VIEW --- */
-        .hero { min-height: 80vh; display: flex; align-items: center; border-bottom: 6px solid var(--text-color); width: 100%; padding: 5% 0;}
-        .hero-layout { display: grid; grid-template-columns: 1fr; gap: 40px; align-items: center; }
-        @media(min-width: 1024px) { .hero-layout { grid-template-columns: 1.2fr 1fr; gap: 60px; } }
+        .hero-text-box { padding: 10% 5%; display: flex; flex-direction: column; justify-content: center; border-right: 6px solid var(--text-color); }
+        .hero-title { font-family: var(--font-heading); font-size: clamp(4rem, 11vw, 10rem); font-weight: 800; line-height: 0.85; text-transform: uppercase; margin-bottom: 30px; letter-spacing: -3px;}
         
-        .hero-content { background: var(--bg-color); padding: 40px; border: 6px solid var(--text-color); box-shadow: 15px 15px 0 var(--text-color); position: relative; z-index: 2;}
-        .hero-tagline { font-family: var(--font-mono); font-size: 0.9rem; font-weight: 800; text-transform: uppercase; padding: 8px 15px; border: 3px solid var(--text-color); display: inline-block; margin-bottom: 30px; box-shadow: 4px 4px 0 var(--muted-bg); }
-        .hero h1 { font-family: var(--font-heading); font-size: clamp(3rem, 7vw, 6rem); font-weight: 800; line-height: 0.9; margin-bottom: 30px; text-transform: uppercase; letter-spacing: -3px; }
-        .hero p { font-size: 1.2rem; font-weight: 600; max-width: 500px; color: #ddd; margin-bottom: 40px; border-left: 4px solid var(--text-color); padding-left: 20px; }
+        .hero-img-box { position: relative; background: var(--text-color); overflow: hidden; min-height: 40vh;}
+        .hero-img-box img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; transition: transform 1.2s;}
+        .hero-img-box:hover img { transform: scale(1.05); opacity: 1;}
 
-        .hero-img-box { position: relative; border: 6px solid var(--text-color); box-shadow: 15px 15px 0 var(--text-color); height: 100%; min-height: 400px; overflow: hidden; background: var(--text-color); }
-        .hero-img-box img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.8;}
-        .hero-img-box:hover img { transform: scale(1.05); opacity: 1; }
-
-        /* --- MARQUEE --- */
-        .marquee-container { width: 100%; overflow: hidden; padding: 40px 0; display: block; box-sizing: border-box; }
-        .marquee { background: var(--text-color); color: var(--bg-color); padding: 20px 0; white-space: nowrap; border-top: 4px solid var(--text-color); border-bottom: 4px solid var(--text-color); transform: rotate(-1deg) scale(1.05); box-shadow: 0 10px 0 rgba(255,255,255,0.15); width: 100%; }
-        .marquee-content { display: inline-block; font-family: var(--font-mono); font-size: 1.5rem; font-weight: 800; animation: scrollMarquee 20s linear infinite; text-transform: uppercase; }
-        .marquee-content span { color: var(--bg-color); padding: 0 20px; }
+        .marquee-container { width: 100%; overflow: hidden; padding: 40px 0; display: block; box-sizing: border-box;}
+        .marquee { background: var(--text-color); color: #fff; padding: 20px 0; white-space: nowrap; border-top: 4px solid var(--text-color); border-bottom: 4px solid var(--text-color); transform: rotate(-2deg) scale(1.05); box-shadow: 0 10px 0 rgba(0,0,0,0.15); width: 100%;}
+        .marquee-content { display: inline-block; font-family: var(--font-mono); font-size: 1.5rem; font-weight: 800; animation: scrollMarquee 20s linear infinite; text-transform: uppercase;}
         @keyframes scrollMarquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-        /* --- WORK GRID --- */
-        .work-card { display: flex; flex-direction: column; border: 5px solid var(--text-color); background: var(--bg-color); box-shadow: 8px 8px 0 var(--text-color); transition: var(--transition); cursor: pointer; overflow: hidden; }
-        .work-img-wrapper { width: 100%; height: 350px; border-bottom: 4px solid var(--text-color); background: var(--text-color); overflow: hidden; }
-        .work-card:hover { transform: translate(-6px, -6px); box-shadow: 14px 14px 0 var(--text-color); background: var(--text-color); color: var(--bg-color);}
-        .work-card:hover .work-img { opacity: 0.8; }
+        /* ==========================================
+           7. SHOP ASSETS
+           ========================================== */
+        .filter-bar { display: flex; gap: 10px; margin-bottom: 40px; overflow-x: auto; padding-bottom: 10px; width: 100%;}
+        .filter-bar::-webkit-scrollbar { display: none; }
+        .filter-btn { font-family: var(--font-mono); font-size: 0.9rem; font-weight: 800; padding: 10px 18px; border: 3px solid var(--text-color); background: #fff; transition: var(--transition); white-space: nowrap; text-transform: uppercase; cursor: pointer;}
+        .filter-btn:hover, .filter-btn.active { background: var(--text-color); color: #fff; transform: translateY(-3px); box-shadow: 5px 5px 0 var(--muted-bg);}
+
+        .product-card { border: 5px solid var(--text-color); padding: 15px; background: #fff; box-shadow: 8px 8px 0 var(--text-color); transition: var(--transition); display: flex; flex-direction: column;}
+        .product-card:hover { transform: translate(-4px, -4px); box-shadow: 12px 12px 0 var(--text-color); }
         
-        .work-info { padding: 25px; transition: var(--transition); }
-        .work-client { font-family: var(--font-heading); font-size: 1.8rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px; line-height: 1.1; letter-spacing: -1px;}
-        .work-card:hover .work-client, .work-card:hover .work-tags { color: var(--bg-color); }
-        .work-tags { font-family: var(--font-mono); font-size: 0.9rem; font-weight: 800; padding: 5px 10px; border: 2px solid var(--text-color); display: inline-block; background: var(--bg-color); color: var(--text-color); }
-        .work-card:hover .work-tags { border-color: var(--bg-color); }
+        .product-img { width: 100%; height: 350px; background: var(--muted-bg); border: 3px solid var(--text-color); margin-bottom: 15px; position: relative; overflow: hidden;}
+        @media(min-width: 768px) { .product-img { height: 420px; } }
+        .product-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 0.4s ease;}
+        .product-img img.hover-img { opacity: 0; transform: scale(1.05); transition: opacity 0.4s ease, transform 0.4s ease;}
+        .product-card:hover .product-img img.base-img { opacity: 0; }
+        .product-card:hover .product-img img.hover-img { opacity: 1; transform: scale(1); filter: grayscale(0%);}
 
-        .featured-study { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr; border: 6px solid var(--text-color); background: var(--bg-color); box-shadow: 12px 12px 0 var(--text-color); transition: var(--transition); }
-        @media(min-width: 1024px) { .featured-study { grid-template-columns: 1.5fr 1fr; } }
-        .featured-study:hover { transform: translate(-6px, -6px); box-shadow: 18px 18px 0 var(--text-color); }
-        .fs-img { width: 100%; height: 100%; object-fit: cover; border-bottom: 4px solid var(--text-color); min-height: 350px; }
-        @media(min-width: 1024px) { .fs-img { border-bottom: none; border-right: 4px solid var(--text-color); } }
-        .fs-content { padding: 40px; display: flex; flex-direction: column; justify-content: center; }
+        .product-meta { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; gap: 10px;}
+        .product-name { font-family: var(--font-heading); font-size: 1.1rem; font-weight: 800; text-transform: uppercase; line-height: 1.2; letter-spacing: -1px;}
+        .product-price { font-family: var(--font-mono); font-size: 1.1rem; font-weight: 800; background: var(--text-color); color: #fff; padding: 4px 8px; border: 2px solid var(--text-color);}
 
-        /* --- PRICING CARDS --- */
-        .tier-card { border: 5px solid var(--text-color); background: var(--bg-color); padding: 40px; display: flex; flex-direction: column; transition: var(--transition); box-shadow: 8px 8px 0 var(--text-color); width: 100%; }
-        .tier-card:hover { transform: translate(-4px, -4px); box-shadow: 12px 12px 0 var(--text-color); background: var(--text-color); color: var(--bg-color);}
-        .tier-card.featured { background: var(--text-color); color: var(--bg-color); box-shadow: 8px 8px 0 var(--muted-bg); }
-        .tier-card.featured:hover { background: var(--bg-color); color: var(--text-color); box-shadow: 12px 12px 0 var(--text-color); }
+        .btn-add { width: 100%; font-family: var(--font-mono); font-size: 0.9rem; font-weight: 800; padding: 12px; border: 3px solid var(--text-color); background: #fff; transition: var(--transition); text-transform: uppercase; margin-top: auto; text-align: center; cursor: pointer;}
+        .btn-add:hover { background: var(--text-color); color: #fff;}
+
+        /* ==========================================
+           8. PRODUCT DETAIL
+           ========================================== */
+        .pd-layout { display: grid; grid-template-columns: 1fr; gap: 40px; max-width: 1400px; margin: 0 auto; width: 100%;}
+        @media(min-width: 1024px) { .pd-layout { grid-template-columns: 1.2fr 1fr; gap: 60px;} }
         
-        .tier-name { font-family: var(--font-mono); font-size: 1.2rem; font-weight: 800; text-transform: uppercase; margin-bottom: 20px; border-bottom: 3px dashed var(--text-color); padding-bottom: 10px; transition: var(--transition); }
-        .tier-card:hover .tier-name { border-color: var(--bg-color); }
-        .tier-card.featured .tier-name { border-color: var(--bg-color); }
-        .tier-card.featured:hover .tier-name { border-color: var(--text-color); }
-
-        .tier-price { font-family: var(--font-heading); font-size: 3.5rem; font-weight: 800; line-height: 1; margin-bottom: 15px; letter-spacing: -2px;}
-        .tier-price span { font-family: var(--font-mono); font-size: 1.1rem; font-weight: 800; text-transform: uppercase; }
-        .tier-desc { font-size: 1rem; font-weight: 600; margin-bottom: 30px; }
+        .pd-images img { width: 100%; border: 5px solid var(--text-color); margin-bottom: 20px; box-shadow: 8px 8px 0 var(--text-color); }
         
-        .tier-list { flex-grow: 1; margin-bottom: 40px; font-weight: 600; font-size: 0.95rem; line-height: 1.6;}
-        .tier-list li { margin-bottom: 15px; display: flex; align-items: flex-start; gap: 12px; }
-        .tier-list li::before { content: '>'; font-family: var(--font-mono); font-weight: 800; }
+        .pd-info { position: sticky; top: 100px; border: 5px solid var(--text-color); padding: 30px; background: #fff; box-shadow: 10px 10px 0 var(--text-color);}
+        @media(min-width: 768px) { .pd-info { padding: 40px; border-width: 8px; box-shadow: 15px 15px 0 var(--text-color);} }
+        .pd-info h1 { font-family: var(--font-heading); font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; line-height: 1.1; text-transform: uppercase; margin-bottom: 15px; letter-spacing: -1px;}
+        .pd-price { font-family: var(--font-mono); font-size: 2rem; font-weight: 800; border-bottom: 3px solid var(--text-color); padding-bottom: 15px; display: block; margin-bottom: 25px;}
+        
+        .size-selector { display: flex; gap: 10px; margin: 20px 0 40px 0; flex-wrap: wrap;}
+        .size-btn { width: 50px; height: 50px; border: 3px solid var(--text-color); font-family: var(--font-mono); font-weight: 800; font-size: 1.1rem; background: #fff; transition: var(--transition); box-shadow: 3px 3px 0 var(--muted-bg); display: flex; justify-content: center; align-items: center; cursor: pointer;}
+        @media(min-width: 768px) { .size-btn { width: 60px; height: 60px; font-size: 1.2rem; } }
+        .size-btn.active { background: var(--text-color); color: #fff; box-shadow: 3px 3px 0 var(--text-color); transform: translate(-2px,-2px);}
+        .size-btn:hover:not(.active) { background: var(--text-color); color: #fff; transform: translate(2px,2px); box-shadow: 0 0 0 transparent;}
 
-        /* --- TERMINAL A LA CARTE --- */
-        .terminal-block { background: var(--bg-color); border: 5px solid var(--text-color); padding: 40px; font-family: var(--font-mono); width: 100%; box-shadow: 10px 10px 0 var(--text-color); transition: var(--transition); }
-        .terminal-block:hover { transform: translate(-4px,-4px); box-shadow: 14px 14px 0 var(--text-color); }
-        .terminal-header { display: flex; justify-content: space-between; border-bottom: 4px solid var(--text-color); padding-bottom: 20px; margin-bottom: 30px; font-size: 1.1rem; font-weight: 800; text-transform: uppercase; }
-        .terminal-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 20px; border-bottom: 2px dashed var(--text-color); padding-bottom: 10px; }
-        .t-service { font-size: 1rem; font-weight: 800; text-transform: uppercase; }
-        .t-price { font-size: 1.1rem; font-weight: 800; background: var(--text-color); color: var(--bg-color); padding: 2px 8px; }
+        /* ==========================================
+           9. TEXT, BLOG, & MISC PAGES
+           ========================================== */
+        .text-layout { max-width: 1000px; margin: 0 auto; background: #fff; padding: 40px 20px; border: 5px solid var(--text-color); box-shadow: 12px 12px 0 var(--text-color); width: 100%; box-sizing: border-box;}
+        @media(min-width: 768px){ .text-layout { padding: 60px; border-width: 6px; box-shadow: 15px 15px 0 var(--text-color); } }
 
-        /* --- ABOUT & CONTACT LAYOUTS --- */
-        .split-layout { display: grid; grid-template-columns: 1fr; border: 6px solid var(--text-color); width: 100%; box-shadow: 12px 12px 0 var(--text-color); background: var(--bg-color);}
-        @media(min-width: 1024px) { .split-layout { grid-template-columns: 1.2fr 1fr; } }
-        .split-main { padding: 40px 5%; border-bottom: 6px solid var(--text-color); }
-        @media(min-width: 1024px) { .split-main { padding: 60px; border-bottom: none; border-right: 6px solid var(--text-color); } }
-        .split-sidebar { display: flex; flex-direction: column; background: var(--muted-bg); }
-        .sidebar-block { padding: 40px 5%; border-bottom: 4px solid var(--text-color); flex-grow: 1; display: flex; flex-direction: column; justify-content: center; transition: var(--transition); }
-        @media(min-width: 1024px) { .sidebar-block { padding: 50px; } }
-        .sidebar-block:last-child { border-bottom: none; }
-        .sidebar-block:hover { background: var(--text-color); color: var(--bg-color); }
-        .sidebar-block:hover h4, .sidebar-block:hover p, .sidebar-block:hover a { color: var(--bg-color); }
+        .journal-card { border: 5px solid var(--text-color); padding: 20px; background: #fff; box-shadow: 8px 8px 0 var(--text-color); transition: var(--transition); cursor: pointer;}
+        .journal-card img { height: 250px; width: 100%; border: 3px solid var(--text-color); margin-bottom: 15px;}
+        @media(min-width: 768px) { .journal-card img { height: 350px; } }
+        .journal-tag { font-family: var(--font-mono); font-size: 0.8rem; padding: 4px 10px; border: 2px solid var(--text-color); display: inline-block; margin-bottom: 15px; background: #fff; color: var(--text-color); font-weight: 800;}
+        .journal-card h3 { font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800; text-transform: uppercase; line-height: 1.2;}
 
-        /* --- FOOTER FIXED ALIGNMENT --- */
-        footer { background: var(--bg-color); color: var(--text-color); padding: 60px 5% 40px; width: 100vw; overflow-x: hidden; box-sizing: border-box; margin-top: auto;}
-        .footer-grid { display: flex; flex-direction: column; gap: 40px; margin-bottom: 60px; width: 100%; max-width: 1400px; margin: 0 auto 60px auto;}
+        .data-block { border: 5px solid var(--text-color); padding: 25px; background: #fff; margin-bottom: 30px; box-shadow: 6px 6px 0 var(--text-color); transition: var(--transition);}
+        .data-block h3 { font-family: var(--font-mono); font-size: 1.2rem; font-weight: 800; border-bottom: 2px dashed var(--text-color); padding-bottom: 10px; margin-bottom: 15px;}
+
+        .checkout-grid { display: grid; grid-template-columns: 1fr; gap: 40px; width: 100%;}
+        @media (min-width: 1024px) { .checkout-grid { grid-template-columns: 1.5fr 1fr; gap: 50px; } }
+        .order-summary { background: #fff; padding: 30px; border: 5px solid var(--text-color); box-shadow: 8px 8px 0 var(--text-color); height: fit-content; width: 100%; box-sizing: border-box;}
+        .summary-item { display: flex; justify-content: space-between; margin-bottom: 20px; border-bottom: 3px dashed var(--text-color); padding-bottom: 20px; font-weight: 800; font-size: 1.1rem; font-family: var(--font-heading); text-transform: uppercase;}
+
+        .lux-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; text-align: left; border: 4px solid var(--text-color); background: #fff;}
+        .lux-table th, .lux-table td { padding: 15px; border-bottom: 2px solid var(--text-color); border-right: 2px solid var(--text-color); font-family: var(--font-mono); font-size: 0.95rem;}
+        .lux-table th { background: var(--text-color); color: #fff; text-transform: uppercase; font-weight: 800;}
+
+        /* ==========================================
+           10. CART DRAWER & TOASTS
+           ========================================== */
+        .cart-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 95000; opacity: 0; visibility: hidden; transition: var(--transition); backdrop-filter: blur(5px);}
+        .cart-drawer { position: fixed; top: 0; right: -100%; width: 100%; max-width: 500px; height: 100vh; background: #fff; z-index: 96000; border-left: 6px solid var(--text-color); transition: right 0.4s cubic-bezier(0.19, 1, 0.22, 1); display: flex; flex-direction: column; box-shadow: -15px 0 0 #fff;}
+        body.cart-open .cart-overlay { opacity: 1; visibility: visible; }
+        body.cart-open .cart-drawer { right: 0; }
+
+        .cart-header { padding: 30px; border-bottom: 6px solid var(--text-color); display: flex; justify-content: space-between; align-items: center; background: #fff; }
+        .cart-header h2 { font-family: var(--font-heading); font-size: 2rem; font-weight: 800; text-transform: uppercase; letter-spacing: -1px;}
+        
+        .cart-items { flex-grow: 1; overflow-y: auto; padding: 30px; background-image: linear-gradient(#e0e0e0 1px, transparent 1px), linear-gradient(90deg, #e0e0e0 1px, transparent 1px); background-size: 40px 40px;}
+        .cart-item-card { display: flex; gap: 15px; background: #fff; border: 4px solid var(--text-color); padding: 15px; margin-bottom: 25px; box-shadow: 8px 8px 0 var(--text-color);}
+        .cart-item-card img { width: 80px; height: 100px; border: 3px solid var(--text-color);}
+        .cart-controls { display: flex; align-items: center; border: 3px solid var(--text-color); margin-top: 10px;}
+        .cart-controls button { width: 35px; height: 35px; font-weight: 800; font-size: 1.2rem; transition: var(--transition); cursor: pointer; background: #fff;}
+        .cart-controls button:hover { background: var(--text-color); color: #fff;}
+        .cart-controls span { width: 35px; text-align: center; font-family: var(--font-mono); font-weight: 800; font-size: 1rem; border-left: 3px solid var(--text-color); border-right: 3px solid var(--text-color); background: var(--muted-bg);}
+
+        .cart-footer { padding: 30px; border-top: 6px solid var(--text-color); background: #fff; }
+        .cart-total { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 1.8rem; font-weight: 800; margin-bottom: 25px; text-transform: uppercase;}
+
+        .toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 99999; display: flex; flex-direction: column; gap: 15px; pointer-events: none; }
+        .toast { background: var(--text-color); color: #fff; padding: 15px 25px; font-family: var(--font-mono); font-weight: 800; font-size: 0.9rem; border: 3px solid #fff; box-shadow: -6px 6px 0 #000; text-transform: uppercase; transform: translateX(150%); transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1); }
+        .toast.show { transform: translateX(0); }
+
+        /* ==========================================
+           11. FOOTER 
+           ========================================== */
+        footer { background: #000; color: #fff; padding: 60px 5% 40px; width: 100vw; overflow-x: hidden; box-sizing: border-box;}
+
+        .footer-logo { font-family: var(--font-heading); font-size: 2.5rem; font-weight: 800; margin-bottom: 20px; text-transform: uppercase; letter-spacing: -2px;}
+        .footer-desc { font-family: var(--font-body); font-size: 0.95rem; font-weight: 500; color: #ccc; margin-bottom: 40px; line-height: 1.6; max-width: 400px;}
+
+        .footer-grid { display: flex; flex-direction: column; gap: 40px; margin-bottom: 60px; width: 100%;}
         @media(min-width: 768px) { .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; } }
 
-        .footer-brand h3 { font-family: var(--font-heading); font-size: 2.5rem; font-weight: 800; margin-bottom: 20px; text-transform: uppercase; letter-spacing: -2px; }
-        .footer-brand p { font-family: var(--font-body); font-size: 0.95rem; font-weight: 500; color: #ccc; margin-bottom: 40px; line-height: 1.6; max-width: 400px; }
-        
-        .footer-links h4 { font-family: var(--font-mono); font-size: 1.1rem; font-weight: 800; margin-bottom: 25px; text-transform: uppercase; color: var(--text-color); letter-spacing: 1px; }
-        .footer-links ul li { margin-bottom: 12px; }
-        .footer-links ul li a { font-family: var(--font-mono); font-size: 0.95rem; font-weight: 800; color: #aaa; transition: color 0.3s; cursor: pointer; text-transform: uppercase; }
-        .footer-links ul li a:hover { color: var(--text-color); }
+        .footer-title { font-family: var(--font-mono); font-size: 1.1rem; font-weight: 800; margin-bottom: 15px; text-transform: uppercase; color: #fff; letter-spacing: 1px;}
 
-        .footer-bottom { border-top: 1px solid #333; padding-top: 25px; display: flex; flex-direction: column; gap: 15px; font-family: var(--font-mono); font-size: 0.8rem; font-weight: 800; text-transform: uppercase; color: #666; width: 100%; max-width: 1400px; margin: 0 auto;}
+        .footer-text { font-family: var(--font-body); font-size: 0.9rem; color: #aaa; margin-bottom: 25px; line-height: 1.6;}
+
+        .footer-links { list-style: none; margin-bottom: 40px;}
+        .footer-links li { margin-bottom: 12px; }
+        .footer-links a { font-family: var(--font-mono); font-size: 0.95rem; font-weight: 800; color: #aaa; transition: color 0.3s; cursor: pointer; text-decoration: none; text-transform: uppercase;}
+        .footer-links a:hover { color: #fff; }
+
+        .footer-newsletter-wrapper { width: 100%; max-width: 400px; margin-bottom: 20px; position: relative;}
+        .newsletter-input-group { display: flex; border-bottom: 1px solid #444; padding-bottom: 10px;}
+        .newsletter-input { flex-grow: 1; background: transparent; border: none; outline: none; color: #fff; font-family: var(--font-mono); font-size: 0.9rem; text-transform: uppercase;}
+        .newsletter-input::placeholder { color: #666; }
+        .newsletter-btn { font-family: var(--font-mono); font-weight: 800; font-size: 0.9rem; color: #fff; text-transform: uppercase; cursor: pointer; transition: color 0.3s;}
+        .newsletter-btn:hover { color: #aaa; }
+
+        .footer-socials { display: flex; gap: 20px; margin-bottom: 60px;}
+        .footer-socials a { font-family: var(--font-mono); font-weight: 800; font-size: 0.85rem; color: #fff; text-transform: uppercase; letter-spacing: 1px; cursor: pointer;}
+
+        .footer-bottom { border-top: 1px solid #222; padding-top: 25px; display: flex; flex-direction: column; gap: 15px; font-family: var(--font-mono); font-size: 0.8rem; font-weight: 800; text-transform: uppercase; color: #666;}
         @media(min-width: 768px) { .footer-bottom { flex-direction: row; justify-content: space-between; align-items: center; } }
 
-        .mobile-menu-footer { display: none; }
-
-        /* --- MOBILE MENU & TABLET FIX --- */
-        @media (max-width: 1024px) {
-            .header-actions .btn-outline { display: none; }
-            
-            /* Toggle Button - Square Brutalist with Shadow */
-            .mobile-toggle { 
-                display: block; 
-                width: 42px; 
-                height: 42px; 
-                border: 3px solid var(--text-color); 
-                background: var(--bg-color); 
-                position: relative; 
-                z-index: 90001; 
-                transition: var(--transition); 
-                box-shadow: 4px 4px 0 var(--text-color); 
-                cursor: none;
-            }
-            .mobile-toggle:active { 
-                transform: translate(4px, 4px); 
-                box-shadow: 0 0 0 transparent; 
-            }
-            .mobile-toggle span { 
-                position: absolute; 
-                left: 8px; 
-                height: 3px; 
-                background: var(--text-color); 
-                transition: var(--transition); 
-                pointer-events: none; 
-                width: 20px; 
-            }
-            .mobile-toggle span:nth-child(1) { top: 12px; }
-            .mobile-toggle span:nth-child(2) { top: 22px; }
-            
-            /* Active state (Cross configuration) */
-            .mobile-toggle.active { background: var(--text-color); }
-            .mobile-toggle.active span { background: var(--bg-color); }
-            .mobile-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(4px, 4px); }
-            .mobile-toggle.active span:nth-child(2) { transform: rotate(-45deg) translate(3px, -3px); }
-
-            /* Nav Container Redesign */
-            .nav-links { 
-                position: fixed; 
-                top: 0; 
-                left: -100%; 
-                width: 100vw; 
-                max-width: 100vw; 
-                height: 100vh; 
-                background: var(--bg-color); 
-                border-right: none; 
-                flex-direction: column; 
-                padding: 120px 40px 40px 40px; 
-                z-index: 90000; 
-                transition: left 0.5s cubic-bezier(0.19, 1, 0.22, 1); 
-                box-shadow: none; 
-                overflow-y: auto;
-                justify-content: flex-start;
-            }
-            .nav-links.active { left: 0; }
-            
-            /* Clean Link Typography */
-            .nav-links > a.nav-trigger { 
-                font-family: var(--font-mono); 
-                font-size: 2.5rem; 
-                font-weight: 800; 
-                text-transform: uppercase; 
-                width: 100%; 
-                border-bottom: none; 
-                padding: 8px 0; 
-                color: var(--text-color); 
-                transition: opacity 0.3s ease;
-                line-height: 1.2;
-            }
-            .nav-links > a.nav-trigger::after { display: none !important; } 
-            .nav-links > a.nav-trigger:hover, 
-            .nav-links > a.nav-trigger.active-link { 
-                padding-left: 0; 
-                border-color: transparent; 
-                opacity: 0.6;
-            }
-
-            /* New Mobile Footer Layout */
-            .mobile-menu-footer {
-                display: flex;
-                margin-top: auto;
-                padding-top: 40px;
-                flex-direction: column;
-                font-family: var(--font-body);
-                width: 100%;
-            }
-
-            .mobile-address {
-                font-size: 0.8rem;
-                color: #a0a0a0;
-                line-height: 1.6;
-                text-transform: uppercase;
-                font-weight: 500;
-                letter-spacing: 0.5px;
-                margin-bottom: 25px;
-            }
-
-            a.mobile-email {
-                font-size: 0.8rem;
-                color: var(--text-color) !important;
-                text-transform: uppercase;
-                text-decoration: none;
-                font-weight: 600;
-                letter-spacing: 0.5px;
-                padding: 0 0 5px 0 !important;
-                margin-bottom: 30px;
-                display: inline-block;
-                width: fit-content;
-                border-bottom: 1px solid var(--text-color) !important;
-            }
-
-            .mobile-legal-wrap {
-                border-top: 1px solid #222;
-                padding-top: 20px;
-                width: 100%;
-            }
-
-            .mobile-legal-row {
-                display: flex;
-                justify-content: space-between;
-                align-items: flex-end;
-                margin-bottom: 5px;
-            }
-
-            .legal-muted {
-                font-size: 0.6rem;
-                color: #666;
-                text-transform: uppercase;
-                letter-spacing: 0.5px;
-            }
-
-            .legal-highlight {
-                font-size: 0.6rem;
-                color: #fff;
-                text-transform: uppercase;
-                text-align: right;
-                font-weight: 600;
-                letter-spacing: 0.5px;
-                line-height: 1.4;
-            }
-
-            .mobile-copyright {
-                font-size: 0.6rem;
-                color: #666;
-                text-transform: uppercase;
-                letter-spacing: 0.5px;
-            }
-            
-            .mobile-only-link { display: none !important; }
-        }
-        @media (min-width: 1025px) { .mobile-only-link { display: none !important; } }
+        .footer-bottom-links { display: flex; gap: 15px; flex-wrap: wrap; }
+        .footer-bottom-links a { color: #888; transition: color 0.3s; cursor: pointer;}
+        .footer-bottom-links a:hover { color: #fff;}
+        .footer-credit { color: #fff; font-weight: 800;}
     </style>
 </head>
 <body>
 
     <canvas id="cursor-canvas"></canvas>
     <div class="custom-cursor-dot" id="cursor-dot"></div>
-    
+
     <div class="toast-container" id="toast-container"></div>
-    <div class="nav-overlay-bg" id="nav-overlay-bg"></div>
 
-    <header id="header">
-        <div class="header-inner">
-            <div class="logo magnetic-wrap">
-                <a href="#home" class="nav-trigger magnetic" data-target="view-home">DIGITAL<span class="blink">_</span>TRADE</a>
-            </div>
-            
-            <nav class="nav-links" id="nav-links">
-                <a href="#home" class="nav-trigger scrambler active-link" data-target="view-home">Home</a>
-                <a href="#services" class="nav-trigger scrambler" data-target="view-services">Services</a>
-                <a href="#work" class="nav-trigger scrambler" data-target="view-work">Work</a>
-                <a href="#pricing" class="nav-trigger scrambler" data-target="view-pricing">Pricing</a>
-                <a href="#about" class="nav-trigger scrambler" data-target="view-about">Ethos</a>
-                <a href="#faq" class="nav-trigger scrambler" data-target="view-faq">FAQ</a>
-                <a href="#contact" class="nav-trigger scrambler" data-target="view-contact">Contact</a>
+    <div class="page-transition" id="page-transition">
+        <h1 class="glitch-text" data-text="VIROX" style="font-family: var(--font-heading); font-size: 5rem; font-weight: 800; color: #fff; letter-spacing: -1px;">VIROX</h1>
+    </div>
 
-                <div class="mobile-menu-footer">
-                    <div class="mobile-address">
-                        TEKNAAR CHOWK,<br>
-                        AWARBHATA<br>
-                        DANTEWADA, CG
-                    </div>
-                    <a href="#contact" class="mobile-email nav-trigger" data-target="view-contact">EMAIL US</a>
-                    
-                    <div class="mobile-legal-wrap">
-                        <div class="mobile-legal-row">
-                            <span class="legal-muted">LEGAL NOTICE</span>
-                            <span class="legal-highlight">WEBSITE BY<br>DIGITAL TRADE</span>
-                        </div>
-                        <div class="mobile-copyright">
-                            ©2026 DIGITAL TRADE
-                        </div>
-                    </div>
-                </div>
-            </nav>
-            
-            <div class="header-actions">
-                <div class="magnetic-wrap">
-                    <button class="btn-outline nav-trigger magnetic scrambler" data-target="view-contact">START PROJECT</button>
-                </div>
-                <button class="mobile-toggle magnetic" id="mobile-toggle" aria-label="Toggle Mobile Menu">
-                    <span></span><span></span>
-                </button>
-            </div>
+    <header>
+        <div class="logo"><a href="#home" class="magnetic-btn nav-btn glitch-text" data-text="VIROX" data-target="view-home">VIROX</a></div>
+        
+        <nav class="nav-links-desktop">
+            <a href="#home" class="nav-link nav-btn active-link" data-target="view-home">Home</a>
+            <a href="#shop" class="nav-link nav-btn" data-target="view-shop">Catalog</a>
+            <a href="#campaigns" class="nav-link nav-btn" data-target="view-campaigns">Archive</a>
+            <a href="#journal" class="nav-link nav-btn" data-target="view-journal">Logs</a>
+            <a href="#about" class="nav-link nav-btn" data-target="view-about">Ethos</a>
+        </nav>
+
+        <div class="header-actions">
+            <button class="btn-action magnetic-btn nav-btn" data-target="view-account">LOGIN</button>
+            <button class="btn-action magnetic-btn" id="cart-toggle">
+                CART <span style="background:var(--text-color); color:#fff; padding: 2px 6px; font-family:var(--font-mono);" id="cart-count">0</span>
+            </button>
+
+            <button class="mobile-icon-btn magnetic-btn" id="cart-toggle-mobile">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="square"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+            </button>
+            <button class="mobile-toggle-text magnetic-btn" id="mobile-toggle">MENU</button>
         </div>
     </header>
 
-    <main id="main-content">
+    <div id="nav-overlay"></div>
+    <div class="mobile-nav-drawer" id="nav-menu">
+        <div class="menu-top-bar">
+            <span>VIROX_OS</span>
+            <button class="menu-close-btn" id="close-mobile-menu">[X]</button>
+        </div>
+        
+        <div class="menu-header-block">
+            <h2 class="menu-active-title">MAIN</h2>
+            <div class="menu-subtitle">System Architecture - Core Operations</div>
+            
+            <div style="display: flex; flex-direction: column; gap: 5px;">
+                <label class="menu-checkbox-item">
+                    <input type="checkbox" class="menu-chk" checked>
+                    <a href="#home" class="nav-btn menu-chk-label" data-target="view-home">Initialize System (Home)</a>
+                </label>
+                <label class="menu-checkbox-item">
+                    <input type="checkbox" class="menu-chk">
+                    <a href="#faq" class="nav-btn menu-chk-label" data-target="view-faq">Access Intel / FAQ</a>
+                </label>
+                <label class="menu-checkbox-item">
+                    <input type="checkbox" class="menu-chk">
+                    <a href="#contact" class="nav-btn menu-chk-label" data-target="view-contact">Transmit Message</a>
+                </label>
+                <label class="menu-checkbox-item">
+                    <input type="checkbox" class="menu-chk">
+                    <a href="#account" class="nav-btn menu-chk-label" data-target="view-account">Login / Authentication</a>
+                </label>
+            </div>
+        </div>
+        
+        <div style="display: flex; flex-direction: column; margin-top: auto;">
+            <button class="nav-btn menu-large-block" data-target="view-shop">CATALOG</button>
+            <button class="nav-btn menu-large-block" data-target="view-campaigns">ARCHIVE</button>
+            <button class="nav-btn menu-large-block" data-target="view-journal">LOGS</button>
+            <button class="nav-btn menu-large-block" data-target="view-about">CORE</button>
+        </div>
+    </div>
+
+    <div class="cart-overlay" id="cart-overlay"></div>
+    <div class="cart-drawer" id="cart-drawer">
+        <div class="cart-header">
+            <h2 class="glitch-text" data-text="MANIFEST">MANIFEST</h2>
+            <button class="magnetic-btn" id="cart-close" style="font-size: 1.5rem; font-weight:800; font-family: var(--font-mono); border: 2px solid var(--text-color); background: #fff; padding: 0 10px; box-shadow: 3px 3px 0 var(--text-color); cursor:pointer;">X</button>
+        </div>
+        <div class="cart-items" id="cart-items">
+            </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total</span>
+                <span id="cart-total-price">$0.00</span>
+            </div>
+            <button class="primary-btn nav-btn magnetic-btn" data-target="view-checkout" style="width: 100%; padding: 15px; font-size: 1.1rem;" id="checkout-drawer-btn">Initialize Checkout</button>
+        </div>
+    </div>
+
+    <main id="main-wrap">
         
         <section id="view-home" class="view-section active">
-            
-            <section class="hero container">
-                <div class="hero-layout">
-                    <div class="hero-content">
-                        <span class="hero-tagline scrambler">System Status: Active</span>
-                        <h1 class="glitch-text" data-text="PRECISION ARCHITECTURE">PRECISION<br>ARCHITECTURE</h1>
-                        <p>We engineer brand experiences. From pixel-perfect website design to structural graphic identities, we build aesthetics that convert.</p>
-                        <div class="magnetic-wrap" style="margin-top: 10px;">
-                            <button class="btn-primary nav-trigger magnetic scrambler" data-target="view-work">EXPLORE ARCHIVE</button>
-                        </div>
-                    </div>
-                    <div class="hero-img-box magnetic-wrap">
-                        <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?q=80&w=2000&auto=format&fit=crop" class="magnetic" alt="Digital Trade Concept">
+            <div class="hero">
+                <div class="hero-text-box">
+                    <span style="font-family: var(--font-mono); font-weight: 800; border: 2px solid var(--text-color); padding: 4px 10px; display: inline-block; margin-bottom: 20px; width: fit-content; font-size: 0.8rem; box-shadow: 3px 3px 0 var(--muted-bg);">DROP 002 LIVE</span>
+                    <h1 class="hero-title glitch-text" data-text="VIROX SYSTEM">VIROX<br>SYSTEM</h1>
+                    <p class="text-body" style="font-weight: 600; border-left: 4px solid var(--text-color); padding-left: 15px;">
+                        Engineered streetwear for the modern grid. Heavyweight fabrics. Structural silhouettes. Strict monochromatic protocol.
+                    </p>
+                    <div style="margin-top: 30px; display: flex; gap: 15px; flex-wrap: wrap;">
+                        <button class="primary-btn magnetic-btn nav-btn" style="background: var(--text-color); border-color: var(--text-color);" data-target="view-shop">ENTER CATALOG</button>
                     </div>
                 </div>
-            </section>
-
+                <div class="hero-img-box magnetic-btn nav-btn" data-target="view-campaigns" style="cursor: pointer;">
+                    <img src="https://images.unsplash.com/photo-1542596594-649edbc13630?q=80&w=1200&auto=format&fit=crop" alt="Virox Hero">
+                </div>
+            </div>
+            
             <div class="marquee-container">
                 <div class="marquee">
                     <div class="marquee-content">
-                        Web Design <span>//</span> Graphic Systems <span>//</span> E-Commerce Architecture <span>//</span> Brand Identity <span>//</span> UI/UX Layouts <span>//</span> Web Design <span>//</span> Graphic Systems <span>//</span> E-Commerce Architecture <span>//</span> Brand Identity <span>//</span> UI/UX Layouts <span>//</span>
+                        STRICT BLACK AND WHITE ++ ARCHITECTURAL FIT ++ NO RESTOCKS ++ HEAVYWEIGHT CORE ++ STRICT BLACK AND WHITE ++ ARCHITECTURAL FIT ++ NO RESTOCKS ++ HEAVYWEIGHT CORE ++ 
                     </div>
                 </div>
             </div>
 
-            <section class="section-padding">
-                <div class="container">
-                    <div class="section-header">
-                        <h2 class="glitch-text" data-text="THE METHODOLOGY">THE <span>METHODOLOGY</span></h2>
-                        <p>How we deploy digital infrastructure from concept to launch.</p>
-                    </div>
-                    <div class="grid-3">
-                        <div class="process-box">
-                            <div class="process-num">01</div>
-                            <h3 style="font-family: var(--font-heading); font-size: 1.5rem; text-transform: uppercase; margin-bottom: 15px; font-weight: 800;">Discovery</h3>
-                            <p class="text-body">We analyze your market, competitors, and structural requirements to blueprint a strategy that guarantees conversion.</p>
-                        </div>
-                        <div class="process-box">
-                            <div class="process-num">02</div>
-                            <h3 style="font-family: var(--font-heading); font-size: 1.5rem; text-transform: uppercase; margin-bottom: 15px; font-weight: 800;">Architecture</h3>
-                            <p class="text-body">Our team develops wireframes, vector logos, and design systems, ensuring perfect visual hierarchy across all devices.</p>
-                        </div>
-                        <div class="process-box">
-                            <div class="process-num">03</div>
-                            <h3 style="font-family: var(--font-heading); font-size: 1.5rem; text-transform: uppercase; margin-bottom: 15px; font-weight: 800;">Deployment</h3>
-                            <p class="text-body">We push the code live. Integrating Shopify, optimized graphics, and analytics to track your new digital ecosystem.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section class="section-padding" style="padding-top: 0;">
-                <div class="container">
-                    <div class="section-header">
-                        <h2 class="glitch-text" data-text="CLIENT NETWORK">CLIENT <span>NETWORK</span></h2>
-                        <p>A global roster of brands running on our framework.</p>
-                    </div>
-                    <div class="grid-4">
-                        <div class="stat-box" style="padding: 25px; text-align: center;"><h3 class="scrambler" style="font-family: var(--font-mono); font-size: 1.2rem; font-weight: 800; text-transform: uppercase;">Virox Apparel</h3></div>
-                        <div class="stat-box" style="padding: 25px; text-align: center;"><h3 class="scrambler" style="font-family: var(--font-mono); font-size: 1.2rem; font-weight: 800; text-transform: uppercase;">Athrex Energy</h3></div>
-                        <div class="stat-box" style="padding: 25px; text-align: center;"><h3 class="scrambler" style="font-family: var(--font-mono); font-size: 1.2rem; font-weight: 800; text-transform: uppercase;">Nirvaan Store</h3></div>
-                        <div class="stat-box" style="padding: 25px; text-align: center;"><h3 class="scrambler" style="font-family: var(--font-mono); font-size: 1.2rem; font-weight: 800; text-transform: uppercase;">Apparel Vault</h3></div>
-                    </div>
-                </div>
-            </section>
-
-            <div style="width: 100%; border-top: 6px solid var(--text-color); border-bottom: 6px solid var(--text-color); background: var(--muted-bg);">
-                <div class="container">
-                    <div class="grid-4" style="gap: 0;">
-                        <div class="stat-box" style="border: none; border-right: 4px dashed var(--text-color); box-shadow: none; background: transparent; padding: 60px 20px;"><div class="stat-number glitch-text" data-text="200+">200+</div><div class="stat-label">Projects Deployed</div></div>
-                        <div class="stat-box" style="border: none; border-right: 4px dashed var(--text-color); box-shadow: none; background: transparent; padding: 60px 20px;"><div class="stat-number glitch-text" data-text="100%">100%</div><div class="stat-label">Bespoke Design</div></div>
-                        <div class="stat-box" style="border: none; border-right: 4px dashed var(--text-color); box-shadow: none; background: transparent; padding: 60px 20px;"><div class="stat-number glitch-text" data-text="Global">Global</div><div class="stat-label">Client Roster</div></div>
-                        <div class="stat-box" style="border: none; box-shadow: none; background: transparent; padding: 60px 20px;"><div class="stat-number glitch-text" data-text="24/7">24/7</div><div class="stat-label">Creative Support</div></div>
-                    </div>
-                </div>
-            </div>
-
-            <section class="section-padding">
-                <div class="container">
-                    <div class="grid-2">
-                        <div>
-                            <h2 style="font-family: var(--font-heading); font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800; text-transform: uppercase; margin-bottom: 30px; line-height: 1; letter-spacing: -2px;">Constructing digital dominance.</h2>
-                            <p class="text-body">At Digital Trade, we don't just create images; we build structural visual systems. Founded by Indrajeet Pisda and headquartered in Teknaar Chowk, Awarbhata Dantewada, our studio bridges the gap between raw creativity and engineered functionality.</p>
-                            <p class="text-body" style="font-weight: 700; border-left: 4px solid var(--text-color); padding-left: 15px;">Clutter kills conversion. We strip away the unnecessary to deploy high-performance websites and striking graphic identities that scale brands globally.</p>
-                            <div class="magnetic-wrap" style="margin-top: 30px;">
-                                <button class="btn-outline nav-trigger magnetic scrambler" data-target="view-about">READ MANIFESTO</button>
-                            </div>
-                        </div>
-                        <div style="border: 6px solid var(--text-color); box-shadow: 15px 15px 0 var(--text-color); height: 100%; min-height: 400px; overflow: hidden; background: var(--text-color);">
-                            <img src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=2070&auto=format&fit=crop" style="width: 100%; height: 100%; object-fit: cover;" alt="Studio Workspace">
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </section>
-
-        <section id="view-services" class="view-section">
             <div class="section-padding">
-                <div class="container">
-                    <div class="section-header">
-                        <h2 class="glitch-text" data-text="CORE INFRASTRUCTURE">CORE <span>INFRASTRUCTURE</span></h2>
-                        <p>Our studio specializes in the structural execution of visual identities.</p>
-                    </div>
-                    
-                    <div class="grid-3">
-                        <div class="process-box">
-                            <h3 style="font-family: var(--font-heading); font-size: 1.6rem; text-transform: uppercase; margin-bottom: 15px; font-weight: 800; border-bottom: 3px solid var(--text-color); padding-bottom: 10px;">Web Architecture</h3>
-                            <p class="text-body">High-performance, responsive websites built with clean code and intuitive user experiences. We specialize in custom CMS integration, specifically Shopify and Blogger.</p>
-                            <ul style="border-top: 3px dashed var(--text-color); padding-top: 20px; margin-top: auto; font-family: var(--font-mono); font-weight: 800; font-size: 0.9rem;">
-                                <li style="margin-bottom: 10px;">> UI/UX Wireframing</li>
-                                <li style="margin-bottom: 10px;">> Front-End Dev</li>
-                                <li style="margin-bottom: 10px;">> Shopify Stores</li>
-                            </ul>
+                <h2 class="section-title glitch-text" data-text="THE DIRECTIVE">THE DIRECTIVE</h2>
+                <div class="grid-layout" style="grid-template-columns: 1fr; gap: 40px;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                        <div class="data-block magnetic-btn">
+                            <h3>01. STRUCTURAL INTEGRITY</h3>
+                            <p class="text-body">We reject lightweight materials. Every garment is constructed using hyper-dense fabrics ranging from 280gsm cotton to 500gsm fleece.</p>
                         </div>
-                        <div class="process-box">
-                            <h3 style="font-family: var(--font-heading); font-size: 1.6rem; text-transform: uppercase; margin-bottom: 15px; font-weight: 800; border-bottom: 3px solid var(--text-color); padding-bottom: 10px;">Graphic Systems</h3>
-                            <p class="text-body">Striking visual assets engineered for digital platforms and physical print media. We create everything from web banners to custom T-shirt print layouts optimized for DTG.</p>
-                            <ul style="border-top: 3px dashed var(--text-color); padding-top: 20px; margin-top: auto; font-family: var(--font-mono); font-weight: 800; font-size: 0.9rem;">
-                                <li style="margin-bottom: 10px;">> Apparel Graphics</li>
-                                <li style="margin-bottom: 10px;">> Marketing Banners</li>
-                                <li style="margin-bottom: 10px;">> Print Layouts</li>
-                            </ul>
-                        </div>
-                        <div class="process-box">
-                            <h3 style="font-family: var(--font-heading); font-size: 1.6rem; text-transform: uppercase; margin-bottom: 15px; font-weight: 800; border-bottom: 3px solid var(--text-color); padding-bottom: 10px;">Brand Identity</h3>
-                            <p class="text-body">Comprehensive branding strategies that establish market presence. We forge logos, define typography structures, and create brand guidelines.</p>
-                            <ul style="border-top: 3px dashed var(--text-color); padding-top: 20px; margin-top: auto; font-family: var(--font-mono); font-weight: 800; font-size: 0.9rem;">
-                                <li style="margin-bottom: 10px;">> Logo Design</li>
-                                <li style="margin-bottom: 10px;">> Brand Guidelines</li>
-                                <li style="margin-bottom: 10px;">> Color Systems</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="section-header" style="margin-top: 100px;">
-                        <h2 class="glitch-text" data-text="OPERATIONAL WORKFLOW">OPERATIONAL <span>WORKFLOW</span></h2>
-                        <p>Our systematic approach to service delivery.</p>
-                    </div>
-                    <div class="interactive-list">
-                        <div class="interactive-item">
-                            <button class="interactive-header">Phase 1: Blueprint <span class="interactive-icon">+</span></button>
-                            <div class="interactive-content"><p class="text-body" style="padding-top: 20px; font-weight: 700;">We gather your raw data, business goals, and asset constraints. This phase establishes the exact timeline and structural requirements of the deliverables.</p></div>
-                        </div>
-                        <div class="interactive-item">
-                            <button class="interactive-header">Phase 2: Construction <span class="interactive-icon">+</span></button>
-                            <div class="interactive-content"><p class="text-body" style="padding-top: 20px; font-weight: 700;">Our architects begin drafting code and vectorizing layouts. You will receive milestone updates and staging links to review the progress in real-time.</p></div>
-                        </div>
-                        <div class="interactive-item">
-                            <button class="interactive-header">Phase 3: Handover <span class="interactive-icon">+</span></button>
-                            <div class="interactive-content"><p class="text-body" style="padding-top: 20px; font-weight: 700;">Final quality assurance. Once approved, the master files, root access, and operational documentation are transferred to your secure servers.</p></div>
+                        <div class="data-block magnetic-btn">
+                            <h3>02. MONOCHROMATIC PURITY</h3>
+                            <p class="text-body">Color is a distraction. The Virox system relies purely on stark contrast, extreme textures, and meticulous pattern making to convey aesthetic dominance.</p>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="view-work" class="view-section">
+        <section id="view-shop" class="view-section">
             <div class="section-padding">
-                <div class="container">
-                    <div class="section-header">
-                        <h2 class="glitch-text" data-text="THE ARCHIVE">THE <span>ARCHIVE</span></h2>
-                        <p>An indexed log of deployed visual identities and graphic systems.</p>
+                <h2 class="section-title glitch-text" data-text="ACTIVE ASSETS">ACTIVE ASSETS</h2>
+                <p class="text-body">Browse the active catalog. Inventory is strictly limited. No restocks once archived.</p>
+                
+                <div class="filter-bar">
+                    <button class="filter-btn active magnetic-btn" data-filter="all">ALL</button>
+                    <button class="filter-btn magnetic-btn" data-filter="outerwear">OUTERWEAR</button>
+                    <button class="filter-btn magnetic-btn" data-filter="essentials">CORE</button>
+                    <button class="filter-btn magnetic-btn" data-filter="graphics">GRAPHICS</button>
+                    <button class="filter-btn magnetic-btn" data-filter="bottoms">BOTTOMS</button>
+                    <button class="filter-btn magnetic-btn" data-filter="accessories">HARDWARE</button>
+                </div>
+
+                <div class="grid-layout" id="product-grid">
                     </div>
-                    
-                    <div class="grid-2">
-                        <div class="featured-study" onclick="navigateTo('view-contact')" style="cursor: pointer;">
-                            <img src="https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=1500&auto=format&fit=crop" class="fs-img" alt="Virox Case Study">
-                            <div class="fs-content">
-                                <span class="scrambler" style="font-family: var(--font-mono); font-weight: 800; border: 3px solid var(--text-color); padding: 5px 10px; display: inline-block; margin-bottom: 20px; width: fit-content; font-size: 0.8rem; box-shadow: 4px 4px 0 var(--muted-bg);">FEATURED BUILD</span>
-                                <h3 class="glitch-text" data-text="VIROX APPAREL" style="font-size: 2.5rem; text-transform: uppercase; line-height: 1; margin-bottom: 20px;">Virox Apparel Ecosystem</h3>
-                                <p class="text-body" style="margin-bottom: 30px; font-weight: 700;">Complete architectural overhaul for an emerging streetwear brand. Custom Shopify theme, vector logo suite, and print-ready graphic assets.</p>
-                                <button class="btn-outline scrambler" style="pointer-events: none; width: fit-content; padding: 12px 25px;">INITIALIZE SIMILAR</button>
-                            </div>
-                        </div>
+            </div>
+        </section>
 
-                        <div class="work-card" onclick="navigateTo('view-contact')">
-                            <div class="work-img-wrapper"><img src="https://images.unsplash.com/photo-1634942537034-2531766767d1?q=80&w=1000&auto=format&fit=crop" alt="Athrex Energy"></div>
-                            <div class="work-info">
-                                <div class="work-client glitch-text" data-text="ATHREX ENERGY">Athrex Energy Pvt. Ltd.</div>
-                                <div class="work-tags scrambler">Corporate Brand // Print Graphics</div>
-                            </div>
-                        </div>
-                        
-                        <div class="work-card" onclick="navigateTo('view-contact')">
-                            <div class="work-img-wrapper"><img src="https://images.unsplash.com/photo-1611532736597-de2d4265fba3?q=80&w=1000&auto=format&fit=crop" alt="Nirvaan Store"></div>
-                            <div class="work-info">
-                                <div class="work-client glitch-text" data-text="NIRVAAN STORE">Nirvaan.Store</div>
-                                <div class="work-tags scrambler">Logo Design // Web Infrastructure</div>
-                            </div>
-                        </div>
-                        
-                        <div class="work-card" onclick="navigateTo('view-contact')">
-                            <div class="work-img-wrapper"><img src="https://images.unsplash.com/photo-1541462608143-67571c6738dd?q=80&w=1000&auto=format&fit=crop" alt="Editorial"></div>
-                            <div class="work-info">
-                                <div class="work-client glitch-text" data-text="DIGITAL TRADE EDITORIAL">Digital Trade Editorial</div>
-                                <div class="work-tags scrambler">Print Media // Layout Design</div>
-                            </div>
-                        </div>
+        <section id="view-product" class="view-section">
+            <div class="section-padding">
+                <button class="outline-btn nav-btn magnetic-btn" data-target="view-shop" style="margin-bottom: 40px; padding: 12px 25px; font-size: 0.9rem;">[ BACK TO CATALOG ]</button>
+                <div class="pd-layout" id="pd-container">
+                    </div>
+            </div>
+        </section>
 
-                        <div class="work-card" onclick="navigateTo('view-contact')">
-                            <div class="work-img-wrapper"><img src="https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=1000&auto=format&fit=crop" alt="Vector Vault"></div>
-                            <div class="work-info">
-                                <div class="work-client glitch-text" data-text="APPAREL PRINT VAULT">Apparel Print Vault</div>
-                                <div class="work-tags scrambler">Vector Illustrations // DTG Layouts</div>
-                            </div>
-                        </div>
+        <section id="view-campaigns" class="view-section">
+            <div class="section-padding">
+                <h2 class="section-title glitch-text" data-text="VISUAL ARCHIVE">VISUAL ARCHIVE</h2>
+                <p class="text-body">Documentation of the Virox aesthetic protocol. Lookbooks and campaigns strictly enforcing the monochromatic rule.</p>
+                
+                <div class="grid-layout">
+                    <div class="journal-card magnetic-btn">
+                        <img src="https://images.unsplash.com/photo-1511511450040-677116ff389e?q=80&w=800&auto=format&fit=crop" alt="C1">
+                        <span class="journal-tag">CAMPAIGN 001</span>
+                        <h3>SILHOUETTE DISTORTION</h3>
+                    </div>
+                    <div class="journal-card magnetic-btn">
+                        <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=800&auto=format&fit=crop" alt="C2">
+                        <span class="journal-tag">LOOKBOOK</span>
+                        <h3>THE HEAVY OVERCOAT</h3>
+                    </div>
+                    <div class="journal-card magnetic-btn">
+                        <img src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=800&auto=format&fit=crop" alt="C3">
+                        <span class="journal-tag">STUDIO DATA</span>
+                        <h3>PATTERN DRAFTING V2</h3>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="view-pricing" class="view-section">
+        <section id="view-journal" class="view-section">
             <div class="section-padding">
-                <div class="container">
-                    <div class="section-header">
-                        <h2 class="glitch-text" data-text="DEPLOYMENT TIERS">DEPLOYMENT <span>TIERS</span></h2>
-                        <p>Transparent pricing models. No hidden fees. No scope creep.</p>
+                <h2 class="section-title glitch-text" data-text="SYSTEM LOGS">SYSTEM LOGS</h2>
+                <p class="text-body">Transmissions from HQ regarding design philosophy, fabric sourcing, and future architecture. Click to view data.</p>
+                <div class="grid-layout" id="journal-container">
                     </div>
-                    
-                    <div class="grid-3">
-                        <div class="tier-card">
-                            <div class="tier-name scrambler">Identity Starter</div>
-                            <div class="tier-price">₹1,499<br><span>FLAT FEE</span></div>
-                            <div class="tier-desc">Core foundation for emerging brands. Establish your visual language.</div>
-                            <ul class="tier-list">
-                                <li>Primary & Secondary Logo</li>
-                                <li>Basic Color Palette Definition</li>
-                                <li>Typography Selection</li>
-                                <li>High-Res Vector Export</li>
-                                <li>2 Revision Rounds</li>
-                            </ul>
-                            <div class="magnetic-wrap" style="width: 100%;"><button class="btn-outline magnetic nav-trigger scrambler" data-target="view-contact" style="width: 100%;">SELECT TIER</button></div>
-                        </div>
-                        
-                        <div class="tier-card featured">
-                            <div class="tier-name scrambler" style="color: var(--bg-color); border-color: var(--bg-color);">Digital Platform</div>
-                            <div class="tier-price">₹14,990<br><span>FLAT FEE</span></div>
-                            <div class="tier-desc">Complete web presence engineered for speed and conversion.</div>
-                            <ul class="tier-list">
-                                <li>Full Brand Identity System</li>
-                                <li>Custom Website Architecture</li>
-                                <li>Responsive UI/UX Design</li>
-                                <li>Basic SEO Implementation</li>
-                                <li>CMS Training Handover</li>
-                            </ul>
-                            <div class="magnetic-wrap" style="width: 100%;"><button class="btn-outline magnetic nav-trigger scrambler" data-target="view-contact" style="width: 100%; color: var(--text-color); border-color: var(--bg-color); background: var(--bg-color);">SELECT TIER</button></div>
-                        </div>
+            </div>
+        </section>
 
-                        <div class="tier-card">
-                            <div class="tier-name scrambler">Scale & E-Commerce</div>
-                            <div class="tier-price">Custom<br><span>BY SCOPE</span></div>
-                            <div class="tier-desc">Advanced infrastructure for high-volume sales and custom functionality.</div>
-                            <ul class="tier-list">
-                                <li>Shopify Advanced Setup</li>
-                                <li>Payment Gateway Integration</li>
-                                <li>Complex UI Animations</li>
-                                <li>Ongoing Graphic Support</li>
-                                <li>Priority 24/7 SLA</li>
-                            </ul>
-                            <div class="magnetic-wrap" style="width: 100%;"><button class="btn-primary magnetic nav-trigger scrambler" data-target="view-contact" style="width: 100%;">CONSULT SALES</button></div>
-                        </div>
+        <section id="view-blog-post" class="view-section">
+            <div class="section-padding">
+                <button class="outline-btn nav-btn magnetic-btn" data-target="view-journal" style="margin-bottom: 30px;">&larr; Back to Logs</button>
+                <div class="text-layout" id="blog-post-content">
                     </div>
-
-                    <div class="grid-2" style="margin-top: 100px;">
-                        <div>
-                            <h3 style="font-family: var(--font-heading); font-size: 2.5rem; font-weight: 800; margin-bottom: 20px; text-transform: uppercase; letter-spacing: -1px;">A La Carte Modules</h3>
-                            <p class="text-body" style="font-weight: 700;">Need specific structural upgrades without a full retainer? We offer modular pricing for individual deliverables.</p>
-                            
-                            <div class="stat-box" style="margin-top: 40px;">
-                                <h4 style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px;">Enterprise Retainer</h4>
-                                <p class="text-body" style="font-size: 0.95rem;">For brands requiring constant architectural updates and high-volume graphic output. We integrate directly into your workflow.</p>
-                                <button class="btn-outline nav-trigger scrambler" data-target="view-contact" style="padding: 10px 20px; font-size: 0.9rem;">REQUEST PROPOSAL</button>
-                            </div>
-                        </div>
-                        
-                        <div class="terminal-block">
-                            <div class="terminal-header"><span>Module</span><span>Starting At</span></div>
-                            <div class="terminal-row"><span class="t-service scrambler">Video Ad Production</span><span class="t-price">₹2,500</span></div>
-                            <div class="terminal-row"><span class="t-service scrambler">T-Shirt Print Artwork</span><span class="t-price">₹999</span></div>
-                            <div class="terminal-row"><span class="t-service scrambler">Logo Digitization</span><span class="t-price">₹1,200</span></div>
-                            <div class="terminal-row"><span class="t-service scrambler">Web Banner Set (x3)</span><span class="t-price">₹1,500</span></div>
-                            <div class="terminal-row" style="border:none; margin-bottom:0; padding-bottom:0;"><span class="t-service scrambler">Landing Page Dev</span><span class="t-price">₹4,999</span></div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </section>
 
         <section id="view-about" class="view-section">
             <div class="section-padding">
-                <div class="container">
-                    <div class="split-layout">
-                        <div class="split-main">
-                            <h2 class="glitch-text" data-text="THE ARCHITECT" style="font-size: clamp(3rem, 6vw, 5rem); font-weight: 800; text-transform: uppercase; margin-bottom: 30px; line-height: 1; letter-spacing: -2px;">THE ARCHITECT<span class="blink">_</span></h2>
-                            <p class="text-body" style="font-size: 1.3rem; font-weight: 800; border-left: 6px solid var(--text-color); padding-left: 20px;">Digital Trade is helmed by Indrajeet Pisda, operating out of Dantewada, Chhattisgarh.</p>
-                            <p class="text-body">We reject the notion that design should be purely aesthetic. True design is an engineered solution to a structural business problem. Whether we are building a complex Shopify ecosystem for an apparel brand like Virox, or drafting corporate identity for Athrex Energy, our methodology remains identical: aggressive precision.</p>
-                            <p class="text-body">Our studio is located at Teknaar Chowk, Awarbhata. We serve a global client base, transmitting high-fidelity code and vector architecture across timezones.</p>
-                            
-                            <div style="margin-top: 50px; padding-top: 40px; border-top: 4px dashed var(--text-color);">
-                                <h4 style="font-family: var(--font-mono); font-size: 1rem; font-weight: 800; text-transform: uppercase; margin-bottom: 20px;">STUDIO CAPABILITIES</h4>
-                                <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-                                    <span class="scrambler" style="font-family: var(--font-mono); font-weight: 800; border: 3px solid var(--text-color); padding: 8px 15px; box-shadow: 4px 4px 0 var(--text-color);">Web Architecture</span>
-                                    <span class="scrambler" style="font-family: var(--font-mono); font-weight: 800; border: 3px solid var(--text-color); padding: 8px 15px; box-shadow: 4px 4px 0 var(--text-color);">Shopify Liquid</span>
-                                    <span class="scrambler" style="font-family: var(--font-mono); font-weight: 800; border: 3px solid var(--text-color); padding: 8px 15px; box-shadow: 4px 4px 0 var(--text-color);">Vector Logos</span>
-                                </div>
-                            </div>
+                <div class="text-layout">
+                    <h2 class="section-title glitch-text" data-text="SYSTEM CORE">SYSTEM CORE</h2>
+                    <img src="https://images.unsplash.com/photo-1581655353564-df123a1eb820?q=80&w=1200&auto=format&fit=crop" alt="About" style="width: 100%; border: 6px solid var(--text-color); margin-bottom: 40px; box-shadow: 10px 10px 0 var(--text-color);">
+                    
+                    <div class="data-block magnetic-btn">
+                        <h3>ORIGIN PROTOCOL</h3>
+                        <p class="text-body">Initialized by Indrajeet Pisda, Virox operates as a reaction against mass-produced, flimsy fashion. Sourced from the core concepts of digital brutalism and architectural clothing, we view garments not as mere covering, but as hardware.</p>
+                    </div>
+
+                    <div class="data-block magnetic-btn">
+                        <h3>MATERIAL SPECS</h3>
+                        <p class="text-body">A silhouette is only as strong as its foundation. We refuse lightweight fabrics. Our t-shirts utilize a minimum of 280gsm cotton for a rigid, boxy drape. Outerwear is constructed from high-tensile nylons, weatherproof ripstop, and heavy thermal linings.</p>
+                    </div>
+
+                    <h3 style="font-family: var(--font-heading); font-size: 2rem; font-weight: 800; margin-top: 50px; border-bottom: 4px solid var(--text-color); padding-bottom: 15px; text-transform: uppercase;">OPERATIONAL LOOP</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-top: 20px;">
+                        <div class="data-block magnetic-btn" style="margin:0; padding: 20px;">
+                            <h4>PHASE A: DRAFT</h4>
+                            <p class="text-body" style="font-size: 0.95rem; margin-top: 10px;">Silhouettes are engineered digitally. Shoulders are dropped precisely.</p>
                         </div>
-                        <div class="split-sidebar">
-                            <div class="sidebar-block">
-                                <h4 style="font-family: var(--font-mono); font-size: 0.9rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px;">FOUNDED</h4>
-                                <p style="font-family: var(--font-heading); font-size: 2rem; font-weight: 800;">2025</p>
-                            </div>
-                            <div class="sidebar-block">
-                                <h4 style="font-family: var(--font-mono); font-size: 0.9rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px;">PRIMARY NODE</h4>
-                                <p style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800;">Dantewada, CG, India</p>
-                            </div>
-                            <div class="sidebar-block" style="background: var(--text-color); color: var(--bg-color);">
-                                <h4 style="font-family: var(--font-mono); font-size: 0.9rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px; color: var(--bg-color);">CURRENT STATUS</h4>
-                                <p style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800; display: flex; align-items: center; gap: 10px;">
-                                    <span class="blink" style="display:inline-block; width:15px; height:15px; background:var(--bg-color); border: 3px solid var(--text-color);"></span> Accepting Projects
-                                </p>
+                        <div class="data-block magnetic-btn" style="margin:0; padding: 20px;">
+                            <h4>PHASE B: PROCUREMENT</h4>
+                            <p class="text-body" style="font-size: 0.95rem; margin-top: 10px;">We hunt for the densest, most durable fabrics available on the global market.</p>
+                        </div>
+                        <div class="data-block magnetic-btn" style="margin:0; padding: 20px;">
+                            <h4>PHASE C: EXECUTION</h4>
+                            <p class="text-body" style="font-size: 0.95rem; margin-top: 10px;">Heavy-duty hardware insertion. Reinforced stitching across all tension points.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-account" class="view-section">
+            <div class="section-padding" style="display: flex; justify-content: center;">
+                <div class="text-layout" style="width: 100%; max-width: 600px; text-align: center;">
+                    <h2 class="section-title glitch-text" data-text="LOGIN PROTOCOL">LOGIN PROTOCOL</h2>
+                    <form onsubmit="event.preventDefault(); showToast('AUTHORIZATION ACCEPTED.'); setTimeout(()=>navigateTo('view-home'), 2000);">
+                        <div class="form-group">
+                            <label class="form-label">COMMLINK [EMAIL]</label>
+                            <input type="email" class="form-input magnetic-btn" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">CIPHER [PASSWORD]</label>
+                            <input type="password" class="form-input magnetic-btn" required>
+                        </div>
+                        <button type="submit" class="primary-btn magnetic-btn" style="width: 100%; margin-top: 20px;">AUTHENTICATE</button>
+                        <div style="margin-top: 30px; font-weight: 800; font-size: 1.1rem; font-family: var(--font-mono);">
+                            NO CLEARANCE? <a href="#" style="border-bottom: 2px solid var(--text-color);">REQUEST ACCESS</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-checkout" class="view-section">
+            <div class="section-padding">
+                <div class="text-layout" style="max-width: 1200px;">
+                    <h2 class="section-title glitch-text" data-text="SECURE CHECKOUT">SECURE CHECKOUT</h2>
+                    <div class="checkout-grid">
+                        <div>
+                            <h3 style="font-family: var(--font-mono); font-size: 1.4rem; font-weight: 800; background: var(--text-color); color: #fff; display: inline-block; padding: 10px 20px; margin-bottom: 30px;">1. DESTINATION DATA</h3>
+                            <form onsubmit="event.preventDefault(); showToast('TRANSACTION COMPLETE. ASSETS SECURED.'); setTimeout(()=>navigateTo('view-home'), 3000);">
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                                    <div class="form-group"><label class="form-label">FIRST NAME</label><input type="text" class="form-input magnetic-btn" required></div>
+                                    <div class="form-group"><label class="form-label">LAST NAME</label><input type="text" class="form-input magnetic-btn" required></div>
+                                </div>
+                                <div class="form-group"><label class="form-label">ADDRESS LINE</label><input type="text" class="form-input magnetic-btn" required></div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                                    <div class="form-group"><label class="form-label">CITY</label><input type="text" class="form-input magnetic-btn" required></div>
+                                    <div class="form-group"><label class="form-label">ZIP CODE</label><input type="text" class="form-input magnetic-btn" required></div>
+                                </div>
+                                
+                                <h3 style="font-family: var(--font-mono); font-size: 1.4rem; font-weight: 800; background: var(--text-color); color: #fff; display: inline-block; padding: 10px 20px; margin: 40px 0 30px 0;">2. PAYMENT UPLINK</h3>
+                                <div class="form-group"><label class="form-label">CARD NUMBER</label><input type="text" class="form-input magnetic-btn" placeholder="0000 0000 0000 0000" required></div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                                    <div class="form-group"><label class="form-label">EXPIRY</label><input type="text" class="form-input magnetic-btn" placeholder="MM/YY" required></div>
+                                    <div class="form-group"><label class="form-label">CVC</label><input type="text" class="form-input magnetic-btn" required></div>
+                                </div>
+                                <button type="submit" class="primary-btn magnetic-btn" style="width: 100%; margin-top: 10px;">AUTHORIZE TRANSFER</button>
+                            </form>
+                        </div>
+                        <div class="order-summary">
+                            <h3 style="margin-bottom: 30px; font-family: var(--font-heading); font-size: 2rem; font-weight: 800; border-bottom: 4px solid var(--text-color); padding-bottom: 15px; text-transform: uppercase;">MANIFEST</h3>
+                            <div id="checkout-items"></div>
+                            <div style="margin-top: 40px; background: var(--muted-bg); padding: 30px; border: 4px solid var(--text-color);">
+                                <div class="summary-item"><span>SUBTOTAL</span><span id="checkout-subtotal">$0.00</span></div>
+                                <div class="summary-item"><span>FREIGHT</span><span style="font-family: var(--font-mono); font-size:0.9rem;">CALC AT DISPATCH</span></div>
+                                <div class="summary-item" style="border: none; font-size: 2.2rem; font-family: var(--font-mono); font-weight: 800; color: var(--text-color); padding-bottom: 0; align-items: center; margin-top: 20px;"><span>TOTAL</span><span id="checkout-total">$0.00</span></div>
                             </div>
                         </div>
                     </div>
@@ -792,29 +736,103 @@
 
         <section id="view-faq" class="view-section">
             <div class="section-padding">
-                <div class="container">
-                    <div class="section-header">
-                        <h2 class="glitch-text" data-text="KNOWLEDGE BASE">KNOWLEDGE <span>BASE</span></h2>
-                        <p>Standard operating procedures and frequent queries.</p>
-                    </div>
+                <div class="text-layout">
+                    <h2 class="section-title glitch-text" data-text="INTEL / FAQ">INTEL / FAQ</h2>
+                    <p class="text-body" style="font-size: 1.2rem; margin-bottom: 40px; border-left: 6px solid var(--text-color); padding-left: 20px; font-weight: 700;">Before opening a comms channel, review the system parameters below.</p>
                     
-                    <div class="interactive-list" style="max-width: 900px;">
-                        <div class="interactive-item">
-                            <button class="interactive-header">STANDARD TURNAROUND TIME? <span class="interactive-icon">+</span></button>
-                            <div class="interactive-content"><p class="text-body" style="padding-top: 20px; font-weight: 700;">Brand identities and logo systems typically require 1-2 weeks. Full-scale web platforms and e-commerce builds take between 3-6 weeks depending on architectural complexity.</p></div>
-                        </div>
-                        <div class="interactive-item">
-                            <button class="interactive-header">DO YOU PROVIDE SOURCE FILES? <span class="interactive-icon">+</span></button>
-                            <div class="interactive-content"><p class="text-body" style="padding-top: 20px; font-weight: 700;">Yes. We don't hold brands hostage. Upon final payment, all intellectual property rights and raw source files (Figma, Illustrator, complete codebases) are securely transferred.</p></div>
-                        </div>
-                        <div class="interactive-item">
-                            <button class="interactive-header">WHAT PLATFORMS DO YOU BUILD ON? <span class="interactive-icon">+</span></button>
-                            <div class="interactive-content"><p class="text-body" style="padding-top: 20px; font-weight: 700;">We engineer custom front-end solutions. For e-commerce, we specialize in Shopify. For simpler content sites, we utilize platforms like Blogger based on client budget.</p></div>
-                        </div>
-                        <div class="interactive-item">
-                            <button class="interactive-header">HOW DOES COMMUNICATION WORK? <span class="interactive-icon">+</span></button>
-                            <div class="interactive-content"><p class="text-body" style="padding-top: 20px; font-weight: 700;">Direct and efficient. We primarily utilize our secure WhatsApp line for quick updates, and formal email transmissions for asset delivery and milestone approvals.</p></div>
-                        </div>
+                    <div class="accordion-item magnetic-btn">
+                        <button class="accordion-btn">HOW DOES THE GEAR FIT? <span class="accordion-icon">+</span></button>
+                        <div class="accordion-content"><p class="text-body" style="padding-top:20px;">Our signature fit is inherently boxy, slightly cropped, with pronounced dropped shoulders. Order your true size to achieve the intended architectural look.</p></div>
+                    </div>
+                    <div class="accordion-item magnetic-btn">
+                        <button class="accordion-btn">RESTOCK SCHEDULE? <span class="accordion-icon">+</span></button>
+                        <div class="accordion-content"><p class="text-body" style="padding-top:20px;">We operate on a strict drop model. Once a collection is released, inventory is limited. When an item sells out, it is archived permanently. No restocks.</p></div>
+                    </div>
+                    <div class="accordion-item magnetic-btn">
+                        <button class="accordion-btn">DO YOU OFFER WHOLESALE? <span class="accordion-icon">+</span></button>
+                        <div class="accordion-content"><p class="text-body" style="padding-top:20px;">Yes, we partner with select boutiques globally. Please transmit a message via our contact page for wholesale inquiries.</p></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-shipping" class="view-section">
+            <div class="section-padding">
+                <div class="text-layout">
+                    <h2 class="section-title glitch-text" data-text="SHIPPING POLICY">SHIPPING POLICY</h2>
+                    <div class="data-block magnetic-btn">
+                        <h3>PROCESSING TIMES</h3>
+                        <p class="text-body">All orders are processed within 1-3 business days. Orders are not shipped or delivered on weekends or holidays.</p>
+                    </div>
+                    <div class="data-block magnetic-btn">
+                        <h3>DOMESTIC DISPATCH (INDIA)</h3>
+                        <p class="text-body">We offer standard shipping (3-5 business days) across India. Expedited options are available at checkout.</p>
+                    </div>
+                    <div class="data-block magnetic-btn">
+                        <h3>GLOBAL DISPATCH</h3>
+                        <p class="text-body">We ship worldwide. International shipping rates and delivery estimates are calculated dynamically at checkout. Custom duties are the sole responsibility of the customer.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-returns" class="view-section">
+            <div class="section-padding">
+                <div class="text-layout">
+                    <h2 class="section-title glitch-text" data-text="RETURNS POLICY">RETURNS POLICY</h2>
+                    <div class="data-block magnetic-btn">
+                        <h3>14-DAY PROTOCOL</h3>
+                        <p class="text-body">We accept returns and exchanges within 14 days of delivery. To be eligible, your item must be unworn, unwashed, and in the exact condition that you received it.</p>
+                    </div>
+                    <div class="data-block magnetic-btn">
+                        <h3>THE PROCESS</h3>
+                        <p class="text-body">To initiate a return, please contact our support team with your order number. A flat fee will be deducted from your refund to cover return shipping costs.</p>
+                    </div>
+                    <div class="data-block magnetic-btn">
+                        <h3>EXCEPTIONS</h3>
+                        <p class="text-body">Limited edition drop items and accessories (beanies, bags) are final sale and cannot be returned unless defective.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-size-guide" class="view-section">
+            <div class="section-padding">
+                <div class="text-layout">
+                    <h2 class="section-title glitch-text" data-text="SIZE GUIDE">SIZE GUIDE</h2>
+                    <p class="text-body">Our garments are designed with a structural, oversized fit. Use the table below to find your correct measurements (in inches).</p>
+                    
+                    <h3 style="font-family: var(--font-heading); font-size: 1.5rem; margin: 40px 0 20px; text-transform: uppercase; font-weight: 800;">TOPS (TEES & HOODIES)</h3>
+                    <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+                        <table class="lux-table">
+                            <thead><tr><th>Size</th><th>Chest (Pit to Pit)</th><th>Length</th><th>Sleeve</th></tr></thead>
+                            <tbody>
+                                <tr><td>Small (S)</td><td>22.5"</td><td>26.5"</td><td>8.5"</td></tr>
+                                <tr><td>Medium (M)</td><td>23.5"</td><td>27.5"</td><td>9.0"</td></tr>
+                                <tr><td>Large (L)</td><td>24.5"</td><td>28.5"</td><td>9.5"</td></tr>
+                                <tr><td>X-Large (XL)</td><td>25.5"</td><td>29.5"</td><td>10.0"</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-care" class="view-section">
+            <div class="section-padding">
+                <div class="text-layout">
+                    <h2 class="section-title glitch-text" data-text="GARMENT CARE">GARMENT CARE</h2>
+                    <div class="data-block magnetic-btn">
+                        <h3>PRESERVING STRUCTURE</h3>
+                        <p class="text-body">Virox garments are built from heavy, premium fabrics. To maintain their structural integrity and prevent shrinkage, follow these instructions meticulously.</p>
+                    </div>
+                    <div class="data-block magnetic-btn">
+                        <h3>WASHING</h3>
+                        <p class="text-body">Always turn garments inside out before washing. Machine wash on a cold, gentle cycle using mild detergent. Do not bleach.</p>
+                    </div>
+                    <div class="data-block magnetic-btn">
+                        <h3>DRYING & IRONING</h3>
+                        <p class="text-body">Never tumble dry. Hang dry or lay flat in a shaded area. If ironing is necessary, use a low heat setting and iron inside out.</p>
                     </div>
                 </div>
             </div>
@@ -822,47 +840,47 @@
 
         <section id="view-contact" class="view-section">
             <div class="section-padding">
-                <div class="container">
-                    <div class="section-header">
-                        <h2 class="glitch-text" data-text="INITIATE SEQUENCE">INITIATE <span>SEQUENCE</span></h2>
-                        <p>Transmit your project parameters directly to our secure line.</p>
+                <div class="text-layout">
+                    <h2 class="section-title glitch-text" data-text="TRANSMIT">TRANSMIT</h2>
+                    <p class="text-body" style="margin-bottom: 40px; font-size: 1.2rem;">For order support, wholesale inquiries, or press, transmit a message to the dispatch unit below.</p>
+                    
+                    <form onsubmit="event.preventDefault(); showToast('TRANSMISSION SENT SUCCESSFULLY.');">
+                        <div style="display: grid; grid-template-columns: 1fr; gap: 0;">
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                                <div class="form-group"><label class="form-label">ID / NAME</label><input type="text" class="form-input magnetic-btn" required></div>
+                                <div class="form-group"><label class="form-label">EMAIL COMM-LINK</label><input type="email" class="form-input magnetic-btn" required></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">SUBJECT CATEGORY</label>
+                            <select class="form-input magnetic-btn" style="cursor: pointer;">
+                                <option>Order Inquiry</option>
+                                <option>Wholesale</option>
+                                <option>Media / Press</option>
+                            </select>
+                        </div>
+                        <div class="form-group"><label class="form-label">MESSAGE DATA</label><textarea class="form-input magnetic-btn" style="height: 150px; resize: vertical;" required></textarea></div>
+                        <button type="submit" class="primary-btn magnetic-btn" style="padding: 20px 40px;">SEND TRANSMISSION</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-legal" class="view-section">
+            <div class="section-padding">
+                <div class="text-layout">
+                    <h2 id="legal-title" class="section-title glitch-text" data-text="LEGAL DATA">LEGAL DATA</h2>
+                    
+                    <p class="text-body" style="font-size: 1.2rem; border-left: 6px solid var(--text-color); padding-left: 20px; font-weight: 800;">Data collection, returns protocols, and terms of use are governed strictly by the Virox Systems mandate. Review thoroughly.</p>
+                    
+                    <div class="data-block magnetic-btn" style="margin-top: 40px;">
+                        <h3>1. DATA USAGE (PRIVACY)</h3>
+                        <p class="text-body">We collect necessary telemetry to process orders and optimize grid performance. Financial information provided during secure checkout is fully encrypted via industry-standard protocols and never stored on our local servers.</p>
                     </div>
                     
-                    <div class="split-layout">
-                        <div class="split-main">
-                            <form id="whatsapp-form">
-                                <div class="form-group">
-                                    <label class="form-label">NAME / CALLSIGN</label>
-                                    <input type="text" id="wa-name" class="form-input" required>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">TRANSMISSION EMAIL</label>
-                                    <input type="email" id="wa-email" class="form-input" required>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">PROJECT PARAMETERS</label>
-                                    <textarea id="wa-message" class="form-input" style="height: 150px; resize: vertical;" required></textarea>
-                                </div>
-                                <button type="submit" class="btn-primary scrambler" style="width: 100%;">TRANSMIT VIA WHATSAPP</button>
-                            </form>
-                        </div>
-                        
-                        <div class="split-sidebar">
-                            <div class="sidebar-block" style="background: var(--text-color); color: var(--bg-color);">
-                                <h4 style="font-family: var(--font-mono); font-size: 0.9rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px; color: var(--bg-color);">TRANSMISSION SLA</h4>
-                                <p style="font-size: 1rem; font-weight: 700;">All inquiries receive a structural review and response within 12 operating hours.</p>
-                            </div>
-
-                            <div class="sidebar-block">
-                                <h4 style="font-family: var(--font-mono); font-size: 0.9rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px;">DIRECT COMMS</h4>
-                                <p class="scrambler" style="font-family: var(--font-heading); font-size: 1.3rem; font-weight: 800; cursor: pointer;">trade@digital.com</p>
-                                <p class="scrambler" style="font-family: var(--font-heading); font-size: 1.3rem; font-weight: 800; margin-top: 10px; cursor: pointer;">+91 7646846030</p>
-                            </div>
-                            <div class="sidebar-block">
-                                <h4 style="font-family: var(--font-mono); font-size: 0.9rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px;">HEADQUARTERS</h4>
-                                <p style="font-family: var(--font-heading); font-size: 1.3rem; font-weight: 800;">Teknaar Chowk, Awarbhata<br>Dantewada, Chhattisgarh</p>
-                            </div>
-                        </div>
+                    <div class="data-block magnetic-btn">
+                        <h3>2. TERMS OF ACCESS</h3>
+                        <p class="text-body">By utilizing the Virox web architecture, you agree to be bound by these Terms. Unauthorized reproduction of our apparel designs or digital assets will result in immediate legal action.</p>
                     </div>
                 </div>
             </div>
@@ -871,58 +889,416 @@
     </main>
 
     <footer>
-        <div class="footer-grid">
-            <div>
-                <h3 class="footer-brand" style="font-family: var(--font-heading); font-size: 2.5rem; font-weight: 800; margin-bottom: 20px; text-transform: uppercase; letter-spacing: -2px;">DIGITAL<span class="blink">_</span>TRADE</h3>
-                <p style="font-family: var(--font-body); font-size: 0.95rem; font-weight: 500; color: #ccc; margin-bottom: 40px; line-height: 1.6; max-width: 400px;">A minimalist design and development agency engineering future-proof brand architectures.</p>
-                <div class="terminal-block" style="background: var(--text-color); border-color: var(--bg-color); color: var(--bg-color); padding: 20px; box-shadow: 6px 6px 0 var(--bg-color);">
-                    > SYSTEM_CHECK: CREATIVE_OK<br>> SERVER_NODE: DANTEWADA_HQ<br>> STATUS: ACTIVE<span class="blink">_</span>
-                </div>
-            </div>
-
-            <div>
-                <h4 class="footer-links">DISCIPLINES</h4>
-                <ul class="footer-links">
-                    <li><a href="#services" class="nav-trigger scrambler" data-target="view-services">Web Architecture</a></li>
-                    <li><a href="#services" class="nav-trigger scrambler" data-target="view-services">Shopify Dev</a></li>
-                    <li><a href="#services" class="nav-trigger scrambler" data-target="view-services">Brand Identity</a></li>
-                    <li><a href="#services" class="nav-trigger scrambler" data-target="view-services">Graphic Systems</a></li>
-                </ul>
-            </div>
-
-            <div>
-                <h4 class="footer-links">RESOURCES</h4>
-                <ul class="footer-links">
-                    <li><a href="#work" class="nav-trigger scrambler" data-target="view-work">The Archive</a></li>
-                    <li><a href="#pricing" class="nav-trigger scrambler" data-target="view-pricing">Deployment Tiers</a></li>
-                    <li><a href="#faq" class="nav-trigger scrambler" data-target="view-faq">Knowledge Base</a></li>
-                    <li><a href="#about" class="nav-trigger scrambler" data-target="view-about">Agency Ethos</a></li>
-                </ul>
+        <div style="max-width: 1400px; margin: 0 auto; width: 100%;">
+            <div style="margin-bottom: 50px;">
+                <h2 class="footer-logo glitch-text" data-text="VIROX">VIROX</h2>
+                <p class="footer-desc">Architecture for the body. Premium streetwear engineered for the modern landscape.</p>
             </div>
             
-            <div>
-                <h4 class="footer-links">SOCIAL GRID</h4>
-                <ul class="footer-links">
-                    <li><a href="#" class="scrambler" target="_blank">Instagram</a></li>
-                    <li><a href="#" class="scrambler" target="_blank">Behance</a></li>
-                    <li><a href="#" class="scrambler" target="_blank">LinkedIn</a></li>
-                    <li><a href="#" class="scrambler" target="_blank">X (Twitter)</a></li>
-                </ul>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-bottom: 60px;">
+                
+                <div>
+                    <h4 class="footer-title">HEADQUARTERS</h4>
+                    <p class="footer-text">
+                        Virox Studio<br>
+                        Teknaar Chowk<br>
+                        Dantewada, Chhattisgarh 494449<br>
+                        India
+                    </p>
+                    
+                    <h4 class="footer-title" style="margin-top: 30px;">CONTACT US</h4>
+                    <p class="footer-text">
+                        Email: support@virox.in<br>
+                        Phone: +91 7646846030
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="footer-title">NAVIGATION</h4>
+                    <ul class="footer-links">
+                        <li><a href="#home" class="nav-btn scrambler" data-target="view-home">Home</a></li>
+                        <li><a href="#shop" class="nav-btn scrambler" data-target="view-shop">Shop All</a></li>
+                        <li><a href="#campaigns" class="nav-btn scrambler" data-target="view-campaigns">Campaigns</a></li>
+                        <li><a href="#journal" class="nav-btn scrambler" data-target="view-journal">Journal</a></li>
+                        <li><a href="#about" class="nav-btn scrambler" data-target="view-about">Our Ethos</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="footer-title">SUPPORT</h4>
+                    <ul class="footer-links">
+                        <li><a href="#faq" class="nav-btn scrambler" data-target="view-faq">FAQ</a></li>
+                        <li><a href="#shipping" class="nav-btn scrambler" data-target="view-shipping">Shipping Policy</a></li>
+                        <li><a href="#returns" class="nav-btn scrambler" data-target="view-returns">Returns & Exchanges</a></li>
+                        <li><a href="#size-guide" class="nav-btn scrambler" data-target="view-size-guide">Size Guide</a></li>
+                        <li><a href="#care" class="nav-btn scrambler" data-target="view-care">Garment Care</a></li>
+                        <li><a href="#contact" class="nav-btn scrambler" data-target="view-contact">Contact Us</a></li>
+                    </ul>
+                </div>
+                
             </div>
-        </div>
-
-        <div class="footer-bottom">
-            <p>© 2026 DIGITAL TRADE. ALL RIGHTS RESERVED.</p>
-            <p>ARCHITECT: INDRAJEET PISDA | BUILD 2.0.0 (DARK)</p>
+            
+            <div style="margin-bottom: 50px;">
+                <h4 class="footer-title">THE INNER CIRCLE</h4>
+                <p class="footer-text" style="max-width: 400px; margin-bottom: 15px;">Subscribe to receive updates on exclusive releases and studio news.</p>
+                <div class="footer-newsletter-wrapper">
+                    <form class="newsletter-input-group" onsubmit="event.preventDefault(); showToast('NETWORK JOINED.');">
+                        <input type="email" class="newsletter-input" placeholder="Email Address" required>
+                        <button type="submit" class="newsletter-btn">JOIN</button>
+                    </form>
+                </div>
+                <div class="footer-socials">
+                    <a href="#" class="scrambler">INSTAGRAM</a>
+                    <a href="#" class="scrambler">TWITTER / X</a>
+                    <a href="#" class="scrambler">PINTEREST</a>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2026 Virox Studios. All Rights Reserved.</p>
+                <div class="footer-bottom-links">
+                    <a href="#legal" class="nav-btn scrambler" data-target="view-legal" onclick="document.getElementById('legal-title').innerText='Privacy Policy'">Privacy Policy</a>
+                    <a href="#legal" class="nav-btn scrambler" data-target="view-legal" onclick="document.getElementById('legal-title').innerText='Terms of Service'">Terms of Service</a>
+                    <span class="footer-credit">Designed by Digital Trade</span>
+                </div>
+            </div>
         </div>
     </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            
-            const isTouchDevice = (('ontouchstart' in window) || (navigator.maxTouchPoints > 0));
 
-            // --- SCRAMBLER EFFECT ---
+            // --- 1. ROBUST ROUTING SYSTEM WITH CSS FLASH ---
+            const views = document.querySelectorAll('.view-section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const mobileMenu = document.getElementById('nav-menu');
+            const mobileToggle = document.getElementById('mobile-toggle');
+            const navOverlay = document.getElementById('nav-overlay');
+            const closeMobileBtn = document.getElementById('close-mobile-menu');
+
+            function openMobileNav() {
+                mobileToggle.classList.add('active');
+                document.body.classList.add('mobile-nav-open');
+                document.body.classList.add('no-scroll');
+            }
+
+            function closeMobileNav() {
+                mobileToggle.classList.remove('active');
+                document.body.classList.remove('mobile-nav-open');
+                document.body.classList.remove('no-scroll');
+            }
+
+            mobileToggle.addEventListener('click', () => {
+                if(document.body.classList.contains('mobile-nav-open')) { closeMobileNav(); } 
+                else { openMobileNav(); }
+            });
+            
+            if(navOverlay) navOverlay.addEventListener('click', closeMobileNav);
+            if(closeMobileBtn) closeMobileBtn.addEventListener('click', closeMobileNav);
+
+            window.navigateTo = function(targetId) {
+                const targetView = document.getElementById(targetId);
+                if(!targetView) return;
+
+                // INVERT GLITCH FLASH EFFECT
+                document.body.classList.add('glitch-flash');
+                
+                setTimeout(() => {
+                    document.body.classList.remove('glitch-flash');
+                    
+                    // Hide all, show target
+                    views.forEach(v => {
+                        v.classList.remove('active');
+                        v.style.animation = 'none'; 
+                    });
+                    
+                    targetView.classList.add('active');
+                    void targetView.offsetWidth; // Trigger reflow for fresh animation
+                    targetView.style.animation = 'brutalReveal 0.4s cubic-bezier(0.19, 1, 0.22, 1) forwards';
+
+                    if(targetId === 'view-checkout') renderCheckout();
+
+                    // Update active nav state
+                    navLinks.forEach(link => {
+                        link.classList.remove('active-link');
+                        if(link.getAttribute('data-target') === targetId) {
+                            link.classList.add('active-link');
+                        }
+                    });
+
+                    window.scrollTo(0,0);
+                    document.body.classList.remove('cart-open'); 
+                    closeMobileNav(); 
+                }, 150); // Very fast flash
+            };
+
+            // Bind Navigation Buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const target = btn.getAttribute('data-target');
+                    if(target) {
+                        const view = document.getElementById(target);
+                        if(view && view.classList.contains('active')) {
+                            closeMobileNav();
+                            return; 
+                        }
+                        navigateTo(target);
+                        history.pushState(null, null, `#${target.replace('view-', '')}`);
+                    }
+                });
+            });
+
+            if(window.location.hash) {
+                const target = `view-${window.location.hash.substring(1)}`;
+                if(document.getElementById(target)) { 
+                    views.forEach(v => v.classList.remove('active'));
+                    document.getElementById(target).classList.add('active');
+                }
+            }
+
+            // --- 2. PRODUCT DATABASE & RENDERING ---
+            const products = [
+                { id: 1, name: "Origin Heavyweight Tee", price: 45, category: "essentials", img1: "https://images.unsplash.com/photo-1581655353564-df123a1eb820?q=80&w=800", img2: "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?q=80&w=800", desc: "Our signature piece. Cut from 280gsm heavyweight cotton for a perfect structural drape." },
+                { id: 2, name: "Digital Trade Collab", price: 55, category: "graphics", img1: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=800", img2: "https://images.unsplash.com/photo-1529374255404-311a2a4f1fd9?q=80&w=800", desc: "A limited run in collaboration with Digital Trade Agency. Features high-density puff print." },
+                { id: 3, name: "Acid Wash Boxy", price: 60, category: "graphics", img1: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?q=80&w=800", img2: "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?q=80&w=800", desc: "Vintage wash treatment makes every piece unique. Cropped body with dropped shoulders." },
+                { id: 4, name: "Studio Hoodie Black", price: 95, category: "essentials", img1: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=800", img2: "https://images.unsplash.com/photo-1511511450040-677116ff389e?q=80&w=800", desc: "450gsm French Terry. Double-lined hood. Built for the studio." },
+                { id: 5, name: "Virox Typo Tee", price: 45, category: "graphics", img1: "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?q=80&w=800", img2: "https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=800", desc: "Minimalist chest hit with expanded back typography layout." },
+                { id: 6, name: "Nylon Cargo Pant", price: 120, category: "bottoms", img1: "https://images.unsplash.com/photo-1523398002811-999aa8e9e11a?q=80&w=800", img2: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=800", desc: "Water-resistant matte nylon with articulated knee darts." },
+                { id: 7, name: "Puffer Vest Matte", price: 140, category: "outerwear", img1: "https://images.unsplash.com/photo-1511511450040-677116ff389e?q=80&w=800", img2: "https://images.unsplash.com/photo-1529374255404-311a2a4f1fd9?q=80&w=800", desc: "Synthetic down fill with a matte black ripstop shell." },
+                { id: 8, name: "Archive Beanie", price: 35, category: "accessories", img1: "https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=800", img2: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=800", desc: "Chunky knit essential with woven logo patch." },
+                { id: 9, name: "Tech Short", price: 65, category: "bottoms", img1: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=800", img2: "https://images.unsplash.com/photo-1523398002811-999aa8e9e11a?q=80&w=800", desc: "Lightweight short for active wear. Hidden zip pockets." },
+                { id: 10, name: "Mock Neck Longsleeve", price: 55, category: "essentials", img1: "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?q=80&w=800", img2: "https://images.unsplash.com/photo-1581655353564-df123a1eb820?q=80&w=800", desc: "Elevated basic. Perfect for layering under hoodies or jackets." },
+                { id: 11, name: "Oversized Denim Jacket", price: 160, category: "outerwear", img1: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?q=80&w=800", img2: "https://images.unsplash.com/photo-1511511450040-677116ff389e?q=80&w=800", desc: "Washed black denim, dropped shoulders, custom gunmetal hardware." },
+                { id: 12, name: "Virox Tote Bag", price: 40, category: "accessories", img1: "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?q=80&w=800", img2: "https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=800", desc: "Heavy canvas construction. Fits daily essentials." }
+            ];
+
+            const grid = document.getElementById('product-grid');
+            
+            window.renderShop = function(filter = 'all') {
+                const filtered = filter === 'all' ? products : products.filter(p => p.category === filter);
+                if(!grid) return;
+                grid.innerHTML = filtered.map(p => `
+                    <div class="product-card magnetic-btn" onclick="openProductDetail(${p.id})" style="cursor: pointer;">
+                        <div class="product-img">
+                            <img src="${p.img1}" class="base-img" alt="${p.name}">
+                            <img src="${p.img2}" class="hover-img" alt="${p.name}">
+                        </div>
+                        <div class="product-meta">
+                            <h3 class="product-name glitch-text" data-text="${p.name}">${p.name}</h3>
+                            <span class="product-price">$${p.price}</span>
+                        </div>
+                        <div class="btn-add magnetic-btn" onclick="event.stopPropagation(); addToCart(${p.id});">SECURE ASSET</div>
+                    </div>
+                `).join('');
+            };
+
+            renderShop();
+
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    e.target.classList.add('active');
+                    renderShop(e.target.getAttribute('data-filter'));
+                });
+            });
+
+            // Product Detail Logic
+            let selectedSize = 'M';
+            window.openProductDetail = function(id) {
+                const p = products.find(x => x.id === id);
+                if(!p) return;
+
+                const pdContainer = document.getElementById('pd-container');
+                pdContainer.innerHTML = `
+                    <div class="pd-images">
+                        <img src="${p.img1}" alt="${p.name}" class="magnetic-btn">
+                        <img src="${p.img2}" alt="${p.name}" class="magnetic-btn">
+                    </div>
+                    <div>
+                        <div class="pd-info">
+                            <h1 class="glitch-text" data-text="${p.name}">${p.name}</h1>
+                            <span class="pd-price">$${p.price}.00</span>
+                            <p class="text-body" style="font-weight: 800; font-size: 1.3rem;">${p.desc}</p>
+                            
+                            <h3 style="font-family: var(--font-mono); margin-top: 40px; margin-bottom: 20px; font-size: 1.3rem; font-weight:800;">SELECT SPEC</h3>
+                            <div class="size-selector" id="pd-sizes">
+                                <button class="size-btn magnetic-btn">S</button>
+                                <button class="size-btn magnetic-btn active">M</button>
+                                <button class="size-btn magnetic-btn">L</button>
+                                <button class="size-btn magnetic-btn">XL</button>
+                            </div>
+
+                            <button class="primary-btn magnetic-btn" style="width: 100%; padding: 25px; font-size: 1.5rem;" onclick="addToCart(${p.id})">ADD TO MANIFEST</button>
+                        </div>
+                    </div>
+                `;
+
+                document.querySelectorAll('#pd-sizes .size-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('#pd-sizes .size-btn').forEach(b => b.classList.remove('active'));
+                        e.target.classList.add('active');
+                        selectedSize = e.target.innerText;
+                    });
+                });
+
+                navigateTo('view-product');
+            };
+
+            // --- 2.5 BLOG/STORY SYSTEM ---
+            const journalPosts = [
+                { id: 1, title: "ARCHITECTURE OF A TEE", category: "DESIGN", img: "https://images.unsplash.com/photo-1618085220188-b4f210d22703?q=80&w=1200", content: "We spent 6 months sourcing the perfect 280gsm heavyweight cotton to build a foundational piece that holds its shape entirely independent of the wearer. No thin drapes, no clinging—just pure structural architecture applied to everyday clothing." },
+                { id: 2, title: "SOURCING 500GSM FLEECE", category: "SUPPLY CHAIN", img: "https://images.unsplash.com/photo-1529374255404-311a2a4f1fd9?q=80&w=1200", content: "To create the Ghost Layer Hoodie, we had to reject 95% of standard fleece available on the market. We ultimately partnered with a specialized mill to custom knit a 500gsm French Terry that acts as armor against the urban landscape." },
+                { id: 3, title: "DIGITAL TRADE COLLAB", category: "PARTNERSHIPS", img: "https://images.unsplash.com/photo-1511511450040-677116ff389e?q=80&w=1200", content: "A convergence of digital brutalism and physical architecture. The Virox system was engineered in partnership with Digital Trade, forging a new standard for online and offline streetwear integration. The capsule features high-density puff prints mirroring raw code blocks." }
+            ];
+
+            window.openBlogPost = function(id) {
+                const post = journalPosts.find(x => x.id === id);
+                if(!post) return;
+                
+                let blogView = document.getElementById('view-blog-post');
+                if(!blogView) {
+                    blogView = document.createElement('section');
+                    blogView.id = 'view-blog-post';
+                    blogView.className = 'view-section';
+                    document.getElementById('main-wrap').appendChild(blogView);
+                }
+
+                blogView.innerHTML = `
+                    <div class="section-padding">
+                        <button class="outline-btn nav-btn magnetic-btn" data-target="view-journal" style="margin-bottom: 40px; padding: 12px 25px; font-size: 0.9rem;">[ BACK TO LOGS ]</button>
+                        <div class="text-layout">
+                            <span style="font-family: var(--font-mono); font-size: 1rem; border: 3px solid var(--text-color); padding: 5px 10px; margin-bottom: 20px; display: inline-block; font-weight:800;">LOG // ${post.category}</span>
+                            <h2 class="section-title glitch-text" data-text="${post.title}" style="border:none; margin-bottom:30px;">${post.title}</h2>
+                            <img src="${post.img}" alt="${post.title}" style="width: 100%; border: 6px solid var(--text-color); box-shadow: 12px 12px 0 var(--text-color); margin-bottom: 40px;">
+                            <p class="text-body" style="font-size: 1.2rem; line-height: 1.8;">${post.content}</p>
+                        </div>
+                    </div>
+                `;
+
+                blogView.querySelector('.nav-btn').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    navigateTo('view-journal');
+                });
+
+                navigateTo('view-blog-post');
+            };
+
+            const journalGrid = document.getElementById('journal-container');
+            if(journalGrid) {
+                journalGrid.innerHTML = journalPosts.map(j => `
+                    <div class="journal-card magnetic-btn" onclick="openBlogPost(${j.id})">
+                        <img src="${j.img}" alt="${j.title}">
+                        <span class="journal-tag">${j.category}</span>
+                        <h3 class="glitch-text" data-text="${j.title}">${j.title}</h3>
+                    </div>
+                `).join('');
+            }
+
+
+            // --- 3. CART SYSTEM ---
+            let cart = [];
+            const body = document.body;
+            
+            document.getElementById('cart-toggle').addEventListener('click', () => body.classList.add('cart-open'));
+            document.getElementById('cart-toggle-mobile').addEventListener('click', () => body.classList.add('cart-open'));
+            document.getElementById('cart-close').addEventListener('click', () => body.classList.remove('cart-open'));
+            document.getElementById('cart-overlay').addEventListener('click', () => body.classList.remove('cart-open'));
+
+            window.addToCart = function(productId, size = 'M') {
+                const p = products.find(x => x.id === productId);
+                const existingItem = cart.find(item => item.id === productId && item.size === selectedSize);
+                if(existingItem) { existingItem.qty += 1; } else { cart.push({ ...p, qty: 1, size: selectedSize }); }
+                
+                updateCartUI();
+                showToast(`ASSET [${p.name}] SECURED.`);
+                body.classList.add('cart-open');
+            };
+
+            window.updateQty = function(index, change) {
+                cart[index].qty += change;
+                if(cart[index].qty <= 0) cart.splice(index, 1);
+                updateCartUI();
+                if(document.getElementById('view-checkout').classList.contains('active')) renderCheckout();
+            };
+
+            function updateCartUI() {
+                const container = document.getElementById('cart-items');
+                const badge = document.getElementById('cart-count');
+                const totalEl = document.getElementById('cart-total-price');
+                const checkoutBtn = document.getElementById('checkout-drawer-btn');
+
+                let totalItems = 0; let totalPrice = 0;
+
+                if(cart.length === 0) {
+                    container.innerHTML = '<h3 class="glitch-text" data-text="NO ASSETS SECURED." style="font-family:var(--font-mono); text-align:center; margin-top:50px; font-size: 1.2rem; background: #fff; border: 4px solid #000; padding: 30px;">NO ASSETS SECURED.</h3>';
+                    badge.innerText = "0"; totalEl.innerText = "$0.00";
+                    checkoutBtn.style.pointerEvents = 'none'; checkoutBtn.style.opacity = '0.5';
+                    return;
+                }
+
+                checkoutBtn.style.pointerEvents = 'auto'; checkoutBtn.style.opacity = '1';
+
+                container.innerHTML = cart.map((item, i) => {
+                    totalItems += item.qty; totalPrice += (item.price * item.qty);
+                    return `
+                        <div class="cart-item-card magnetic-btn">
+                            <img src="${item.img1}">
+                            <div style="flex-grow:1; display:flex; flex-direction:column; justify-content:space-between;">
+                                <div>
+                                    <h4 style="font-weight:800; font-size:1.1rem; text-transform:uppercase;">${item.name}</h4>
+                                    <span style="font-family:var(--font-mono); font-size:0.9rem; font-weight:800; background:var(--text-color); color:#fff; padding:4px 8px; border:2px solid var(--text-color); display:inline-block; margin-top:5px;">SPEC: ${item.size}</span>
+                                </div>
+                                <div style="display:flex; justify-content:space-between; align-items:flex-end;">
+                                    <div class="cart-controls">
+                                        <button onclick="updateQty(${i}, -1)">-</button>
+                                        <span>${item.qty}</span>
+                                        <button onclick="updateQty(${i}, 1)">+</button>
+                                    </div>
+                                    <span style="font-family:var(--font-mono); font-weight:800; font-size:1.4rem;">$${item.price * item.qty}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                badge.innerText = totalItems;
+                totalEl.innerText = `$${totalPrice}.00`;
+            }
+
+            function renderCheckout() {
+                const checkoutItems = document.getElementById('checkout-items');
+                const checkoutSubtotal = document.getElementById('checkout-subtotal');
+                const checkoutTotal = document.getElementById('checkout-total');
+                
+                if(cart.length === 0) {
+                    checkoutItems.innerHTML = '<p class="text-body glitch-text" data-text="NO ASSETS IN CART." style="font-weight: 800; font-family: var(--font-mono); font-size: 1.2rem; background: #fff; padding: 30px; border: 4px dashed var(--text-color); text-align: center;">NO ASSETS IN CART.</p>';
+                    checkoutSubtotal.innerText = '$0.00'; checkoutTotal.innerText = '$0.00';
+                    return;
+                }
+
+                let total = 0;
+                checkoutItems.innerHTML = cart.map(item => {
+                    total += (item.price * item.qty);
+                    return `<div class="summary-item magnetic-btn" style="align-items:center; background:#fff; padding:20px; border:4px solid var(--text-color); box-shadow: 8px 8px 0 var(--muted-bg); display:flex; flex-wrap:wrap; gap: 15px;"><div style="display:flex; gap:20px; align-items:center; flex-grow:1;"><img src="${item.img1}" style="width:70px; height:90px; object-fit:cover; border:3px solid var(--text-color);"><div><div style="font-weight:800; font-family:var(--font-heading); font-size: 1.1rem; line-height: 1.2;">${item.name}</div><div style="font-size:0.9rem; color:#fff; background: var(--text-color); padding: 4px 10px; font-family:var(--font-mono); font-weight: 800; margin-top:10px; display: inline-block; border: 2px solid var(--text-color);">SPEC: ${item.size} | QTY: ${item.qty}</div></div></div><div style="font-family:var(--font-mono); font-size:1.6rem; font-weight:800; color: var(--text-color);">$${item.price * item.qty}</div></div>`;
+                }).join('');
+
+                checkoutSubtotal.innerText = `$${total}.00`; checkoutTotal.innerText = `$${total}.00`;
+            }
+
+            // --- 4. ADVANCED EFFECTS ---
+
+            window.showToast = function(msg) {
+                const container = document.getElementById('toast-container');
+                const t = document.createElement('div');
+                t.className = 'toast glitch-text';
+                t.setAttribute('data-text', msg);
+                t.innerText = msg;
+                container.appendChild(t);
+                setTimeout(() => t.classList.add('show'), 10);
+                setTimeout(() => { t.classList.remove('show'); setTimeout(()=>t.remove(),400); }, 3000);
+            };
+
             const chars = '!<>-_\\\\/[]{}—=+*^?#_';
             document.querySelectorAll('.scrambler').forEach(el => {
                 const originalText = el.innerText;
@@ -937,12 +1313,45 @@
                             clearInterval(interval);
                             el.innerText = originalText;
                         }
-                        iterations += 1/2; // Adjust speed here
+                        iterations += 1/2;
                     }, 30);
                 });
             });
 
-            // --- 1. ADVANCED CANVAS TRAIL CURSOR (Virox Style) ---
+            document.querySelectorAll('.magnetic-btn').forEach(btn => {
+                btn.addEventListener('mousemove', (e) => {
+                    const rect = btn.getBoundingClientRect();
+                    const x = e.clientX - rect.left - rect.width / 2;
+                    const y = e.clientY - rect.top - rect.height / 2;
+                    btn.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px)`;
+                });
+                btn.addEventListener('mouseleave', () => {
+                    btn.style.transform = `translate(0px, 0px)`;
+                });
+            });
+
+            document.querySelectorAll('.accordion-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const item = btn.parentElement;
+                    const isActive = item.classList.contains('active');
+                    document.querySelectorAll('.accordion-item').forEach(i => i.classList.remove('active'));
+                    if(!isActive) item.classList.add('active');
+                });
+            });
+
+            // White on White Contrast Fix
+            document.querySelectorAll('.data-block, .journal-card').forEach(block => {
+                block.addEventListener('mouseover', () => {
+                   block.querySelectorAll('.text-body').forEach(t => t.style.color = '#fff'); 
+                });
+                block.addEventListener('mouseleave', () => {
+                   block.querySelectorAll('.text-body').forEach(t => t.style.color = ''); 
+                });
+            });
+
+            // Advanced Canvas Trail Cursor
+            const isTouchDevice = (('ontouchstart' in window) || (navigator.maxTouchPoints > 0));
+            
             if (!isTouchDevice && window.innerWidth > 768) {
                 const canvas = document.getElementById('cursor-canvas');
                 const ctx = canvas.getContext('2d');
@@ -969,7 +1378,7 @@
                     
                     trail.push({ x: mouse.x, y: mouse.y, age: 0 });
                     
-                    const isHoverable = e.target.closest('a, button, .magnetic, .work-card, .tier-card, input, textarea, .interactive-header, .scrambler');
+                    const isHoverable = e.target.closest('a, button, .magnetic-btn, .product-card, input, textarea, .journal-card');
                     if (isHoverable) dot.classList.add('active');
                     else dot.classList.remove('active');
                 });
@@ -991,7 +1400,7 @@
                         }
                     }
                     
-                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+                    ctx.strokeStyle = 'rgba(0, 0, 0, 0.8)';
                     ctx.lineWidth = 4;
                     ctx.lineCap = 'square';
                     ctx.lineJoin = 'miter';
@@ -1000,7 +1409,7 @@
                     trail.forEach((p, index) => {
                         if(index % 3 === 0) {
                             let size = Math.max(0, 10 - (p.age * 0.5));
-                            ctx.fillStyle = '#fff';
+                            ctx.fillStyle = '#000';
                             ctx.fillRect(p.x - size/2, p.y - size/2, size, size);
                         }
                     });
@@ -1008,136 +1417,10 @@
                     requestAnimationFrame(renderTrail);
                 }
                 renderTrail();
-
-                // Magnetic Buttons
-                document.querySelectorAll('.magnetic-wrap').forEach(wrap => {
-                    const magneticBtn = wrap.querySelector('.magnetic');
-                    if(!magneticBtn) return;
-                    
-                    wrap.addEventListener('mousemove', (e) => {
-                        const rect = wrap.getBoundingClientRect();
-                        const x = e.clientX - rect.left - rect.width / 2;
-                        const y = e.clientY - rect.top - rect.height / 2;
-                        magneticBtn.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px)`;
-                    });
-                    
-                    wrap.addEventListener('mouseleave', () => {
-                        magneticBtn.style.transform = `translate(0px, 0px)`;
-                    });
-                });
             } else {
                 document.getElementById('cursor-canvas').style.display = 'none';
                 document.getElementById('cursor-dot').style.display = 'none';
                 document.body.style.cursor = 'auto';
-            }
-
-            // --- 2. TOAST NOTIFICATIONS ---
-            window.showToast = function(msg) {
-                const container = document.getElementById('toast-container');
-                const toast = document.createElement('div');
-                toast.className = 'toast glitch-text';
-                toast.setAttribute('data-text', msg);
-                toast.innerText = msg;
-                container.appendChild(toast);
-                setTimeout(() => toast.classList.add('show'), 10);
-                setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 500); }, 3000);
-            };
-
-            // --- 3. HEADER & MOBILE NAV ---
-            const mobileToggle = document.getElementById('mobile-toggle');
-            const navLinks = document.getElementById('nav-links');
-            const navOverlayBg = document.getElementById('nav-overlay-bg');
-
-            function openMobileNav() {
-                mobileToggle.classList.add('active'); navLinks.classList.add('active');
-                document.body.classList.add('nav-active'); document.body.classList.add('no-scroll');
-            }
-
-            function closeMobileNav() {
-                mobileToggle.classList.remove('active'); navLinks.classList.remove('active');
-                document.body.classList.remove('nav-active'); document.body.classList.remove('no-scroll');
-            }
-
-            mobileToggle.addEventListener('click', () => {
-                if(navLinks.classList.contains('active')) closeMobileNav(); else openMobileNav();
-            });
-            navOverlayBg.addEventListener('click', closeMobileNav);
-
-            // --- 4. ADVANCED SPA ROUTING (Virox Glitch Style) ---
-            const views = document.querySelectorAll('.view-section');
-
-            window.navigateTo = function(targetId) {
-                const targetView = document.getElementById(targetId);
-                if(!targetView) return;
-
-                // Virox style glitch flash - Since it's dark mode, invert makes it flash white!
-                document.body.style.filter = 'invert(1) hue-rotate(180deg)';
-                
-                setTimeout(() => {
-                    document.body.style.filter = 'none';
-                    
-                    views.forEach(v => {
-                        v.classList.remove('active');
-                        v.style.animation = 'none'; 
-                    });
-                    
-                    targetView.classList.add('active');
-                    void targetView.offsetWidth; 
-                    targetView.style.animation = 'smoothFadeUp 0.4s cubic-bezier(0.19, 1, 0.22, 1) forwards';
-
-                    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active-link'));
-                    const activeLink = document.querySelector(`.nav-links a[data-target="${targetId}"]`);
-                    if(activeLink) activeLink.classList.add('active-link');
-
-                    window.scrollTo(0, 0);
-                    closeMobileNav();
-                }, 150);
-            }
-
-            document.querySelectorAll('.nav-trigger').forEach(trigger => {
-                trigger.addEventListener('click', function(e) {
-                    if(this.getAttribute('target') !== '_blank') {
-                        e.preventDefault();
-                        const targetId = this.getAttribute('data-target');
-                        if(document.getElementById(targetId) && document.getElementById(targetId).classList.contains('active')){ closeMobileNav(); return; }
-                        navigateTo(targetId);
-                        history.pushState(null, null, `#${targetId.replace('view-', '')}`);
-                    }
-                });
-            });
-
-            if(window.location.hash) {
-                const target = `view-${window.location.hash.substring(1)}`;
-                if(document.getElementById(target)) navigateTo(target);
-            }
-
-            // --- 5. ACCORDION / INTERACTIVE LIST ---
-            document.querySelectorAll('.interactive-header').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const item = btn.parentElement;
-                    const isActive = item.classList.contains('active');
-                    document.querySelectorAll('.interactive-item').forEach(i => i.classList.remove('active'));
-                    if(!isActive) item.classList.add('active');
-                });
-            });
-
-            // --- 6. WHATSAPP FORM LOGIC ---
-            const waForm = document.getElementById('whatsapp-form');
-            if (waForm) {
-                waForm.addEventListener('submit', function(event) {
-                    event.preventDefault();
-                    showToast("INITIALIZING TRANSMISSION...");
-
-                    const name = document.getElementById('wa-name').value;
-                    const email = document.getElementById('wa-email').value;
-                    const message = document.getElementById('wa-message').value;
-                    
-                    const whatsappNumber = "917646846030";
-                    const whatsappText = `*NEW PROJECT TRANSMISSION*%0A%0A*Name:* ${name}%0A*Email:* ${email}%0A%0A*Project Parameters:*%0A${message}`;
-                    const whatsappURL = `https://wa.me/${whatsappNumber}?text=${whatsappText}`;
-
-                    setTimeout(() => { window.open(whatsappURL, '_blank'); }, 800);
-                });
             }
         });
     </script>
