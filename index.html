@@ -1,1460 +1,308 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>VIROX | Advanced Core System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Aayu Water Solution - Trusted RO Sales & Service in Raipur. Expert repair, installation, and filter replacement.">
+    <meta name="keywords" content="RO service Raipur, water purifier repair, Aayu Water Solution, RO filter replacement">
+    <title>Aayu Water Solution | RO Service & Repair in Raipur</title>
     
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        trustBlue: '#1e3a8a',
+                        waterBlue: '#2563eb',
+                        lightAqua: '#06b6d4',
+                    }
+                }
+            }
+        }
+    </script>
 
     <style>
-        /* ==========================================
-           1. CORE VARIABLES & BRUTALIST SETUP
-           ========================================== */
-        :root {
-            --bg-color: #ffffff;
-            --text-color: #000000;
-            --muted-bg: #f4f4f4;
-            --font-heading: 'Space Grotesk', sans-serif;
-            --font-wide: 'Syne', sans-serif;
-            --font-body: 'Inter', sans-serif;
-            --font-mono: 'JetBrains Mono', monospace;
-            --transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
-            --header-height: 80px;
-        }
-
-        *, *::before, *::after { 
-            box-sizing: border-box; 
-            margin: 0; 
-            padding: 0; 
-        }
-        
-        /* STRICT OVERFLOW CONTROL */
-        html, body {
-            width: 100%;
-            max-width: 100vw;
-            overflow-x: hidden;
-            scroll-behavior: auto; 
-            font-size: 16px; 
-            -webkit-tap-highlight-color: transparent;
-            background-color: var(--bg-color); 
-            color: var(--text-color);
-            font-family: var(--font-body);
-        }
-        
-        body {
-            line-height: 1.6;
-            cursor: none; 
-            background-image: 
-                linear-gradient(#e0e0e0 1px, transparent 1px),
-                linear-gradient(90deg, #e0e0e0 1px, transparent 1px);
-            background-size: 40px 40px;
-        }
-
-        body.no-scroll { overflow: hidden; }
-        body.glitch-flash { filter: invert(1) hue-rotate(180deg); }
-
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg-color); border-left: 2px solid var(--text-color); }
-        ::-webkit-scrollbar-thumb { background: var(--text-color); }
-
-        a, button { cursor: none; color: inherit; text-decoration: none; border: none; outline: none; background: none;}
-        img { max-width: 100%; display: block; object-fit: cover; filter: grayscale(100%) contrast(1.1); transition: filter 0.4s; }
-        img:hover { filter: grayscale(0%) contrast(1); }
-        ul { list-style: none; }
-
-        /* ==========================================
-           2. ADVANCED CANVAS CURSOR & TEXT GLITCH
-           ========================================== */
-        #cursor-canvas {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            pointer-events: none; z-index: 999999; mix-blend-mode: difference;
-        }
-
-        .custom-cursor-dot {
-            position: fixed; width: 12px; height: 12px; background: #fff;
-            border-radius: 50%; transform: translate(-50%, -50%);
-            pointer-events: none; z-index: 999999; mix-blend-mode: difference;
-            transition: width 0.2s, height 0.2s, border-radius 0.2s;
-        }
-        .custom-cursor-dot.active { width: 45px; height: 45px; border-radius: 0; }
-
-        .glitch-text { position: relative; display: inline-block; font-weight: 800; font-family: var(--font-heading);}
-        .glitch-text::before, .glitch-text::after {
-            content: attr(data-text); position: absolute; top: 0; left: 0;
-            width: 100%; height: 100%; background: inherit; opacity: 0; pointer-events: none;
-        }
-        .glitch-text:hover::before {
-            left: 3px; text-shadow: -2px 0 var(--text-color); background: var(--bg-color);
-            animation: glitch-anim 0.2s infinite linear alternate-reverse; opacity: 1; z-index: -1;
-        }
-        .glitch-text:hover::after {
-            left: -3px; text-shadow: 2px 0 var(--text-color); background: var(--bg-color);
-            animation: glitch-anim2 0.3s infinite linear alternate-reverse; opacity: 1; z-index: -1;
-        }
-        @keyframes glitch-anim { 0% { clip-path: inset(20% 0 80% 0); } 50% { clip-path: inset(60% 0 10% 0); } 100% { clip-path: inset(10% 0 50% 0); } }
-        @keyframes glitch-anim2 { 0% { clip-path: inset(10% 0 60% 0); } 50% { clip-path: inset(30% 0 20% 0); } 100% { clip-path: inset(80% 0 5% 0); } }
-
-        .page-transition {
-            position: fixed; inset: 0; background: var(--text-color); z-index: 100000;
-            transform: translateY(100%); transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            border-top: 10px solid #fff; border-bottom: 10px solid #fff;
-        }
-        .page-transition.active { transform: translateY(0); }
-        .page-transition.exit { transform: translateY(-100%); }
-
-        /* ==========================================
-           3. DESKTOP HEADER
-           ========================================== */
-        header {
-            position: fixed; top: 0; left: 0; width: 100%; height: var(--header-height);
-            display: flex; justify-content: space-between; align-items: center; padding: 0 4%;
-            z-index: 90000; background: var(--bg-color);
-            border-bottom: 4px solid var(--text-color);
-            transition: var(--transition);
-        }
-
-        .logo { font-family: var(--font-heading); font-size: 2.8rem; font-weight: 800; letter-spacing: -2px; text-transform: uppercase; display: flex; align-items: center; }
-
-        .nav-links-desktop { display: flex; gap: 30px; align-items: center; }
-        .nav-links-desktop .nav-link {
-            font-family: var(--font-mono); font-size: 1.1rem; font-weight: 800; text-transform: uppercase;
-            position: relative; padding: 5px 0; display: inline-block;
-        }
-        .nav-links-desktop .nav-link::after {
-            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 4px;
-            background: var(--text-color); transform: scaleX(0); transform-origin: right; transition: transform 0.3s cubic-bezier(0.19, 1, 0.22, 1);
-        }
-        .nav-links-desktop .nav-link:hover::after, .nav-links-desktop .nav-link.active-link::after { transform: scaleX(1); transform-origin: left; }
-
-        .header-actions { display: flex; gap: 10px; align-items: center; height: 100%; }
-        
-        .btn-action {
-            font-family: var(--font-mono); font-weight: 800; font-size: 1rem;
-            padding: 10px 20px; border: 3px solid var(--text-color); background: #fff;
-            box-shadow: 4px 4px 0 var(--text-color); transition: var(--transition); display: flex; align-items: center; gap: 10px; cursor: pointer; text-transform: uppercase;
-        }
-        .magnetic-btn:hover { background: var(--text-color); color: #fff; transform: translate(3px, 3px); box-shadow: 0 0 0 transparent; }
-
-        /* BRUTALIST TEXT-BASED MOBILE TOGGLE */
-        .mobile-icon-btn { 
-            display: none; width: 42px; height: 42px; border: 3px solid var(--text-color); 
-            background: #fff; position: relative; z-index: 90001; 
-            justify-content: center; align-items: center; transition: var(--transition); padding: 0;
-            box-shadow: 4px 4px 0 var(--text-color); cursor: pointer;
-        }
-        .mobile-icon-btn:active { transform: translate(4px, 4px); box-shadow: 0 0 0 transparent; }
-
-        .mobile-toggle-text {
-            display: none; font-family: var(--font-mono); font-size: 1rem; font-weight: 800;
-            background: #fff; color: var(--text-color); border: 3px solid var(--text-color);
-            padding: 8px 15px; box-shadow: 4px 4px 0 var(--text-color); cursor: pointer; 
-            text-transform: uppercase; transition: var(--transition); z-index: 99999;
-        }
-        .mobile-toggle-text.active { 
-            background: var(--text-color); color: #fff; 
-            transform: translate(4px, 4px); box-shadow: 0 0 0 transparent; 
-        }
-
-        /* ==========================================
-           4. MOBILE NAVIGATION (UPDATED MINIMALIST LAYOUT)
-           ========================================== */
-        #nav-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 89999; opacity: 0; visibility: hidden; transition: var(--transition); backdrop-filter: blur(4px); }
-        
-        .mobile-nav-drawer {
-            position: fixed; top: 0; right: -100vw; width: 85vw; max-width: 400px; height: 100vh;
-            background: #111111; color: #ffffff; z-index: 90000; transition: right 0.4s cubic-bezier(0.19, 1, 0.22, 1);
-            display: flex; flex-direction: column; padding: 40px; overflow-y: auto; overflow-x: hidden;
-            border-left: 2px solid #333; box-shadow: -10px 0 0 var(--text-color);
-        }
-        
-        body.mobile-nav-open #nav-overlay { opacity: 1; visibility: visible; }
-        body.mobile-nav-open .mobile-nav-drawer { right: 0; }
-
-        /* Top Decorative Elements */
-        .mobile-nav-drawer .top-decor {
-            display: flex; justify-content: space-between; align-items: flex-start;
-            margin-top: 10px; margin-bottom: 60px;
-        }
-        .mobile-nav-drawer .star-icon { font-size: 40px; line-height: 1; color: #fff;}
-        
-        /* Animated Close Lines */
-        .mobile-nav-drawer .line-decor {
-            position: relative;
-            width: 55px;
-            height: 30px;
-            cursor: pointer;
-            margin-top: 5px;
-            z-index: 90002;
-        }
-        .mobile-nav-drawer .line-decor span {
-            position: absolute;
-            display: block;
-            height: 1.5px;
-            background-color: #ffffff;
-            right: 0;
-            transform-origin: center;
-            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
-            transition-delay: 0.1s; /* Slight delay to animate smoothly while opening */
-        }
-        .mobile-nav-drawer .line-decor span:first-child { width: 35px; top: 8px; transform: rotate(0deg); }
-        .mobile-nav-drawer .line-decor span:last-child { width: 55px; bottom: 8px; transform: rotate(0deg); }
-
-        /* The X Animation State (Triggered when drawer opens) */
-        body.mobile-nav-open .mobile-nav-drawer .line-decor span:first-child {
-            width: 40px;
-            top: 14px;
-            transform: rotate(45deg);
-        }
-        body.mobile-nav-open .mobile-nav-drawer .line-decor span:last-child {
-            width: 40px;
-            bottom: 14.5px;
-            transform: rotate(-45deg);
-        }
-
-        /* Main Menu Navigation */
-        .mobile-nav-drawer .main-nav { flex-grow: 1; display: flex; flex-direction: column; }
-        .mobile-nav-drawer .nav-item {
-            font-family: var(--font-heading); font-size: 32px; text-transform: uppercase; text-decoration: none; color: #ffffff; font-weight: 800;
-            padding: 20px 0; border-bottom: 1.5px solid rgba(255, 255, 255, 0.9);
-            display: flex; justify-content: space-between; align-items: center; letter-spacing: 1px; transition: var(--transition);
-        }
-        .mobile-nav-drawer .nav-item:last-of-type { border-bottom: none; }
-        .mobile-nav-drawer .nav-item:hover, .mobile-nav-drawer .nav-item.active-link { padding-left: 15px; color: #ccc;}
-
-        /* Arrow Icon (Dynamic Visibility) */
-        .mobile-nav-drawer .arrow-circle {
-            width: 32px; height: 32px; border: 1.5px solid #ffffff; border-radius: 50%;
-            display: flex; justify-content: center; align-items: center; transition: var(--transition);
-            opacity: 0; visibility: hidden; transform: translateX(-10px);
-        }
-        .mobile-nav-drawer .nav-item.active-link .arrow-circle {
-            opacity: 1; visibility: visible; transform: translateX(0);
-        }
-        .mobile-nav-drawer .nav-item:hover .arrow-circle { background: #fff; }
-        .mobile-nav-drawer .nav-item:hover .arrow-circle svg { fill: #111; }
-        .mobile-nav-drawer .arrow-circle svg { width: 14px; height: 14px; fill: #ffffff; margin-left: 3px; transition: var(--transition);}
-
-        /* Bottom Section */
-        .mobile-nav-drawer .bottom-section { margin-top: auto; display: flex; flex-direction: column; align-items: center; gap: 40px; padding-bottom: 10px; }
-        .mobile-nav-drawer .social-links { display: flex; gap: 25px; }
-        .mobile-nav-drawer .social-links a { font-family: var(--font-mono); color: #ffffff; text-decoration: none; font-size: 14px; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 800; transition: var(--transition);}
-        .mobile-nav-drawer .social-links a:hover { color: #ccc;}
-        .mobile-nav-drawer .copyright { font-family: var(--font-mono); text-align: center; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; line-height: 1.5; color: #888; font-weight: 600;}
-
-        @media(max-width: 1024px) {
-            .nav-links-desktop { display: none; }
-            .header-actions .btn-action { display: none; }
-            .mobile-icon-btn, .mobile-toggle-text { display: flex; }
-        }
-
-        /* ==========================================
-           5. GLOBAL LAYOUTS & COMPONENTS
-           ========================================== */
-        main { padding-top: var(--header-height); min-height: 100vh; width: 100%;}
-        
-        .view-section { display: none; opacity: 0; width: 100%; }
-        .view-section.active { display: block; animation: brutalReveal 0.4s cubic-bezier(0.19, 1, 0.22, 1) forwards; }
-        @keyframes brutalReveal {
-            0% { opacity: 0; transform: translateY(15px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-
-        .section-padding { padding: 80px 5%; width: 100%; }
-        @media(min-width: 768px) { .section-padding { padding: 120px 5%; } }
-
-        .section-title { font-family: var(--font-heading); font-size: clamp(2.5rem, 8vw, 5rem); font-weight: 800; line-height: 1; margin-bottom: 40px; text-transform: uppercase; letter-spacing: -2px; border-bottom: 6px solid var(--text-color); padding-bottom: 15px;}
-        .text-body { font-size: 1.1rem; margin-bottom: 25px; line-height: 1.7; max-width: 800px; color: #222;}
-
-        .primary-btn { display: inline-block; padding: 20px 35px; background: var(--text-color); color: #fff; font-family: var(--font-mono); font-size: 1.1rem; font-weight: 800; border: 4px solid var(--text-color); box-shadow: 6px 6px 0 rgba(0,0,0,0.15); transition: var(--transition); text-transform: uppercase; text-align: center; cursor: pointer;}
-        .primary-btn:hover { transform: translate(4px, 4px); box-shadow: 0 0 0 transparent; background: #fff; color: var(--text-color);}
-        
-        .outline-btn { display: inline-block; padding: 20px 35px; background: #fff; color: var(--text-color); font-family: var(--font-mono); font-size: 1.1rem; font-weight: 800; border: 4px solid var(--text-color); box-shadow: 6px 6px 0 var(--text-color); transition: var(--transition); text-transform: uppercase; text-align: center; cursor: pointer;}
-        .outline-btn:hover { transform: translate(4px, 4px); box-shadow: 0 0 0 transparent; background: var(--text-color); color: #fff;}
-
-        .grid-layout { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; width: 100%;}
-        @media(min-width: 768px) { .grid-layout { gap: 50px; } }
-
-        .form-group { margin-bottom: 25px; width: 100%; }
-        .form-label { display: block; text-transform: uppercase; font-family: var(--font-mono); font-size: 0.9rem; font-weight: 800; margin-bottom: 10px; color: #444;}
-        .form-input { width: 100%; padding: 18px; background: #fff; border: 3px solid var(--text-color); color: var(--text-color); font-size: 1rem; font-family: var(--font-body); transition: var(--transition); box-shadow: 4px 4px 0 var(--muted-bg); border-radius: 0; -webkit-appearance: none;}
-        .form-input:focus { box-shadow: 6px 6px 0 var(--text-color); outline: none; }
-
-        .accordion-item { border: 3px solid var(--text-color); margin-bottom: 15px; background: #fff; box-shadow: 4px 4px 0 var(--text-color); transition: var(--transition);}
-        .accordion-btn { width: 100%; text-align: left; padding: 20px; font-family: var(--font-heading); font-weight: 800; font-size: 1.2rem; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; cursor: pointer; color: var(--text-color); background: transparent;}
-        .accordion-btn:hover { background: var(--text-color); color: #fff; padding-left: 25px;}
-        .accordion-content { max-height: 0; overflow: hidden; padding: 0 20px; transition: max-height 0.4s ease; background: var(--muted-bg);}
-        .accordion-item.active { box-shadow: 0 0 0 transparent; transform: translate(4px, 4px);}
-        .accordion-item.active .accordion-content { max-height: 800px; padding-bottom: 20px; border-top: 3px dashed var(--text-color); padding-top: 20px;}
-
-        /* FIX HOVER CONTRAST (Cards turn black -> Text turns white) */
-        .data-block, .journal-card { transition: all 0.3s ease; }
-        .data-block *, .journal-card * { transition: color 0.3s ease, border-color 0.3s ease, background 0.3s ease; }
-        
-        .data-block:hover { background: var(--text-color); color: #fff; transform: translateY(-4px); box-shadow: 12px 12px 0 var(--text-color);}
-        .data-block:hover h3, .data-block:hover p, .data-block:hover .text-body { color: #fff !important; }
-        .data-block:hover h3 { border-color: #fff; }
-
-        .journal-card:hover { background: var(--text-color); color: #fff; transform: translate(-6px,-6px); box-shadow: 16px 16px 0 var(--text-color);}
-        .journal-card:hover h3, .journal-card:hover p, .journal-card:hover .text-body { color: #fff !important; }
-        .journal-card:hover .journal-tag { background: #fff; color: var(--text-color) !important; border-color: #fff; }
-
-        /* ==========================================
-           6. HERO & MARQUEE
-           ========================================== */
-        .hero { display: grid; grid-template-columns: 1fr; min-height: calc(100vh - var(--header-height)); border-bottom: 6px solid var(--text-color); width: 100%;}
-        @media(min-width: 1024px) { .hero { grid-template-columns: 1.2fr 1fr; } }
-        
-        .hero-text-box { padding: 10% 5%; display: flex; flex-direction: column; justify-content: center; border-right: 6px solid var(--text-color); }
-        .hero-title { font-family: var(--font-heading); font-size: clamp(4rem, 11vw, 10rem); font-weight: 800; line-height: 0.85; text-transform: uppercase; margin-bottom: 30px; letter-spacing: -3px;}
-        
-        .hero-img-box { position: relative; background: var(--text-color); overflow: hidden; min-height: 40vh;}
-        .hero-img-box img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; transition: transform 1.2s;}
-        .hero-img-box:hover img { transform: scale(1.05); opacity: 1;}
-
-        .marquee-container { width: 100%; overflow: hidden; padding: 40px 0; display: block; box-sizing: border-box;}
-        .marquee { background: var(--text-color); color: #fff; padding: 20px 0; white-space: nowrap; border-top: 4px solid var(--text-color); border-bottom: 4px solid var(--text-color); transform: rotate(-2deg) scale(1.05); box-shadow: 0 10px 0 rgba(0,0,0,0.15); width: 100%;}
-        .marquee-content { display: inline-block; font-family: var(--font-mono); font-size: 1.5rem; font-weight: 800; animation: scrollMarquee 20s linear infinite; text-transform: uppercase;}
-        @keyframes scrollMarquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-
-        /* ==========================================
-           7. SHOP ASSETS
-           ========================================== */
-        .filter-bar { display: flex; gap: 10px; margin-bottom: 40px; overflow-x: auto; padding-bottom: 10px; width: 100%;}
-        .filter-bar::-webkit-scrollbar { display: none; }
-        .filter-btn { font-family: var(--font-mono); font-size: 0.9rem; font-weight: 800; padding: 10px 18px; border: 3px solid var(--text-color); background: #fff; transition: var(--transition); white-space: nowrap; text-transform: uppercase; cursor: pointer;}
-        .filter-btn:hover, .filter-btn.active { background: var(--text-color); color: #fff; transform: translateY(-3px); box-shadow: 5px 5px 0 var(--muted-bg);}
-
-        .product-card { border: 5px solid var(--text-color); padding: 15px; background: #fff; box-shadow: 8px 8px 0 var(--text-color); transition: var(--transition); display: flex; flex-direction: column;}
-        .product-card:hover { transform: translate(-4px, -4px); box-shadow: 12px 12px 0 var(--text-color); }
-        
-        .product-img { width: 100%; height: 350px; background: var(--muted-bg); border: 3px solid var(--text-color); margin-bottom: 15px; position: relative; overflow: hidden;}
-        @media(min-width: 768px) { .product-img { height: 420px; } }
-        .product-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 0.4s ease;}
-        .product-img img.hover-img { opacity: 0; transform: scale(1.05); transition: opacity 0.4s ease, transform 0.4s ease;}
-        .product-card:hover .product-img img.base-img { opacity: 0; }
-        .product-card:hover .product-img img.hover-img { opacity: 1; transform: scale(1); filter: grayscale(0%);}
-
-        .product-meta { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; gap: 10px;}
-        .product-name { font-family: var(--font-heading); font-size: 1.1rem; font-weight: 800; text-transform: uppercase; line-height: 1.2; letter-spacing: -1px;}
-        .product-price { font-family: var(--font-mono); font-size: 1.1rem; font-weight: 800; background: var(--text-color); color: #fff; padding: 4px 8px; border: 2px solid var(--text-color);}
-
-        .btn-add { width: 100%; font-family: var(--font-mono); font-size: 0.9rem; font-weight: 800; padding: 12px; border: 3px solid var(--text-color); background: #fff; transition: var(--transition); text-transform: uppercase; margin-top: auto; text-align: center; cursor: pointer;}
-        .btn-add:hover { background: var(--text-color); color: #fff;}
-
-        /* ==========================================
-           8. PRODUCT DETAIL
-           ========================================== */
-        .pd-layout { display: grid; grid-template-columns: 1fr; gap: 40px; max-width: 1400px; margin: 0 auto; width: 100%;}
-        @media(min-width: 1024px) { .pd-layout { grid-template-columns: 1.2fr 1fr; gap: 60px;} }
-        
-        .pd-images img { width: 100%; border: 5px solid var(--text-color); margin-bottom: 20px; box-shadow: 8px 8px 0 var(--text-color); }
-        
-        .pd-info { position: sticky; top: 100px; border: 5px solid var(--text-color); padding: 30px; background: #fff; box-shadow: 10px 10px 0 var(--text-color);}
-        @media(min-width: 768px) { .pd-info { padding: 40px; border-width: 8px; box-shadow: 15px 15px 0 var(--text-color);} }
-        .pd-info h1 { font-family: var(--font-heading); font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; line-height: 1.1; text-transform: uppercase; margin-bottom: 15px; letter-spacing: -1px;}
-        .pd-price { font-family: var(--font-mono); font-size: 2rem; font-weight: 800; border-bottom: 3px solid var(--text-color); padding-bottom: 15px; display: block; margin-bottom: 25px;}
-        
-        .size-selector { display: flex; gap: 10px; margin: 20px 0 40px 0; flex-wrap: wrap;}
-        .size-btn { width: 50px; height: 50px; border: 3px solid var(--text-color); font-family: var(--font-mono); font-weight: 800; font-size: 1.1rem; background: #fff; transition: var(--transition); box-shadow: 3px 3px 0 var(--muted-bg); display: flex; justify-content: center; align-items: center; cursor: pointer;}
-        @media(min-width: 768px) { .size-btn { width: 60px; height: 60px; font-size: 1.2rem; } }
-        .size-btn.active { background: var(--text-color); color: #fff; box-shadow: 3px 3px 0 var(--text-color); transform: translate(-2px,-2px);}
-        .size-btn:hover:not(.active) { background: var(--text-color); color: #fff; transform: translate(2px,2px); box-shadow: 0 0 0 transparent;}
-
-        /* ==========================================
-           9. TEXT, BLOG, & MISC PAGES
-           ========================================== */
-        .text-layout { max-width: 1000px; margin: 0 auto; background: #fff; padding: 40px 20px; border: 5px solid var(--text-color); box-shadow: 12px 12px 0 var(--text-color); width: 100%; box-sizing: border-box;}
-        @media(min-width: 768px){ .text-layout { padding: 60px; border-width: 6px; box-shadow: 15px 15px 0 var(--text-color); } }
-
-        .journal-card { border: 5px solid var(--text-color); padding: 20px; background: #fff; box-shadow: 8px 8px 0 var(--text-color); transition: var(--transition); cursor: pointer;}
-        .journal-card img { height: 250px; width: 100%; border: 3px solid var(--text-color); margin-bottom: 15px;}
-        @media(min-width: 768px) { .journal-card img { height: 350px; } }
-        .journal-tag { font-family: var(--font-mono); font-size: 0.8rem; padding: 4px 10px; border: 2px solid var(--text-color); display: inline-block; margin-bottom: 15px; background: #fff; color: var(--text-color); font-weight: 800;}
-        .journal-card h3 { font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800; text-transform: uppercase; line-height: 1.2;}
-
-        .data-block { border: 5px solid var(--text-color); padding: 25px; background: #fff; margin-bottom: 30px; box-shadow: 6px 6px 0 var(--text-color); transition: var(--transition);}
-        .data-block h3 { font-family: var(--font-mono); font-size: 1.2rem; font-weight: 800; border-bottom: 2px dashed var(--text-color); padding-bottom: 10px; margin-bottom: 15px;}
-
-        .checkout-grid { display: grid; grid-template-columns: 1fr; gap: 40px; width: 100%;}
-        @media (min-width: 1024px) { .checkout-grid { grid-template-columns: 1.5fr 1fr; gap: 50px; } }
-        .order-summary { background: #fff; padding: 30px; border: 5px solid var(--text-color); box-shadow: 8px 8px 0 var(--text-color); height: fit-content; width: 100%; box-sizing: border-box;}
-        .summary-item { display: flex; justify-content: space-between; margin-bottom: 20px; border-bottom: 3px dashed var(--text-color); padding-bottom: 20px; font-weight: 800; font-size: 1.1rem; font-family: var(--font-heading); text-transform: uppercase;}
-
-        .lux-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; text-align: left; border: 4px solid var(--text-color); background: #fff;}
-        .lux-table th, .lux-table td { padding: 15px; border-bottom: 2px solid var(--text-color); border-right: 2px solid var(--text-color); font-family: var(--font-mono); font-size: 0.95rem;}
-        .lux-table th { background: var(--text-color); color: #fff; text-transform: uppercase; font-weight: 800;}
-
-        /* ==========================================
-           10. CART DRAWER & TOASTS
-           ========================================== */
-        .cart-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 95000; opacity: 0; visibility: hidden; transition: var(--transition); backdrop-filter: blur(5px);}
-        .cart-drawer { position: fixed; top: 0; right: -100%; width: 100%; max-width: 500px; height: 100vh; background: #fff; z-index: 96000; border-left: 6px solid var(--text-color); transition: right 0.4s cubic-bezier(0.19, 1, 0.22, 1); display: flex; flex-direction: column; box-shadow: -15px 0 0 #fff;}
-        body.cart-open .cart-overlay { opacity: 1; visibility: visible; }
-        body.cart-open .cart-drawer { right: 0; }
-
-        .cart-header { padding: 30px; border-bottom: 6px solid var(--text-color); display: flex; justify-content: space-between; align-items: center; background: #fff; }
-        .cart-header h2 { font-family: var(--font-heading); font-size: 2rem; font-weight: 800; text-transform: uppercase; letter-spacing: -1px;}
-        
-        .cart-items { flex-grow: 1; overflow-y: auto; padding: 30px; background-image: linear-gradient(#e0e0e0 1px, transparent 1px), linear-gradient(90deg, #e0e0e0 1px, transparent 1px); background-size: 40px 40px;}
-        .cart-item-card { display: flex; gap: 15px; background: #fff; border: 4px solid var(--text-color); padding: 15px; margin-bottom: 25px; box-shadow: 8px 8px 0 var(--text-color);}
-        .cart-item-card img { width: 80px; height: 100px; border: 3px solid var(--text-color);}
-        .cart-controls { display: flex; align-items: center; border: 3px solid var(--text-color); margin-top: 10px;}
-        .cart-controls button { width: 35px; height: 35px; font-weight: 800; font-size: 1.2rem; transition: var(--transition); cursor: pointer; background: #fff;}
-        .cart-controls button:hover { background: var(--text-color); color: #fff;}
-        .cart-controls span { width: 35px; text-align: center; font-family: var(--font-mono); font-weight: 800; font-size: 1rem; border-left: 3px solid var(--text-color); border-right: 3px solid var(--text-color); background: var(--muted-bg);}
-
-        .cart-footer { padding: 30px; border-top: 6px solid var(--text-color); background: #fff; }
-        .cart-total { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 1.8rem; font-weight: 800; margin-bottom: 25px; text-transform: uppercase;}
-
-        .toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 99999; display: flex; flex-direction: column; gap: 15px; pointer-events: none; }
-        .toast { background: var(--text-color); color: #fff; padding: 15px 25px; font-family: var(--font-mono); font-weight: 800; font-size: 0.9rem; border: 3px solid #fff; box-shadow: -6px 6px 0 #000; text-transform: uppercase; transform: translateX(150%); transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1); }
-        .toast.show { transform: translateX(0); }
-
-        /* ==========================================
-           11. FOOTER 
-           ========================================== */
-        footer { background: #000; color: #fff; padding: 60px 5% 40px; width: 100vw; overflow-x: hidden; box-sizing: border-box;}
-
-        .footer-logo { font-family: var(--font-heading); font-size: 2.5rem; font-weight: 800; margin-bottom: 20px; text-transform: uppercase; letter-spacing: -2px;}
-        .footer-desc { font-family: var(--font-body); font-size: 0.95rem; font-weight: 500; color: #ccc; margin-bottom: 40px; line-height: 1.6; max-width: 400px;}
-
-        .footer-grid { display: flex; flex-direction: column; gap: 40px; margin-bottom: 60px; width: 100%;}
-        @media(min-width: 768px) { .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; } }
-
-        .footer-title { font-family: var(--font-mono); font-size: 1.1rem; font-weight: 800; margin-bottom: 15px; text-transform: uppercase; color: #fff; letter-spacing: 1px;}
-
-        .footer-text { font-family: var(--font-body); font-size: 0.9rem; color: #aaa; margin-bottom: 25px; line-height: 1.6;}
-
-        .footer-links { list-style: none; margin-bottom: 40px;}
-        .footer-links li { margin-bottom: 12px; }
-        .footer-links a { font-family: var(--font-mono); font-size: 0.95rem; font-weight: 800; color: #aaa; transition: color 0.3s; cursor: pointer; text-decoration: none; text-transform: uppercase;}
-        .footer-links a:hover { color: #fff; }
-
-        .footer-newsletter-wrapper { width: 100%; max-width: 400px; margin-bottom: 20px; position: relative;}
-        .newsletter-input-group { display: flex; border-bottom: 1px solid #444; padding-bottom: 10px;}
-        .newsletter-input { flex-grow: 1; background: transparent; border: none; outline: none; color: #fff; font-family: var(--font-mono); font-size: 0.9rem; text-transform: uppercase;}
-        .newsletter-input::placeholder { color: #666; }
-        .newsletter-btn { font-family: var(--font-mono); font-weight: 800; font-size: 0.9rem; color: #fff; text-transform: uppercase; cursor: pointer; transition: color 0.3s;}
-        .newsletter-btn:hover { color: #aaa; }
-
-        .footer-socials { display: flex; gap: 20px; margin-bottom: 60px;}
-        .footer-socials a { font-family: var(--font-mono); font-weight: 800; font-size: 0.85rem; color: #fff; text-transform: uppercase; letter-spacing: 1px; cursor: pointer;}
-
-        .footer-bottom { border-top: 1px solid #222; padding-top: 25px; display: flex; flex-direction: column; gap: 15px; font-family: var(--font-mono); font-size: 0.8rem; font-weight: 800; text-transform: uppercase; color: #666;}
-        @media(min-width: 768px) { .footer-bottom { flex-direction: row; justify-content: space-between; align-items: center; } }
-
-        .footer-bottom-links { display: flex; gap: 15px; flex-wrap: wrap; }
-        .footer-bottom-links a { color: #888; transition: color 0.3s; cursor: pointer;}
-        .footer-bottom-links a:hover { color: #fff;}
-        .footer-credit { color: #fff; font-weight: 800;}
+        .fade-in { animation: fadeIn 1s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .pulse-btn { animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
     </style>
 </head>
-<body>
+<body class="font-sans text-gray-800 bg-gray-50 selection:bg-waterBlue selection:text-white">
 
-    <canvas id="cursor-canvas"></canvas>
-    <div class="custom-cursor-dot" id="cursor-dot"></div>
-
-    <div class="toast-container" id="toast-container"></div>
-
-    <div class="page-transition" id="page-transition">
-        <h1 class="glitch-text" data-text="VIROX" style="font-family: var(--font-heading); font-size: 5rem; font-weight: 800; color: #fff; letter-spacing: -1px;">VIROX</h1>
-    </div>
-
-    <header>
-        <div class="logo"><a href="#home" class="magnetic-btn nav-btn glitch-text" data-text="VIROX" data-target="view-home">VIROX</a></div>
-        
-        <nav class="nav-links-desktop">
-            <a href="#home" class="nav-link nav-btn active-link" data-target="view-home">Home</a>
-            <a href="#shop" class="nav-link nav-btn" data-target="view-shop">Catalog</a>
-            <a href="#campaigns" class="nav-link nav-btn" data-target="view-campaigns">Archive</a>
-            <a href="#journal" class="nav-link nav-btn" data-target="view-journal">Logs</a>
-            <a href="#about" class="nav-link nav-btn" data-target="view-about">Ethos</a>
-        </nav>
-
-        <div class="header-actions">
-            <button class="btn-action magnetic-btn nav-btn" data-target="view-account">LOGIN</button>
-            <button class="btn-action magnetic-btn" id="cart-toggle">
-                CART <span style="background:var(--text-color); color:#fff; padding: 2px 6px; font-family:var(--font-mono);" id="cart-count">0</span>
-            </button>
-
-            <button class="mobile-icon-btn magnetic-btn" id="cart-toggle-mobile">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="square"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-            </button>
-            <button class="mobile-toggle-text magnetic-btn" id="mobile-toggle">MENU</button>
-        </div>
-    </header>
-
-    <div id="nav-overlay"></div>
-    <div class="mobile-nav-drawer" id="nav-menu">
-        
-        <div class="top-decor">
-            <div class="star-icon">✦</div>
-            <div class="line-decor" id="drawer-close-lines">
-                <span></span>
-                <span></span>
-            </div>
-        </div>
-
-        <nav class="main-nav">
-            <a href="#home" class="nav-item nav-btn active-link" data-target="view-home">
-                Home
-                <div class="arrow-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
-            </a>
-            <a href="#shop" class="nav-item nav-btn" data-target="view-shop">
-                Catalog
-                <div class="arrow-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
-            </a>
-            <a href="#campaigns" class="nav-item nav-btn" data-target="view-campaigns">
-                Archive
-                <div class="arrow-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
-            </a>
-            <a href="#journal" class="nav-item nav-btn" data-target="view-journal">
-                Logs
-                <div class="arrow-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
-            </a>
-            <a href="#about" class="nav-item nav-btn" data-target="view-about">
-                Ethos
-                <div class="arrow-circle"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
-            </a>
-        </nav>
-
-        <div class="bottom-section">
-            <div class="social-links">
-                <a href="#account" class="nav-btn" data-target="view-account">Login</a>
-                <a href="#contact" class="nav-btn" data-target="view-contact">Contact</a>
-            </div>
-            <div class="copyright">
-                VIROX<br>
-                — SYSTEM CORE<br>
-                COPYRIGHTS © 2026
-            </div>
+    <div class="bg-trustBlue text-white text-sm py-2 px-4 hidden md:flex justify-between items-center">
+        <div><i class="fas fa-map-marker-alt mr-2 text-lightAqua"></i> Raipur, Chhattisgarh, India</div>
+        <div class="flex space-x-4">
+            <a href="mailto:rajeshrawte88@gmail.com" class="hover:text-lightAqua transition"><i class="fas fa-envelope mr-2"></i>rajeshrawte88@gmail.com</a>
+            <a href="tel:9893888224" class="hover:text-lightAqua transition font-semibold"><i class="fas fa-phone mr-2"></i>+91 9893888224</a>
         </div>
     </div>
 
-    <div class="cart-overlay" id="cart-overlay"></div>
-    <div class="cart-drawer" id="cart-drawer">
-        <div class="cart-header">
-            <h2 class="glitch-text" data-text="MANIFEST">MANIFEST</h2>
-            <button class="magnetic-btn" id="cart-close" style="font-size: 1.5rem; font-weight:800; font-family: var(--font-mono); border: 2px solid var(--text-color); background: #fff; padding: 0 10px; box-shadow: 3px 3px 0 var(--text-color); cursor:pointer;">X</button>
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0 flex items-center">
+                    <i class="fas fa-tint text-waterBlue text-3xl mr-2"></i>
+                    <span class="font-bold text-2xl text-trustBlue">Aayu <span class="text-lightAqua">Water</span></span>
+                </div>
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="#home" class="text-gray-600 hover:text-waterBlue transition font-medium">Home</a>
+                    <a href="#services" class="text-gray-600 hover:text-waterBlue transition font-medium">Services</a>
+                    <a href="#about" class="text-gray-600 hover:text-waterBlue transition font-medium">About Us</a>
+                    <a href="#contact" class="text-gray-600 hover:text-waterBlue transition font-medium">Contact</a>
+                    <a href="tel:9893888224" class="bg-waterBlue text-white px-6 py-2 rounded-full font-semibold hover:bg-trustBlue transition shadow-lg"><i class="fas fa-phone mr-2"></i> Call Now</a>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button class="text-trustBlue hover:text-waterBlue focus:outline-none">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
         </div>
-        <div class="cart-items" id="cart-items">
-            </div>
-        <div class="cart-footer">
-            <div class="cart-total">
-                <span>Total</span>
-                <span id="cart-total-price">$0.00</span>
-            </div>
-            <button class="primary-btn nav-btn magnetic-btn" data-target="view-checkout" style="width: 100%; padding: 15px; font-size: 1.1rem;" id="checkout-drawer-btn">Initialize Checkout</button>
-        </div>
-    </div>
+    </nav>
 
-    <main id="main-wrap">
-        
-        <section id="view-home" class="view-section active">
-            <div class="hero">
-                <div class="hero-text-box">
-                    <span style="font-family: var(--font-mono); font-weight: 800; border: 2px solid var(--text-color); padding: 4px 10px; display: inline-block; margin-bottom: 20px; width: fit-content; font-size: 0.8rem; box-shadow: 3px 3px 0 var(--muted-bg);">DROP 002 LIVE</span>
-                    <h1 class="hero-title glitch-text" data-text="VIROX SYSTEM">VIROX<br>SYSTEM</h1>
-                    <p class="text-body" style="font-weight: 600; border-left: 4px solid var(--text-color); padding-left: 15px;">
-                        Engineered streetwear for the modern grid. Heavyweight fabrics. Structural silhouettes. Strict monochromatic protocol.
-                    </p>
-                    <div style="margin-top: 30px; display: flex; gap: 15px; flex-wrap: wrap;">
-                        <button class="primary-btn magnetic-btn nav-btn" style="background: var(--text-color); border-color: var(--text-color);" data-target="view-shop">ENTER CATALOG</button>
-                    </div>
-                </div>
-                <div class="hero-img-box magnetic-btn nav-btn" data-target="view-campaigns" style="cursor: pointer;">
-                    <img src="https://images.unsplash.com/photo-1542596594-649edbc13630?q=80&w=1200&auto=format&fit=crop" alt="Virox Hero">
-                </div>
-            </div>
-            
-            <div class="marquee-container">
-                <div class="marquee">
-                    <div class="marquee-content">
-                        STRICT BLACK AND WHITE ++ ARCHITECTURAL FIT ++ NO RESTOCKS ++ HEAVYWEIGHT CORE ++ STRICT BLACK AND WHITE ++ ARCHITECTURAL FIT ++ NO RESTOCKS ++ HEAVYWEIGHT CORE ++ 
-                    </div>
-                </div>
-            </div>
-
-            <div class="section-padding">
-                <h2 class="section-title glitch-text" data-text="THE DIRECTIVE">THE DIRECTIVE</h2>
-                <div class="grid-layout" style="grid-template-columns: 1fr; gap: 40px;">
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
-                        <div class="data-block magnetic-btn">
-                            <h3>01. STRUCTURAL INTEGRITY</h3>
-                            <p class="text-body">We reject lightweight materials. Every garment is constructed using hyper-dense fabrics ranging from 280gsm cotton to 500gsm fleece.</p>
-                        </div>
-                        <div class="data-block magnetic-btn">
-                            <h3>02. MONOCHROMATIC PURITY</h3>
-                            <p class="text-body">Color is a distraction. The Virox system relies purely on stark contrast, extreme textures, and meticulous pattern making to convey aesthetic dominance.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="view-shop" class="view-section">
-            <div class="section-padding">
-                <h2 class="section-title glitch-text" data-text="ACTIVE ASSETS">ACTIVE ASSETS</h2>
-                <p class="text-body">Browse the active catalog. Inventory is strictly limited. No restocks once archived.</p>
-                
-                <div class="filter-bar">
-                    <button class="filter-btn active magnetic-btn" data-filter="all">ALL</button>
-                    <button class="filter-btn magnetic-btn" data-filter="outerwear">OUTERWEAR</button>
-                    <button class="filter-btn magnetic-btn" data-filter="essentials">CORE</button>
-                    <button class="filter-btn magnetic-btn" data-filter="graphics">GRAPHICS</button>
-                    <button class="filter-btn magnetic-btn" data-filter="bottoms">BOTTOMS</button>
-                    <button class="filter-btn magnetic-btn" data-filter="accessories">HARDWARE</button>
-                </div>
-
-                <div class="grid-layout" id="product-grid">
-                    </div>
-            </div>
-        </section>
-
-        <section id="view-product" class="view-section">
-            <div class="section-padding">
-                <button class="outline-btn nav-btn magnetic-btn" data-target="view-shop" style="margin-bottom: 40px; padding: 12px 25px; font-size: 0.9rem;">[ BACK TO CATALOG ]</button>
-                <div class="pd-layout" id="pd-container">
-                    </div>
-            </div>
-        </section>
-
-        <section id="view-campaigns" class="view-section">
-            <div class="section-padding">
-                <h2 class="section-title glitch-text" data-text="VISUAL ARCHIVE">VISUAL ARCHIVE</h2>
-                <p class="text-body">Documentation of the Virox aesthetic protocol. Lookbooks and campaigns strictly enforcing the monochromatic rule.</p>
-                
-                <div class="grid-layout">
-                    <div class="journal-card magnetic-btn">
-                        <img src="https://images.unsplash.com/photo-1511511450040-677116ff389e?q=80&w=800&auto=format&fit=crop" alt="C1">
-                        <span class="journal-tag">CAMPAIGN 001</span>
-                        <h3>SILHOUETTE DISTORTION</h3>
-                    </div>
-                    <div class="journal-card magnetic-btn">
-                        <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=800&auto=format&fit=crop" alt="C2">
-                        <span class="journal-tag">LOOKBOOK</span>
-                        <h3>THE HEAVY OVERCOAT</h3>
-                    </div>
-                    <div class="journal-card magnetic-btn">
-                        <img src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=800&auto=format&fit=crop" alt="C3">
-                        <span class="journal-tag">STUDIO DATA</span>
-                        <h3>PATTERN DRAFTING V2</h3>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="view-journal" class="view-section">
-            <div class="section-padding">
-                <h2 class="section-title glitch-text" data-text="SYSTEM LOGS">SYSTEM LOGS</h2>
-                <p class="text-body">Transmissions from HQ regarding design philosophy, fabric sourcing, and future architecture. Click to view data.</p>
-                <div class="grid-layout" id="journal-container">
-                    </div>
-            </div>
-        </section>
-
-        <section id="view-blog-post" class="view-section">
-            <div class="section-padding">
-                <button class="outline-btn nav-btn magnetic-btn" data-target="view-journal" style="margin-bottom: 30px;">&larr; Back to Logs</button>
-                <div class="text-layout" id="blog-post-content">
-                    </div>
-            </div>
-        </section>
-
-        <section id="view-about" class="view-section">
-            <div class="section-padding">
-                <div class="text-layout">
-                    <h2 class="section-title glitch-text" data-text="SYSTEM CORE">SYSTEM CORE</h2>
-                    <img src="https://images.unsplash.com/photo-1581655353564-df123a1eb820?q=80&w=1200&auto=format&fit=crop" alt="About" style="width: 100%; border: 6px solid var(--text-color); margin-bottom: 40px; box-shadow: 10px 10px 0 var(--text-color);">
-                    
-                    <div class="data-block magnetic-btn">
-                        <h3>ORIGIN PROTOCOL</h3>
-                        <p class="text-body">Initialized by Indrajeet Pisda, Virox operates as a reaction against mass-produced, flimsy fashion. Sourced from the core concepts of digital brutalism and architectural clothing, we view garments not as mere covering, but as hardware.</p>
-                    </div>
-
-                    <div class="data-block magnetic-btn">
-                        <h3>MATERIAL SPECS</h3>
-                        <p class="text-body">A silhouette is only as strong as its foundation. We refuse lightweight fabrics. Our t-shirts utilize a minimum of 280gsm cotton for a rigid, boxy drape. Outerwear is constructed from high-tensile nylons, weatherproof ripstop, and heavy thermal linings.</p>
-                    </div>
-
-                    <h3 style="font-family: var(--font-heading); font-size: 2rem; font-weight: 800; margin-top: 50px; border-bottom: 4px solid var(--text-color); padding-bottom: 15px; text-transform: uppercase;">OPERATIONAL LOOP</h3>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-top: 20px;">
-                        <div class="data-block magnetic-btn" style="margin:0; padding: 20px;">
-                            <h4>PHASE A: DRAFT</h4>
-                            <p class="text-body" style="font-size: 0.95rem; margin-top: 10px;">Silhouettes are engineered digitally. Shoulders are dropped precisely.</p>
-                        </div>
-                        <div class="data-block magnetic-btn" style="margin:0; padding: 20px;">
-                            <h4>PHASE B: PROCUREMENT</h4>
-                            <p class="text-body" style="font-size: 0.95rem; margin-top: 10px;">We hunt for the densest, most durable fabrics available on the global market.</p>
-                        </div>
-                        <div class="data-block magnetic-btn" style="margin:0; padding: 20px;">
-                            <h4>PHASE C: EXECUTION</h4>
-                            <p class="text-body" style="font-size: 0.95rem; margin-top: 10px;">Heavy-duty hardware insertion. Reinforced stitching across all tension points.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="view-account" class="view-section">
-            <div class="section-padding" style="display: flex; justify-content: center;">
-                <div class="text-layout" style="width: 100%; max-width: 600px; text-align: center;">
-                    <h2 class="section-title glitch-text" data-text="LOGIN PROTOCOL">LOGIN PROTOCOL</h2>
-                    <form onsubmit="event.preventDefault(); showToast('AUTHORIZATION ACCEPTED.'); setTimeout(()=>navigateTo('view-home'), 2000);">
-                        <div class="form-group">
-                            <label class="form-label">COMMLINK [EMAIL]</label>
-                            <input type="email" class="form-input magnetic-btn" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">CIPHER [PASSWORD]</label>
-                            <input type="password" class="form-input magnetic-btn" required>
-                        </div>
-                        <button type="submit" class="primary-btn magnetic-btn" style="width: 100%; margin-top: 20px;">AUTHENTICATE</button>
-                        <div style="margin-top: 30px; font-weight: 800; font-size: 1.1rem; font-family: var(--font-mono);">
-                            NO CLEARANCE? <a href="#" style="border-bottom: 2px solid var(--text-color);">REQUEST ACCESS</a>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </section>
-
-        <section id="view-checkout" class="view-section">
-            <div class="section-padding">
-                <div class="text-layout" style="max-width: 1200px;">
-                    <h2 class="section-title glitch-text" data-text="SECURE CHECKOUT">SECURE CHECKOUT</h2>
-                    <div class="checkout-grid">
-                        <div>
-                            <h3 style="font-family: var(--font-mono); font-size: 1.4rem; font-weight: 800; background: var(--text-color); color: #fff; display: inline-block; padding: 10px 20px; margin-bottom: 30px;">1. DESTINATION DATA</h3>
-                            <form onsubmit="event.preventDefault(); showToast('TRANSACTION COMPLETE. ASSETS SECURED.'); setTimeout(()=>navigateTo('view-home'), 3000);">
-                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                                    <div class="form-group"><label class="form-label">FIRST NAME</label><input type="text" class="form-input magnetic-btn" required></div>
-                                    <div class="form-group"><label class="form-label">LAST NAME</label><input type="text" class="form-input magnetic-btn" required></div>
-                                </div>
-                                <div class="form-group"><label class="form-label">ADDRESS LINE</label><input type="text" class="form-input magnetic-btn" required></div>
-                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                                    <div class="form-group"><label class="form-label">CITY</label><input type="text" class="form-input magnetic-btn" required></div>
-                                    <div class="form-group"><label class="form-label">ZIP CODE</label><input type="text" class="form-input magnetic-btn" required></div>
-                                </div>
-                                
-                                <h3 style="font-family: var(--font-mono); font-size: 1.4rem; font-weight: 800; background: var(--text-color); color: #fff; display: inline-block; padding: 10px 20px; margin: 40px 0 30px 0;">2. PAYMENT UPLINK</h3>
-                                <div class="form-group"><label class="form-label">CARD NUMBER</label><input type="text" class="form-input magnetic-btn" placeholder="0000 0000 0000 0000" required></div>
-                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                                    <div class="form-group"><label class="form-label">EXPIRY</label><input type="text" class="form-input magnetic-btn" placeholder="MM/YY" required></div>
-                                    <div class="form-group"><label class="form-label">CVC</label><input type="text" class="form-input magnetic-btn" required></div>
-                                </div>
-                                <button type="submit" class="primary-btn magnetic-btn" style="width: 100%; margin-top: 10px;">AUTHORIZE TRANSFER</button>
-                            </form>
-                        </div>
-                        <div class="order-summary">
-                            <h3 style="margin-bottom: 30px; font-family: var(--font-heading); font-size: 2rem; font-weight: 800; border-bottom: 4px solid var(--text-color); padding-bottom: 15px; text-transform: uppercase;">MANIFEST</h3>
-                            <div id="checkout-items"></div>
-                            <div style="margin-top: 40px; background: var(--muted-bg); padding: 30px; border: 4px solid var(--text-color);">
-                                <div class="summary-item"><span>SUBTOTAL</span><span id="checkout-subtotal">$0.00</span></div>
-                                <div class="summary-item"><span>FREIGHT</span><span style="font-family: var(--font-mono); font-size:0.9rem;">CALC AT DISPATCH</span></div>
-                                <div class="summary-item" style="border: none; font-size: 2.2rem; font-family: var(--font-mono); font-weight: 800; color: var(--text-color); padding-bottom: 0; align-items: center; margin-top: 20px;"><span>TOTAL</span><span id="checkout-total">$0.00</span></div>
+    <section id="home" class="relative bg-white overflow-hidden fade-in">
+        <div class="max-w-7xl mx-auto">
+            <div class="relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32 pt-20">
+                <main class="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
+                    <div class="sm:text-center lg:text-left">
+                        <h1 class="text-4xl tracking-tight font-extrabold text-trustBlue sm:text-5xl md:text-6xl">
+                            <span class="block">Pure Water,</span>
+                            <span class="block text-waterBlue">Healthy Life.</span>
+                        </h1>
+                        <p class="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
+                            Trusted RO Sales & Service in Raipur. Fast, affordable, and expert technicians right at your doorstep. Ensure your family drinks the safest water.
+                        </p>
+                        <div class="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
+                            <div class="rounded-md shadow">
+                                <a href="#contact" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-waterBlue hover:bg-trustBlue md:py-4 md:text-lg transition">
+                                    Book Service
+                                </a>
+                            </div>
+                            <div class="mt-3 sm:mt-0 sm:ml-3">
+                                <a href="tel:9893888224" class="w-full flex items-center justify-center px-8 py-3 border border-lightAqua text-base font-medium rounded-md text-waterBlue bg-white hover:bg-gray-50 md:py-4 md:text-lg transition">
+                                    <i class="fas fa-phone mr-2"></i> 9893888224
+                                </a>
                             </div>
                         </div>
                     </div>
+                </main>
+            </div>
+        </div>
+        <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2 bg-gradient-to-br from-lightAqua to-waterBlue opacity-10 hidden lg:block">
+            <div class="w-full h-full flex items-center justify-center">
+                 <i class="fas fa-tint text-9xl text-waterBlue opacity-20"></i>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-16 bg-gradient-to-r from-trustBlue to-waterBlue text-white relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none" style="background-image: url('data:image/svg+xml,%3Csvg width=\'100%\' height=\'100%\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cdefs%3E%3Cpattern id=\'a\' patternUnits=\'userSpaceOnUse\' width=\'20\' height=\'20\'%3E%3Ccircle cx=\'2\' cy=\'2\' r=\'2\' fill=\'%23ffffff\'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width=\'100%\' height=\'100%\' fill=\'url(%23a)\'/%3E%3C/svg%3E');"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <h2 class="text-3xl font-extrabold sm:text-4xl">Is Your Drinking Water 100% Safe?</h2>
+            <p class="mt-4 text-lg text-blue-100 max-w-2xl mx-auto">High TDS and hidden contaminants in Raipur's water can cause long-term health issues. Don't guess with your family's health.</p>
+            <div class="mt-8">
+                <a href="#contact" class="inline-flex items-center justify-center px-8 py-4 border border-transparent text-lg font-bold rounded-full text-trustBlue bg-white hover:bg-gray-100 shadow-xl pulse-btn transition">
+                    <i class="fas fa-vial mr-3 text-lightAqua"></i> Book FREE Water Inspection
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="services" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-base text-lightAqua font-semibold tracking-wide uppercase">Our Services</h2>
+                <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-trustBlue sm:text-4xl">Comprehensive Water Solutions</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white rounded-xl shadow-md p-8 hover:shadow-xl transition border-t-4 border-waterBlue group">
+                    <div class="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center mb-6 group-hover:bg-waterBlue transition">
+                        <i class="fas fa-wrench text-2xl text-waterBlue group-hover:text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">RO Repair & Maintenance</h3>
+                    <p class="text-gray-600 mb-6">Motor issues, leaks, or low water flow? Our experts diagnose and fix problems on the spot for all major brands.</p>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md p-8 hover:shadow-xl transition border-t-4 border-lightAqua group">
+                    <div class="w-14 h-14 bg-cyan-100 rounded-full flex items-center justify-center mb-6 group-hover:bg-lightAqua transition">
+                        <i class="fas fa-sync-alt text-2xl text-lightAqua group-hover:text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Filter Replacement</h3>
+                    <p class="text-gray-600 mb-6">We replace sediment, carbon, and RO membranes using 100% genuine, sealed parts for pure taste.</p>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md p-8 hover:shadow-xl transition border-t-4 border-trustBlue group">
+                    <div class="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center mb-6 group-hover:bg-trustBlue transition">
+                        <i class="fas fa-tools text-2xl text-trustBlue group-hover:text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">RO Installation</h3>
+                    <p class="text-gray-600 mb-6">Moving to a new home? We provide safe, leak-free installation and uninstallation of all RO brands.</p>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section id="view-faq" class="view-section">
-            <div class="section-padding">
-                <div class="text-layout">
-                    <h2 class="section-title glitch-text" data-text="INTEL / FAQ">INTEL / FAQ</h2>
-                    <p class="text-body" style="font-size: 1.2rem; margin-bottom: 40px; border-left: 6px solid var(--text-color); padding-left: 20px; font-weight: 700;">Before opening a comms channel, review the system parameters below.</p>
+    <section id="about" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
+                <div>
+                    <h2 class="text-3xl font-extrabold text-trustBlue mb-6">Why Choose Aayu Water Solution?</h2>
+                    <p class="text-gray-600 text-lg mb-8">Founded by Rajesh Rawte, our mission is to protect the health of Raipur by delivering flawless water purification services with honesty, speed, and affordability.</p>
                     
-                    <div class="accordion-item magnetic-btn">
-                        <button class="accordion-btn">HOW DOES THE GEAR FIT? <span class="accordion-icon">+</span></button>
-                        <div class="accordion-content"><p class="text-body" style="padding-top:20px;">Our signature fit is inherently boxy, slightly cropped, with pronounced dropped shoulders. Order your true size to achieve the intended architectural look.</p></div>
-                    </div>
-                    <div class="accordion-item magnetic-btn">
-                        <button class="accordion-btn">RESTOCK SCHEDULE? <span class="accordion-icon">+</span></button>
-                        <div class="accordion-content"><p class="text-body" style="padding-top:20px;">We operate on a strict drop model. Once a collection is released, inventory is limited. When an item sells out, it is archived permanently. No restocks.</p></div>
-                    </div>
-                    <div class="accordion-item magnetic-btn">
-                        <button class="accordion-btn">DO YOU OFFER WHOLESALE? <span class="accordion-icon">+</span></button>
-                        <div class="accordion-content"><p class="text-body" style="padding-top:20px;">Yes, we partner with select boutiques globally. Please transmit a message via our contact page for wholesale inquiries.</p></div>
+                    <ul class="space-y-6">
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-check-circle text-lightAqua text-2xl"></i>
+                            </div>
+                            <p class="ml-4 text-lg font-medium text-gray-900">Fast Response <br><span class="text-sm font-normal text-gray-500">Same-day service across Raipur.</span></p>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-check-circle text-lightAqua text-2xl"></i>
+                            </div>
+                            <p class="ml-4 text-lg font-medium text-gray-900">Expert Technicians <br><span class="text-sm font-normal text-gray-500">Verified and highly trained professionals.</span></p>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-check-circle text-lightAqua text-2xl"></i>
+                            </div>
+                            <p class="ml-4 text-lg font-medium text-gray-900">Honest Pricing <br><span class="text-sm font-normal text-gray-500">No hidden charges, 100% genuine parts.</span></p>
+                        </li>
+                    </ul>
+                </div>
+                <div class="mt-10 lg:mt-0">
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="bg-gray-50 p-6 rounded-lg text-center border border-gray-100 shadow-sm">
+                            <i class="fas fa-award text-4xl text-waterBlue mb-4"></i>
+                            <h4 class="font-bold text-gray-900">100% Genuine</h4>
+                            <p class="text-sm text-gray-500">Spare Parts</p>
+                        </div>
+                        <div class="bg-gray-50 p-6 rounded-lg text-center border border-gray-100 shadow-sm">
+                            <i class="fas fa-map-marker-alt text-4xl text-waterBlue mb-4"></i>
+                            <h4 class="font-bold text-gray-900">Local Service</h4>
+                            <p class="text-sm text-gray-500">Raipur Based</p>
+                        </div>
+                        <div class="bg-gray-50 p-6 rounded-lg text-center border border-gray-100 shadow-sm col-span-2">
+                            <div class="flex items-center justify-center space-x-2 text-yellow-400 text-xl mb-2">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            </div>
+                            <p class="italic text-gray-600">"Rajesh and his team fixed my RO within 2 hours of calling. Very professional!"</p>
+                            <span class="text-sm font-bold text-gray-900 block mt-2">- Neha S., Raipur</span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section id="view-shipping" class="view-section">
-            <div class="section-padding">
-                <div class="text-layout">
-                    <h2 class="section-title glitch-text" data-text="SHIPPING POLICY">SHIPPING POLICY</h2>
-                    <div class="data-block magnetic-btn">
-                        <h3>PROCESSING TIMES</h3>
-                        <p class="text-body">All orders are processed within 1-3 business days. Orders are not shipped or delivered on weekends or holidays.</p>
-                    </div>
-                    <div class="data-block magnetic-btn">
-                        <h3>DOMESTIC DISPATCH (INDIA)</h3>
-                        <p class="text-body">We offer standard shipping (3-5 business days) across India. Expedited options are available at checkout.</p>
-                    </div>
-                    <div class="data-block magnetic-btn">
-                        <h3>GLOBAL DISPATCH</h3>
-                        <p class="text-body">We ship worldwide. International shipping rates and delivery estimates are calculated dynamically at checkout. Custom duties are the sole responsibility of the customer.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="view-returns" class="view-section">
-            <div class="section-padding">
-                <div class="text-layout">
-                    <h2 class="section-title glitch-text" data-text="RETURNS POLICY">RETURNS POLICY</h2>
-                    <div class="data-block magnetic-btn">
-                        <h3>14-DAY PROTOCOL</h3>
-                        <p class="text-body">We accept returns and exchanges within 14 days of delivery. To be eligible, your item must be unworn, unwashed, and in the exact condition that you received it.</p>
-                    </div>
-                    <div class="data-block magnetic-btn">
-                        <h3>THE PROCESS</h3>
-                        <p class="text-body">To initiate a return, please contact our support team with your order number. A flat fee will be deducted from your refund to cover return shipping costs.</p>
-                    </div>
-                    <div class="data-block magnetic-btn">
-                        <h3>EXCEPTIONS</h3>
-                        <p class="text-body">Limited edition drop items and accessories (beanies, bags) are final sale and cannot be returned unless defective.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="view-size-guide" class="view-section">
-            <div class="section-padding">
-                <div class="text-layout">
-                    <h2 class="section-title glitch-text" data-text="SIZE GUIDE">SIZE GUIDE</h2>
-                    <p class="text-body">Our garments are designed with a structural, oversized fit. Use the table below to find your correct measurements (in inches).</p>
-                    
-                    <h3 style="font-family: var(--font-heading); font-size: 1.5rem; margin: 40px 0 20px; text-transform: uppercase; font-weight: 800;">TOPS (TEES & HOODIES)</h3>
-                    <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
-                        <table class="lux-table">
-                            <thead><tr><th>Size</th><th>Chest (Pit to Pit)</th><th>Length</th><th>Sleeve</th></tr></thead>
-                            <tbody>
-                                <tr><td>Small (S)</td><td>22.5"</td><td>26.5"</td><td>8.5"</td></tr>
-                                <tr><td>Medium (M)</td><td>23.5"</td><td>27.5"</td><td>9.0"</td></tr>
-                                <tr><td>Large (L)</td><td>24.5"</td><td>28.5"</td><td>9.5"</td></tr>
-                                <tr><td>X-Large (XL)</td><td>25.5"</td><td>29.5"</td><td>10.0"</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="view-care" class="view-section">
-            <div class="section-padding">
-                <div class="text-layout">
-                    <h2 class="section-title glitch-text" data-text="GARMENT CARE">GARMENT CARE</h2>
-                    <div class="data-block magnetic-btn">
-                        <h3>PRESERVING STRUCTURE</h3>
-                        <p class="text-body">Virox garments are built from heavy, premium fabrics. To maintain their structural integrity and prevent shrinkage, follow these instructions meticulously.</p>
-                    </div>
-                    <div class="data-block magnetic-btn">
-                        <h3>WASHING</h3>
-                        <p class="text-body">Always turn garments inside out before washing. Machine wash on a cold, gentle cycle using mild detergent. Do not bleach.</p>
-                    </div>
-                    <div class="data-block magnetic-btn">
-                        <h3>DRYING & IRONING</h3>
-                        <p class="text-body">Never tumble dry. Hang dry or lay flat in a shaded area. If ironing is necessary, use a low heat setting and iron inside out.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="view-contact" class="view-section">
-            <div class="section-padding">
-                <div class="text-layout">
-                    <h2 class="section-title glitch-text" data-text="TRANSMIT">TRANSMIT</h2>
-                    <p class="text-body" style="margin-bottom: 40px; font-size: 1.2rem;">For order support, wholesale inquiries, or press, transmit a message to the dispatch unit below.</p>
-                    
-                    <form onsubmit="event.preventDefault(); showToast('TRANSMISSION SENT SUCCESSFULLY.');">
-                        <div style="display: grid; grid-template-columns: 1fr; gap: 0;">
-                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
-                                <div class="form-group"><label class="form-label">ID / NAME</label><input type="text" class="form-input magnetic-btn" required></div>
-                                <div class="form-group"><label class="form-label">EMAIL COMM-LINK</label><input type="email" class="form-input magnetic-btn" required></div>
+    <section id="contact" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-2">
+                    <div class="bg-trustBlue p-10 text-white">
+                        <h3 class="text-3xl font-extrabold mb-6">Contact Us</h3>
+                        <p class="mb-8 text-blue-200">Need urgent repair or a free inspection? Reach out to us immediately.</p>
+                        
+                        <div class="space-y-6">
+                            <div class="flex items-center">
+                                <i class="fas fa-phone-alt text-lightAqua text-xl w-8"></i>
+                                <div>
+                                    <p class="text-sm text-blue-200">Call Us</p>
+                                    <a href="tel:9893888224" class="text-xl font-bold hover:text-lightAqua transition">+91 9893888224</a>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-envelope text-lightAqua text-xl w-8"></i>
+                                <div>
+                                    <p class="text-sm text-blue-200">Email Us</p>
+                                    <a href="mailto:rajeshrawte88@gmail.com" class="text-lg font-medium hover:text-lightAqua transition">rajeshrawte88@gmail.com</a>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-user text-lightAqua text-xl w-8"></i>
+                                <div>
+                                    <p class="text-sm text-blue-200">Owner</p>
+                                    <p class="text-lg font-medium">Rajesh Rawte</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <i class="fas fa-map-marker-alt text-lightAqua text-xl w-8 mt-1"></i>
+                                <div>
+                                    <p class="text-sm text-blue-200">Location</p>
+                                    <p class="text-lg font-medium">Raipur, Chhattisgarh, India</p>
+                                </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="form-label">SUBJECT CATEGORY</label>
-                            <select class="form-input magnetic-btn" style="cursor: pointer;">
-                                <option>Order Inquiry</option>
-                                <option>Wholesale</option>
-                                <option>Media / Press</option>
-                            </select>
-                        </div>
-                        <div class="form-group"><label class="form-label">MESSAGE DATA</label><textarea class="form-input magnetic-btn" style="height: 150px; resize: vertical;" required></textarea></div>
-                        <button type="submit" class="primary-btn magnetic-btn" style="padding: 20px 40px;">SEND TRANSMISSION</button>
-                    </form>
-                </div>
-            </div>
-        </section>
-
-        <section id="view-legal" class="view-section">
-            <div class="section-padding">
-                <div class="text-layout">
-                    <h2 id="legal-title" class="section-title glitch-text" data-text="LEGAL DATA">LEGAL DATA</h2>
-                    
-                    <p class="text-body" style="font-size: 1.2rem; border-left: 6px solid var(--text-color); padding-left: 20px; font-weight: 800;">Data collection, returns protocols, and terms of use are governed strictly by the Virox Systems mandate. Review thoroughly.</p>
-                    
-                    <div class="data-block magnetic-btn" style="margin-top: 40px;">
-                        <h3>1. DATA USAGE (PRIVACY)</h3>
-                        <p class="text-body">We collect necessary telemetry to process orders and optimize grid performance. Financial information provided during secure checkout is fully encrypted via industry-standard protocols and never stored on our local servers.</p>
                     </div>
-                    
-                    <div class="data-block magnetic-btn">
-                        <h3>2. TERMS OF ACCESS</h3>
-                        <p class="text-body">By utilizing the Virox web architecture, you agree to be bound by these Terms. Unauthorized reproduction of our apparel designs or digital assets will result in immediate legal action.</p>
+
+                    <div class="p-10">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-6">Request a Callback</h3>
+                        <form action="#" method="POST" class="space-y-6">
+                            <div>
+                                <label for="name" class="block text-sm font-medium text-gray-700">Full Name</label>
+                                <input type="text" id="name" name="name" class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-waterBlue focus:border-waterBlue" placeholder="Your Name">
+                            </div>
+                            <div>
+                                <label for="phone" class="block text-sm font-medium text-gray-700">Phone Number</label>
+                                <input type="tel" id="phone" name="phone" class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-waterBlue focus:border-waterBlue" placeholder="Your Phone Number">
+                            </div>
+                            <div>
+                                <label for="service" class="block text-sm font-medium text-gray-700">Service Needed</label>
+                                <select id="service" name="service" class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-waterBlue focus:border-waterBlue bg-white">
+                                    <option>RO Repair</option>
+                                    <option>Filter Replacement</option>
+                                    <option>New RO Installation</option>
+                                    <option>Free Water Inspection</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-waterBlue hover:bg-trustBlue focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-waterBlue transition">
+                                Send Request
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-    </main>
-
-    <footer>
-        <div style="max-width: 1400px; margin: 0 auto; width: 100%;">
-            <div style="margin-bottom: 50px;">
-                <h2 class="footer-logo glitch-text" data-text="VIROX">VIROX</h2>
-                <p class="footer-desc">Architecture for the body. Premium streetwear engineered for the modern landscape.</p>
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
+            <div class="mb-6 md:mb-0 text-center md:text-left">
+                <div class="flex items-center justify-center md:justify-start mb-4">
+                    <i class="fas fa-tint text-lightAqua text-3xl mr-2"></i>
+                    <span class="font-bold text-2xl text-white">Aayu <span class="text-lightAqua">Water</span></span>
+                </div>
+                <p class="text-gray-400 text-sm">© 2026 Aayu Water Solution. All rights reserved.</p>
             </div>
-            
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-bottom: 60px;">
-                
-                <div>
-                    <h4 class="footer-title">HEADQUARTERS</h4>
-                    <p class="footer-text">
-                        Virox Studio<br>
-                        Teknaar Chowk<br>
-                        Dantewada, Chhattisgarh 494449<br>
-                        India
-                    </p>
-                    
-                    <h4 class="footer-title" style="margin-top: 30px;">CONTACT US</h4>
-                    <p class="footer-text">
-                        Email: support@virox.in<br>
-                        Phone: +91 7646846030
-                    </p>
-                </div>
-                
-                <div>
-                    <h4 class="footer-title">NAVIGATION</h4>
-                    <ul class="footer-links">
-                        <li><a href="#home" class="nav-btn scrambler" data-target="view-home">Home</a></li>
-                        <li><a href="#shop" class="nav-btn scrambler" data-target="view-shop">Shop All</a></li>
-                        <li><a href="#campaigns" class="nav-btn scrambler" data-target="view-campaigns">Campaigns</a></li>
-                        <li><a href="#journal" class="nav-btn scrambler" data-target="view-journal">Journal</a></li>
-                        <li><a href="#about" class="nav-btn scrambler" data-target="view-about">Our Ethos</a></li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h4 class="footer-title">SUPPORT</h4>
-                    <ul class="footer-links">
-                        <li><a href="#faq" class="nav-btn scrambler" data-target="view-faq">FAQ</a></li>
-                        <li><a href="#shipping" class="nav-btn scrambler" data-target="view-shipping">Shipping Policy</a></li>
-                        <li><a href="#returns" class="nav-btn scrambler" data-target="view-returns">Returns & Exchanges</a></li>
-                        <li><a href="#size-guide" class="nav-btn scrambler" data-target="view-size-guide">Size Guide</a></li>
-                        <li><a href="#care" class="nav-btn scrambler" data-target="view-care">Garment Care</a></li>
-                        <li><a href="#contact" class="nav-btn scrambler" data-target="view-contact">Contact Us</a></li>
-                    </ul>
-                </div>
-                
-            </div>
-            
-            <div style="margin-bottom: 50px;">
-                <h4 class="footer-title">THE INNER CIRCLE</h4>
-                <p class="footer-text" style="max-width: 400px; margin-bottom: 15px;">Subscribe to receive updates on exclusive releases and studio news.</p>
-                <div class="footer-newsletter-wrapper">
-                    <form class="newsletter-input-group" onsubmit="event.preventDefault(); showToast('NETWORK JOINED.');">
-                        <input type="email" class="newsletter-input" placeholder="Email Address" required>
-                        <button type="submit" class="newsletter-btn">JOIN</button>
-                    </form>
-                </div>
-                <div class="footer-socials">
-                    <a href="#" class="scrambler">INSTAGRAM</a>
-                    <a href="#" class="scrambler">TWITTER / X</a>
-                    <a href="#" class="scrambler">PINTEREST</a>
-                </div>
-            </div>
-            
-            <div class="footer-bottom">
-                <p>&copy; 2026 Virox Studios. All Rights Reserved.</p>
-                <div class="footer-bottom-links">
-                    <a href="#legal" class="nav-btn scrambler" data-target="view-legal" onclick="document.getElementById('legal-title').innerText='Privacy Policy'">Privacy Policy</a>
-                    <a href="#legal" class="nav-btn scrambler" data-target="view-legal" onclick="document.getElementById('legal-title').innerText='Terms of Service'">Terms of Service</a>
-                    <span class="footer-credit">Designed by Digital Trade</span>
-                </div>
+            <div class="flex space-x-6 text-gray-400">
+                <a href="#home" class="hover:text-white transition">Home</a>
+                <a href="#services" class="hover:text-white transition">Services</a>
+                <a href="#about" class="hover:text-white transition">About</a>
+                <a href="#contact" class="hover:text-white transition">Contact</a>
             </div>
         </div>
     </footer>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
+    <a href="https://wa.me/919893888224" target="_blank" class="fixed bottom-6 right-6 bg-green-500 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl hover:bg-green-600 hover:scale-110 transition-transform z-50 pulse-btn">
+        <i class="fab fa-whatsapp text-3xl"></i>
+    </a>
+    
+    <div class="md:hidden fixed bottom-0 left-0 w-full z-40 bg-white border-t border-gray-200 p-3 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
+        <a href="tel:9893888224" class="w-full flex items-center justify-center bg-waterBlue text-white py-3 rounded-md font-bold text-lg">
+            <i class="fas fa-phone-alt mr-2"></i> Call Now
+        </a>
+    </div>
 
-            // --- 1. ROBUST ROUTING SYSTEM WITH CSS FLASH ---
-            const views = document.querySelectorAll('.view-section');
-            const navLinks = document.querySelectorAll('.nav-link, .mobile-nav-drawer .nav-item');
-            const mobileMenu = document.getElementById('nav-menu');
-            const mobileToggle = document.getElementById('mobile-toggle');
-            const navOverlay = document.getElementById('nav-overlay');
-            const drawerCloseLines = document.getElementById('drawer-close-lines');
-
-            function openMobileNav() {
-                mobileToggle.classList.add('active');
-                mobileToggle.innerText = 'CLOSE'; // Toggle text to CLOSE
-                document.body.classList.add('mobile-nav-open');
-                document.body.classList.add('no-scroll');
-            }
-
-            function closeMobileNav() {
-                mobileToggle.classList.remove('active');
-                mobileToggle.innerText = 'MENU'; // Toggle text back to MENU
-                document.body.classList.remove('mobile-nav-open');
-                document.body.classList.remove('no-scroll');
-            }
-
-            mobileToggle.addEventListener('click', () => {
-                if(document.body.classList.contains('mobile-nav-open')) { closeMobileNav(); } 
-                else { openMobileNav(); }
-            });
-            
-            if(navOverlay) navOverlay.addEventListener('click', closeMobileNav);
-            if(drawerCloseLines) drawerCloseLines.addEventListener('click', closeMobileNav);
-
-            window.navigateTo = function(targetId) {
-                const targetView = document.getElementById(targetId);
-                if(!targetView) return;
-
-                // INVERT GLITCH FLASH EFFECT
-                document.body.classList.add('glitch-flash');
-                
-                setTimeout(() => {
-                    document.body.classList.remove('glitch-flash');
-                    
-                    // Hide all, show target
-                    views.forEach(v => {
-                        v.classList.remove('active');
-                        v.style.animation = 'none'; 
-                    });
-                    
-                    targetView.classList.add('active');
-                    void targetView.offsetWidth; // Trigger reflow for fresh animation
-                    targetView.style.animation = 'brutalReveal 0.4s cubic-bezier(0.19, 1, 0.22, 1) forwards';
-
-                    if(targetId === 'view-checkout') renderCheckout();
-
-                    // Update active nav state for BOTH desktop and mobile. 
-                    // This triggers the play mark to show up on the newly active item.
-                    navLinks.forEach(link => {
-                        link.classList.remove('active-link');
-                        if(link.getAttribute('data-target') === targetId) {
-                            link.classList.add('active-link');
-                        }
-                    });
-
-                    window.scrollTo(0,0);
-                    document.body.classList.remove('cart-open'); 
-                    closeMobileNav(); 
-                }, 150); // Very fast flash
-            };
-
-            // Bind Navigation Buttons
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const target = btn.getAttribute('data-target');
-                    if(target) {
-                        const view = document.getElementById(target);
-                        if(view && view.classList.contains('active')) {
-                            closeMobileNav();
-                            return; 
-                        }
-                        navigateTo(target);
-                        history.pushState(null, null, `#${target.replace('view-', '')}`);
-                    }
-                });
-            });
-
-            if(window.location.hash) {
-                const target = `view-${window.location.hash.substring(1)}`;
-                if(document.getElementById(target)) { 
-                    views.forEach(v => v.classList.remove('active'));
-                    document.getElementById(target).classList.add('active');
-                }
-            }
-
-            // --- 2. PRODUCT DATABASE & RENDERING ---
-            const products = [
-                { id: 1, name: "Origin Heavyweight Tee", price: 45, category: "essentials", img1: "https://images.unsplash.com/photo-1581655353564-df123a1eb820?q=80&w=800", img2: "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?q=80&w=800", desc: "Our signature piece. Cut from 280gsm heavyweight cotton for a perfect structural drape." },
-                { id: 2, name: "Digital Trade Collab", price: 55, category: "graphics", img1: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=800", img2: "https://images.unsplash.com/photo-1529374255404-311a2a4f1fd9?q=80&w=800", desc: "A limited run in collaboration with Digital Trade Agency. Features high-density puff print." },
-                { id: 3, name: "Acid Wash Boxy", price: 60, category: "graphics", img1: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?q=80&w=800", img2: "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?q=80&w=800", desc: "Vintage wash treatment makes every piece unique. Cropped body with dropped shoulders." },
-                { id: 4, name: "Studio Hoodie Black", price: 95, category: "essentials", img1: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=800", img2: "https://images.unsplash.com/photo-1511511450040-677116ff389e?q=80&w=800", desc: "450gsm French Terry. Double-lined hood. Built for the studio." },
-                { id: 5, name: "Virox Typo Tee", price: 45, category: "graphics", img1: "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?q=80&w=800", img2: "https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=800", desc: "Minimalist chest hit with expanded back typography layout." },
-                { id: 6, name: "Nylon Cargo Pant", price: 120, category: "bottoms", img1: "https://images.unsplash.com/photo-1523398002811-999aa8e9e11a?q=80&w=800", img2: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=800", desc: "Water-resistant matte nylon with articulated knee darts." },
-                { id: 7, name: "Puffer Vest Matte", price: 140, category: "outerwear", img1: "https://images.unsplash.com/photo-1511511450040-677116ff389e?q=80&w=800", img2: "https://images.unsplash.com/photo-1529374255404-311a2a4f1fd9?q=80&w=800", desc: "Synthetic down fill with a matte black ripstop shell." },
-                { id: 8, name: "Archive Beanie", price: 35, category: "accessories", img1: "https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=800", img2: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=800", desc: "Chunky knit essential with woven logo patch." },
-                { id: 9, name: "Tech Short", price: 65, category: "bottoms", img1: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=800", img2: "https://images.unsplash.com/photo-1523398002811-999aa8e9e11a?q=80&w=800", desc: "Lightweight short for active wear. Hidden zip pockets." },
-                { id: 10, name: "Mock Neck Longsleeve", price: 55, category: "essentials", img1: "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?q=80&w=800", img2: "https://images.unsplash.com/photo-1581655353564-df123a1eb820?q=80&w=800", desc: "Elevated basic. Perfect for layering under hoodies or jackets." },
-                { id: 11, name: "Oversized Denim Jacket", price: 160, category: "outerwear", img1: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?q=80&w=800", img2: "https://images.unsplash.com/photo-1511511450040-677116ff389e?q=80&w=800", desc: "Washed black denim, dropped shoulders, custom gunmetal hardware." },
-                { id: 12, name: "Virox Tote Bag", price: 40, category: "accessories", img1: "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?q=80&w=800", img2: "https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=800", desc: "Heavy canvas construction. Fits daily essentials." }
-            ];
-
-            const grid = document.getElementById('product-grid');
-            
-            window.renderShop = function(filter = 'all') {
-                const filtered = filter === 'all' ? products : products.filter(p => p.category === filter);
-                if(!grid) return;
-                grid.innerHTML = filtered.map(p => `
-                    <div class="product-card magnetic-btn" onclick="openProductDetail(${p.id})" style="cursor: pointer;">
-                        <div class="product-img">
-                            <img src="${p.img1}" class="base-img" alt="${p.name}">
-                            <img src="${p.img2}" class="hover-img" alt="${p.name}">
-                        </div>
-                        <div class="product-meta">
-                            <h3 class="product-name glitch-text" data-text="${p.name}">${p.name}</h3>
-                            <span class="product-price">$${p.price}</span>
-                        </div>
-                        <div class="btn-add magnetic-btn" onclick="event.stopPropagation(); addToCart(${p.id});">SECURE ASSET</div>
-                    </div>
-                `).join('');
-            };
-
-            renderShop();
-
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                    e.target.classList.add('active');
-                    renderShop(e.target.getAttribute('data-filter'));
-                });
-            });
-
-            // Product Detail Logic
-            let selectedSize = 'M';
-            window.openProductDetail = function(id) {
-                const p = products.find(x => x.id === id);
-                if(!p) return;
-
-                const pdContainer = document.getElementById('pd-container');
-                pdContainer.innerHTML = `
-                    <div class="pd-images">
-                        <img src="${p.img1}" alt="${p.name}" class="magnetic-btn">
-                        <img src="${p.img2}" alt="${p.name}" class="magnetic-btn">
-                    </div>
-                    <div>
-                        <div class="pd-info">
-                            <h1 class="glitch-text" data-text="${p.name}">${p.name}</h1>
-                            <span class="pd-price">$${p.price}.00</span>
-                            <p class="text-body" style="font-weight: 800; font-size: 1.3rem;">${p.desc}</p>
-                            
-                            <h3 style="font-family: var(--font-mono); margin-top: 40px; margin-bottom: 20px; font-size: 1.3rem; font-weight:800;">SELECT SPEC</h3>
-                            <div class="size-selector" id="pd-sizes">
-                                <button class="size-btn magnetic-btn">S</button>
-                                <button class="size-btn magnetic-btn active">M</button>
-                                <button class="size-btn magnetic-btn">L</button>
-                                <button class="size-btn magnetic-btn">XL</button>
-                            </div>
-
-                            <button class="primary-btn magnetic-btn" style="width: 100%; padding: 25px; font-size: 1.5rem;" onclick="addToCart(${p.id})">ADD TO MANIFEST</button>
-                        </div>
-                    </div>
-                `;
-
-                document.querySelectorAll('#pd-sizes .size-btn').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        document.querySelectorAll('#pd-sizes .size-btn').forEach(b => b.classList.remove('active'));
-                        e.target.classList.add('active');
-                        selectedSize = e.target.innerText;
-                    });
-                });
-
-                navigateTo('view-product');
-            };
-
-            // --- 2.5 BLOG/STORY SYSTEM ---
-            const journalPosts = [
-                { id: 1, title: "ARCHITECTURE OF A TEE", category: "DESIGN", img: "https://images.unsplash.com/photo-1618085220188-b4f210d22703?q=80&w=1200", content: "We spent 6 months sourcing the perfect 280gsm heavyweight cotton to build a foundational piece that holds its shape entirely independent of the wearer. No thin drapes, no clinging—just pure structural architecture applied to everyday clothing." },
-                { id: 2, title: "SOURCING 500GSM FLEECE", category: "SUPPLY CHAIN", img: "https://images.unsplash.com/photo-1529374255404-311a2a4f1fd9?q=80&w=1200", content: "To create the Ghost Layer Hoodie, we had to reject 95% of standard fleece available on the market. We ultimately partnered with a specialized mill to custom knit a 500gsm French Terry that acts as armor against the urban landscape." },
-                { id: 3, title: "DIGITAL TRADE COLLAB", category: "PARTNERSHIPS", img: "https://images.unsplash.com/photo-1511511450040-677116ff389e?q=80&w=1200", content: "A convergence of digital brutalism and physical architecture. The Virox system was engineered in partnership with Digital Trade, forging a new standard for online and offline streetwear integration. The capsule features high-density puff prints mirroring raw code blocks." }
-            ];
-
-            window.openBlogPost = function(id) {
-                const post = journalPosts.find(x => x.id === id);
-                if(!post) return;
-                
-                let blogView = document.getElementById('view-blog-post');
-                if(!blogView) {
-                    blogView = document.createElement('section');
-                    blogView.id = 'view-blog-post';
-                    blogView.className = 'view-section';
-                    document.getElementById('main-wrap').appendChild(blogView);
-                }
-
-                blogView.innerHTML = `
-                    <div class="section-padding">
-                        <button class="outline-btn nav-btn magnetic-btn" data-target="view-journal" style="margin-bottom: 40px; padding: 12px 25px; font-size: 0.9rem;">[ BACK TO LOGS ]</button>
-                        <div class="text-layout">
-                            <span style="font-family: var(--font-mono); font-size: 1rem; border: 3px solid var(--text-color); padding: 5px 10px; margin-bottom: 20px; display: inline-block; font-weight:800;">LOG // ${post.category}</span>
-                            <h2 class="section-title glitch-text" data-text="${post.title}" style="border:none; margin-bottom:30px;">${post.title}</h2>
-                            <img src="${post.img}" alt="${post.title}" style="width: 100%; border: 6px solid var(--text-color); box-shadow: 12px 12px 0 var(--text-color); margin-bottom: 40px;">
-                            <p class="text-body" style="font-size: 1.2rem; line-height: 1.8;">${post.content}</p>
-                        </div>
-                    </div>
-                `;
-
-                blogView.querySelector('.nav-btn').addEventListener('click', (e) => {
-                    e.preventDefault();
-                    navigateTo('view-journal');
-                });
-
-                navigateTo('view-blog-post');
-            };
-
-            const journalGrid = document.getElementById('journal-container');
-            if(journalGrid) {
-                journalGrid.innerHTML = journalPosts.map(j => `
-                    <div class="journal-card magnetic-btn" onclick="openBlogPost(${j.id})">
-                        <img src="${j.img}" alt="${j.title}">
-                        <span class="journal-tag">${j.category}</span>
-                        <h3 class="glitch-text" data-text="${j.title}">${j.title}</h3>
-                    </div>
-                `).join('');
-            }
-
-
-            // --- 3. CART SYSTEM ---
-            let cart = [];
-            const body = document.body;
-            
-            document.getElementById('cart-toggle').addEventListener('click', () => body.classList.add('cart-open'));
-            document.getElementById('cart-toggle-mobile').addEventListener('click', () => body.classList.add('cart-open'));
-            document.getElementById('cart-close').addEventListener('click', () => body.classList.remove('cart-open'));
-            document.getElementById('cart-overlay').addEventListener('click', () => body.classList.remove('cart-open'));
-
-            window.addToCart = function(productId, size = 'M') {
-                const p = products.find(x => x.id === productId);
-                const existingItem = cart.find(item => item.id === productId && item.size === selectedSize);
-                if(existingItem) { existingItem.qty += 1; } else { cart.push({ ...p, qty: 1, size: selectedSize }); }
-                
-                updateCartUI();
-                showToast(`ASSET [${p.name}] SECURED.`);
-                body.classList.add('cart-open');
-            };
-
-            window.updateQty = function(index, change) {
-                cart[index].qty += change;
-                if(cart[index].qty <= 0) cart.splice(index, 1);
-                updateCartUI();
-                if(document.getElementById('view-checkout').classList.contains('active')) renderCheckout();
-            };
-
-            function updateCartUI() {
-                const container = document.getElementById('cart-items');
-                const badge = document.getElementById('cart-count');
-                const totalEl = document.getElementById('cart-total-price');
-                const checkoutBtn = document.getElementById('checkout-drawer-btn');
-
-                let totalItems = 0; let totalPrice = 0;
-
-                if(cart.length === 0) {
-                    container.innerHTML = '<h3 class="glitch-text" data-text="NO ASSETS SECURED." style="font-family:var(--font-mono); text-align:center; margin-top:50px; font-size: 1.2rem; background: #fff; border: 4px solid #000; padding: 30px;">NO ASSETS SECURED.</h3>';
-                    badge.innerText = "0"; totalEl.innerText = "$0.00";
-                    checkoutBtn.style.pointerEvents = 'none'; checkoutBtn.style.opacity = '0.5';
-                    return;
-                }
-
-                checkoutBtn.style.pointerEvents = 'auto'; checkoutBtn.style.opacity = '1';
-
-                container.innerHTML = cart.map((item, i) => {
-                    totalItems += item.qty; totalPrice += (item.price * item.qty);
-                    return `
-                        <div class="cart-item-card magnetic-btn">
-                            <img src="${item.img1}">
-                            <div style="flex-grow:1; display:flex; flex-direction:column; justify-content:space-between;">
-                                <div>
-                                    <h4 style="font-weight:800; font-size:1.1rem; text-transform:uppercase;">${item.name}</h4>
-                                    <span style="font-family:var(--font-mono); font-size:0.9rem; font-weight:800; background:var(--text-color); color:#fff; padding:4px 8px; border:2px solid var(--text-color); display:inline-block; margin-top:5px;">SPEC: ${item.size}</span>
-                                </div>
-                                <div style="display:flex; justify-content:space-between; align-items:flex-end;">
-                                    <div class="cart-controls">
-                                        <button onclick="updateQty(${i}, -1)">-</button>
-                                        <span>${item.qty}</span>
-                                        <button onclick="updateQty(${i}, 1)">+</button>
-                                    </div>
-                                    <span style="font-family:var(--font-mono); font-weight:800; font-size:1.4rem;">$${item.price * item.qty}</span>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-
-                badge.innerText = totalItems;
-                totalEl.innerText = `$${totalPrice}.00`;
-            }
-
-            function renderCheckout() {
-                const checkoutItems = document.getElementById('checkout-items');
-                const checkoutSubtotal = document.getElementById('checkout-subtotal');
-                const checkoutTotal = document.getElementById('checkout-total');
-                
-                if(cart.length === 0) {
-                    checkoutItems.innerHTML = '<p class="text-body glitch-text" data-text="NO ASSETS IN CART." style="font-weight: 800; font-family: var(--font-mono); font-size: 1.2rem; background: #fff; padding: 30px; border: 4px dashed var(--text-color); text-align: center;">NO ASSETS IN CART.</p>';
-                    checkoutSubtotal.innerText = '$0.00'; checkoutTotal.innerText = '$0.00';
-                    return;
-                }
-
-                let total = 0;
-                checkoutItems.innerHTML = cart.map(item => {
-                    total += (item.price * item.qty);
-                    return `<div class="summary-item magnetic-btn" style="align-items:center; background:#fff; padding:20px; border:4px solid var(--text-color); box-shadow: 8px 8px 0 var(--muted-bg); display:flex; flex-wrap:wrap; gap: 15px;"><div style="display:flex; gap:20px; align-items:center; flex-grow:1;"><img src="${item.img1}" style="width:70px; height:90px; object-fit:cover; border:3px solid var(--text-color);"><div><div style="font-weight:800; font-family:var(--font-heading); font-size: 1.1rem; line-height: 1.2;">${item.name}</div><div style="font-size:0.9rem; color:#fff; background: var(--text-color); padding: 4px 10px; font-family:var(--font-mono); font-weight: 800; margin-top:10px; display: inline-block; border: 2px solid var(--text-color);">SPEC: ${item.size} | QTY: ${item.qty}</div></div></div><div style="font-family:var(--font-mono); font-size:1.6rem; font-weight:800; color: var(--text-color);">$${item.price * item.qty}</div></div>`;
-                }).join('');
-
-                checkoutSubtotal.innerText = `$${total}.00`; checkoutTotal.innerText = `$${total}.00`;
-            }
-
-            // --- 4. ADVANCED EFFECTS ---
-
-            window.showToast = function(msg) {
-                const container = document.getElementById('toast-container');
-                const t = document.createElement('div');
-                t.className = 'toast glitch-text';
-                t.setAttribute('data-text', msg);
-                t.innerText = msg;
-                container.appendChild(t);
-                setTimeout(() => t.classList.add('show'), 10);
-                setTimeout(() => { t.classList.remove('show'); setTimeout(()=>t.remove(),400); }, 3000);
-            };
-
-            const chars = '!<>-_\\\\/[]{}—=+*^?#_';
-            document.querySelectorAll('.scrambler').forEach(el => {
-                const originalText = el.innerText;
-                el.addEventListener('mouseover', () => {
-                    let iterations = 0;
-                    const interval = setInterval(() => {
-                        el.innerText = originalText.split('').map((letter, index) => {
-                            if(index < iterations) return originalText[index];
-                            return chars[Math.floor(Math.random() * chars.length)];
-                        }).join('');
-                        if(iterations >= originalText.length) {
-                            clearInterval(interval);
-                            el.innerText = originalText;
-                        }
-                        iterations += 1/2;
-                    }, 30);
-                });
-            });
-
-            document.querySelectorAll('.magnetic-btn').forEach(btn => {
-                btn.addEventListener('mousemove', (e) => {
-                    const rect = btn.getBoundingClientRect();
-                    const x = e.clientX - rect.left - rect.width / 2;
-                    const y = e.clientY - rect.top - rect.height / 2;
-                    btn.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px)`;
-                });
-                btn.addEventListener('mouseleave', () => {
-                    btn.style.transform = `translate(0px, 0px)`;
-                });
-            });
-
-            document.querySelectorAll('.accordion-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const item = btn.parentElement;
-                    const isActive = item.classList.contains('active');
-                    document.querySelectorAll('.accordion-item').forEach(i => i.classList.remove('active'));
-                    if(!isActive) item.classList.add('active');
-                });
-            });
-
-            // White on White Contrast Fix
-            document.querySelectorAll('.data-block, .journal-card').forEach(block => {
-                block.addEventListener('mouseover', () => {
-                   block.querySelectorAll('.text-body').forEach(t => t.style.color = '#fff'); 
-                });
-                block.addEventListener('mouseleave', () => {
-                   block.querySelectorAll('.text-body').forEach(t => t.style.color = ''); 
-                });
-            });
-
-            // Advanced Canvas Trail Cursor
-            const isTouchDevice = (('ontouchstart' in window) || (navigator.maxTouchPoints > 0));
-            
-            if (!isTouchDevice && window.innerWidth > 768) {
-                const canvas = document.getElementById('cursor-canvas');
-                const ctx = canvas.getContext('2d');
-                const dot = document.getElementById('cursor-dot');
-                
-                let width, height;
-                function resize() {
-                    width = window.innerWidth;
-                    height = window.innerHeight;
-                    canvas.width = width;
-                    canvas.height = height;
-                }
-                window.addEventListener('resize', resize);
-                resize();
-
-                let mouse = { x: width/2, y: height/2 };
-                let trail = [];
-
-                window.addEventListener('mousemove', (e) => {
-                    mouse.x = e.clientX;
-                    mouse.y = e.clientY;
-                    dot.style.left = mouse.x + 'px';
-                    dot.style.top = mouse.y + 'px';
-                    
-                    trail.push({ x: mouse.x, y: mouse.y, age: 0 });
-                    
-                    const isHoverable = e.target.closest('a, button, .magnetic-btn, .product-card, input, textarea, .journal-card');
-                    if (isHoverable) dot.classList.add('active');
-                    else dot.classList.remove('active');
-                });
-
-                function renderTrail() {
-                    ctx.clearRect(0, 0, width, height);
-                    
-                    ctx.beginPath();
-                    for(let i = 0; i < trail.length; i++) {
-                        let p = trail[i];
-                        p.age += 1;
-                        
-                        if(i === 0) ctx.moveTo(p.x, p.y);
-                        else ctx.lineTo(p.x, p.y);
-                        
-                        if(p.age > 20) {
-                            trail.splice(i, 1);
-                            i--;
-                        }
-                    }
-                    
-                    ctx.strokeStyle = 'rgba(0, 0, 0, 0.8)';
-                    ctx.lineWidth = 4;
-                    ctx.lineCap = 'square';
-                    ctx.lineJoin = 'miter';
-                    ctx.stroke();
-
-                    trail.forEach((p, index) => {
-                        if(index % 3 === 0) {
-                            let size = Math.max(0, 10 - (p.age * 0.5));
-                            ctx.fillStyle = '#000';
-                            ctx.fillRect(p.x - size/2, p.y - size/2, size, size);
-                        }
-                    });
-
-                    requestAnimationFrame(renderTrail);
-                }
-                renderTrail();
-            } else {
-                document.getElementById('cursor-canvas').style.display = 'none';
-                document.getElementById('cursor-dot').style.display = 'none';
-                document.body.style.cursor = 'auto';
-            }
-        });
-    </script>
 </body>
 </html>
