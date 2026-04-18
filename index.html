@@ -30,89 +30,43 @@
     </script>
 
     <style>
-        /* 1. Global Fixes for Overflow */
-        html, body { 
-            overflow-x: hidden; 
-            width: 100%; 
-            position: relative; 
-            background-color: #F8FAFC; 
-            scroll-behavior: smooth;
-        }
+        html, body { overflow-x: hidden; width: 100%; position: relative; background-color: #F8FAFC; scroll-behavior: smooth; }
 
-        /* 2. SPA Page Routing Logic */
-        .page-view { 
-            display: none; 
-            opacity: 0; 
-            transform: translateY(20px);
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .page-view.active { 
-            display: block; 
-            opacity: 1; 
-            transform: translateY(0);
-            animation: pageFadeIn 0.6s ease-out forwards;
-        }
+        /* SPA Routing & Framer-like Transitions */
+        .page-view { display: none; opacity: 0; transform: translateY(30px); transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+        .page-view.active { display: block; opacity: 1; transform: translateY(0); animation: pageFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes pageFadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-        @keyframes pageFadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* 3. Sleek Navbar & Links */
-        .glass-header {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
-        }
+        /* Sleek Navbar */
+        .glass-header { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0,0,0,0.05); }
         .nav-link { position: relative; cursor: pointer; transition: color 0.3s ease; }
-        .nav-link::after {
-            content: ''; position: absolute; width: 0; height: 2px;
-            bottom: -6px; left: 0; background-color: #1E40AF;
-            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+        .nav-link::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -6px; left: 0; background-color: #1E40AF; transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         .nav-link:hover::after, .nav-link.active::after { width: 100%; }
         .nav-link.active { color: #1E40AF; font-weight: 700; }
 
-        /* 4. Advanced Water Animations (Confined to avoid overflow) */
-        .water-bg-container {
-            position: absolute; inset: 0; overflow: hidden; z-index: 0; pointer-events: none;
-        }
-        .liquid-blob {
-            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
-            animation: morphBlob 10s ease-in-out infinite alternate;
-        }
-        @keyframes morphBlob {
-            0% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; transform: rotate(0deg); }
-            100% { border-radius: 60% 40% 30% 70% / 50% 50% 40% 60%; transform: rotate(180deg); }
-        }
+        /* Advanced Image Masks & Hover Effects */
+        .image-reveal { overflow: hidden; border-radius: 2rem; position: relative; }
+        .image-reveal img { transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1); }
+        .image-reveal:hover img { transform: scale(1.08); }
+        
+        .hover-card { transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease; border: 1px solid transparent; }
+        .hover-card:hover { transform: translateY(-10px); border-color: #06B6D4; box-shadow: 0 30px 60px -15px rgba(6, 182, 212, 0.15); }
 
-        /* 5. Mobile Menu Overlay */
-        #mobile-menu {
-            opacity: 0; pointer-events: none;
-            transition: opacity 0.4s ease, backdrop-filter 0.4s ease;
-        }
-        #mobile-menu.open {
-            opacity: 1; pointer-events: auto;
-        }
+        /* Liquid BG */
+        .water-bg-container { position: absolute; inset: 0; overflow: hidden; z-index: 0; pointer-events: none; }
+        .liquid-blob { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; animation: morphBlob 12s ease-in-out infinite alternate; }
+        @keyframes morphBlob { 0% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; transform: rotate(0deg); } 100% { border-radius: 60% 40% 30% 70% / 50% 50% 40% 60%; transform: rotate(180deg); } }
 
-        /* 6. Card Hover Effect */
-        .hover-card { transition: all 0.4s ease; border: 1px solid transparent; }
-        .hover-card:hover { 
-            transform: translateY(-8px); 
-            border-color: #06B6D4; 
-            box-shadow: 0 20px 40px -10px rgba(6, 182, 212, 0.2); 
-        }
+        #mobile-menu { opacity: 0; pointer-events: none; transition: opacity 0.5s ease; }
+        #mobile-menu.open { opacity: 1; pointer-events: auto; }
     </style>
 </head>
-<body class="text-gray-800 antialiased selection:bg-brandBlue selection:text-white pt-24">
+<body class="text-gray-800 antialiased pt-24">
 
-    <header class="glass-header fixed top-0 left-0 w-full z-50 transition-all duration-300 h-24 flex items-center">
+    <header class="glass-header fixed top-0 left-0 w-full z-50 h-24 flex items-center">
         <div class="w-full max-w-7xl mx-auto px-6 lg:px-8 flex justify-between items-center">
-            
             <a onclick="goToPage('home')" class="flex items-center group cursor-pointer">
-                <div class="w-12 h-12 bg-gradient-to-br from-brandBlue to-brandAqua rounded-xl flex items-center justify-center mr-3 shadow-lg group-hover:scale-105 transition-transform">
+                <div class="w-12 h-12 bg-gradient-to-br from-brandBlue to-brandAqua rounded-xl flex items-center justify-center mr-3 shadow-lg group-hover:rotate-12 transition-transform duration-500">
                     <i class="fas fa-droplet text-white text-xl"></i>
                 </div>
                 <span class="font-extrabold text-2xl text-brandDark tracking-tight">Aayu<span class="text-brandBlue">Water.</span></span>
@@ -126,30 +80,24 @@
             </nav>
 
             <div class="hidden lg:block">
-                <a onclick="goToPage('contact')" class="cursor-pointer bg-brandDark text-white px-8 py-3.5 rounded-xl text-sm font-bold hover:bg-brandBlue transition-all shadow-xl hover:shadow-brandBlue/30">
-                    Book Service
-                </a>
+                <a onclick="goToPage('contact')" class="cursor-pointer bg-brandDark text-white px-8 py-3.5 rounded-xl text-sm font-bold hover:bg-brandBlue transition-all shadow-xl hover:shadow-brandBlue/30">Book Service</a>
             </div>
 
-            <button id="menu-btn" class="lg:hidden w-12 h-12 flex items-center justify-center bg-gray-100 rounded-xl text-brandDark focus:outline-none z-50 relative transition-colors hover:bg-gray-200">
-                <i class="fas fa-bars text-xl transition-all" id="menu-icon"></i>
+            <button id="menu-btn" class="lg:hidden w-12 h-12 flex items-center justify-center bg-gray-100 rounded-xl text-brandDark focus:outline-none z-50 transition-colors">
+                <i class="fas fa-bars text-xl" id="menu-icon"></i>
             </button>
         </div>
     </header>
 
     <div id="mobile-menu" class="fixed inset-0 bg-white/95 backdrop-blur-xl z-40 flex flex-col justify-center items-center">
         <div class="flex flex-col space-y-6 text-center w-full px-8">
-            <a onclick="goToPage('home')" class="mobile-link text-4xl font-extrabold text-brandDark hover:text-brandBlue transition-colors">Home</a>
-            <a onclick="goToPage('about')" class="mobile-link text-4xl font-extrabold text-brandDark hover:text-brandBlue transition-colors">About Us</a>
-            <a onclick="goToPage('services')" class="mobile-link text-4xl font-extrabold text-brandDark hover:text-brandBlue transition-colors">Services</a>
-            <a onclick="goToPage('amc')" class="mobile-link text-4xl font-extrabold text-brandDark hover:text-brandBlue transition-colors">AMC Plans</a>
-            <a onclick="goToPage('contact')" class="mobile-link text-4xl font-extrabold text-brandBlue mt-4 transition-colors">Contact Us</a>
-            
+            <a onclick="goToPage('home')" class="mobile-link text-4xl font-extrabold text-brandDark">Home</a>
+            <a onclick="goToPage('about')" class="mobile-link text-4xl font-extrabold text-brandDark">About Us</a>
+            <a onclick="goToPage('services')" class="mobile-link text-4xl font-extrabold text-brandDark">Services</a>
+            <a onclick="goToPage('amc')" class="mobile-link text-4xl font-extrabold text-brandDark">AMC Plans</a>
+            <a onclick="goToPage('contact')" class="mobile-link text-4xl font-extrabold text-brandBlue mt-4">Contact Us</a>
             <div class="mt-12 pt-8 border-t border-gray-200 w-full">
-                <p class="text-gray-500 font-bold mb-4 uppercase tracking-widest text-xs">Fast Support</p>
-                <a href="https://wa.me/919893888224" target="_blank" class="w-full bg-[#25D366] text-white py-4 rounded-xl font-bold text-lg flex justify-center items-center shadow-lg">
-                    <i class="fab fa-whatsapp text-2xl mr-2"></i> WhatsApp Message
-                </a>
+                <a href="https://wa.me/919893888224" target="_blank" class="w-full bg-[#25D366] text-white py-4 rounded-xl font-bold text-lg flex justify-center items-center shadow-lg"><i class="fab fa-whatsapp text-2xl mr-2"></i> WhatsApp Us</a>
             </div>
         </div>
     </div>
@@ -158,116 +106,136 @@
 
         <div id="home" class="page-view active">
             
-            <section class="relative pt-20 pb-24 lg:pt-32 lg:pb-40 overflow-hidden bg-brandLight">
+            <section class="relative pt-20 pb-24 lg:pt-32 lg:pb-32 overflow-hidden bg-brandLight">
                 <div class="water-bg-container">
-                    <div class="liquid-blob absolute -top-20 -right-20 w-[600px] h-[600px] bg-gradient-to-tr from-brandBlue/10 to-brandAqua/20 filter blur-3xl mix-blend-multiply"></div>
-                    <div class="liquid-blob absolute top-40 -left-20 w-[400px] h-[400px] bg-gradient-to-br from-cyan-300/20 to-blue-400/10 filter blur-3xl mix-blend-multiply" style="animation-direction: reverse;"></div>
+                    <div class="liquid-blob absolute -top-20 -right-20 w-[600px] h-[600px] bg-gradient-to-tr from-brandBlue/10 to-brandAqua/20 filter blur-3xl"></div>
                 </div>
-
-                <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-                    <div class="grid lg:grid-cols-2 gap-16 items-center">
-                        <div data-aos="fade-up" data-aos-duration="1000">
-                            <div class="inline-flex items-center px-4 py-2 rounded-full bg-white border border-gray-200 shadow-sm text-brandBlue font-bold text-sm mb-8">
-                                <span class="w-2.5 h-2.5 rounded-full bg-green-500 mr-2 animate-pulse"></span> Raipur's #1 RO Service
-                            </div>
-                            <h1 class="text-5xl lg:text-7xl font-extrabold text-brandDark leading-[1.1] tracking-tight mb-6">
-                                Pure Water.<br>
-                                <span class="text-transparent bg-clip-text bg-gradient-to-r from-brandBlue to-brandAqua">Perfect Health.</span>
-                            </h1>
-                            <p class="text-lg text-gray-600 mb-10 leading-relaxed max-w-lg">
-                                Premium RO installation, rapid repair, and genuine filter replacement. We bring crystal clear, safe drinking water directly to your home.
-                            </p>
-                            <div class="flex flex-col sm:flex-row gap-4">
-                                <a onclick="goToPage('contact')" class="cursor-pointer px-8 py-4 bg-brandBlue text-white rounded-xl font-bold text-lg text-center hover:bg-brandDark transition-all shadow-xl hover:shadow-brandDark/20">
-                                    Book Inspection
-                                </a>
-                                <a href="tel:9893888224" class="px-8 py-4 bg-white border border-gray-200 text-brandDark rounded-xl font-bold text-lg text-center hover:border-brandBlue hover:text-brandBlue transition-all flex items-center justify-center">
-                                    <i class="fas fa-phone-alt mr-2"></i> 9893888224
-                                </a>
-                            </div>
+                <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 grid lg:grid-cols-2 gap-16 items-center">
+                    <div data-aos="fade-right" data-aos-duration="1200">
+                        <div class="inline-flex items-center px-4 py-2 rounded-full bg-white shadow-sm text-brandBlue font-bold text-sm mb-8"><span class="w-2.5 h-2.5 rounded-full bg-green-500 mr-2 animate-pulse"></span> Verified Service in Raipur</div>
+                        <h1 class="text-5xl lg:text-7xl font-extrabold text-brandDark leading-[1.1] tracking-tight mb-6">Pure Water.<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-brandBlue to-brandAqua">Perfect Health.</span></h1>
+                        <p class="text-lg text-gray-600 mb-10 leading-relaxed max-w-lg">Advanced RO installation, rapid repair, and genuine filter replacement. We engineer water safety for modern homes.</p>
+                        <div class="flex gap-4">
+                            <a onclick="goToPage('contact')" class="cursor-pointer px-8 py-4 bg-brandBlue text-white rounded-xl font-bold shadow-xl hover:shadow-brandBlue/30 hover:bg-brandDark transition-all">Book Inspection</a>
                         </div>
+                    </div>
+                    <div class="image-reveal shadow-2xl h-[400px] lg:h-[500px]" data-aos="zoom-in" data-aos-duration="1200" data-aos-delay="200">
+                        <img src="https://images.unsplash.com/photo-1548614606-52b4451f994b?q=80&w=2070&auto=format&fit=crop" alt="Pure Water Splash" class="w-full h-full object-cover">
+                    </div>
+                </div>
+            </section>
 
-                        <div class="relative flex justify-center items-center h-[400px] lg:h-[500px]" data-aos="fade-left" data-aos-duration="1200" data-aos-delay="200">
-                            <div class="w-72 h-72 lg:w-96 lg:h-96 bg-white rounded-full shadow-2xl flex items-center justify-center relative z-10 border-[12px] border-brandLight/50" style="animation: float 6s ease-in-out infinite;">
-                                <i class="fas fa-glass-water text-8xl text-brandBlue drop-shadow-lg"></i>
-                            </div>
-                            <div class="absolute bottom-10 -left-4 bg-white px-6 py-4 rounded-2xl shadow-xl flex items-center gap-4 border border-gray-100 z-20">
-                                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-600 text-xl"><i class="fas fa-shield-check"></i></div>
-                                <div>
-                                    <p class="font-extrabold text-brandDark">100% Genuine</p>
-                                    <p class="text-xs text-gray-500">Spare Parts Guaranteed</p>
-                                </div>
-                            </div>
+            <section class="py-16 bg-brandDark">
+                <div class="max-w-7xl mx-auto px-6 lg:px-8">
+                    <div class="bg-gradient-to-r from-brandBlue/20 to-brandAqua/20 rounded-[2rem] p-10 flex flex-col md:flex-row items-center justify-between border border-white/10" data-aos="fade-up">
+                        <div class="mb-6 md:mb-0">
+                            <h2 class="text-3xl font-bold text-white mb-2">High TDS in your tap water?</h2>
+                            <p class="text-blue-200">Invisible heavy metals ruin your health. Request a precision digital audit today.</p>
                         </div>
+                        <a onclick="goToPage('contact')" class="cursor-pointer px-8 py-4 bg-white text-brandDark font-bold rounded-xl hover:bg-brandAqua hover:text-white transition-all shadow-[0_0_20px_rgba(6,182,212,0.4)]">Claim Free Test</a>
                     </div>
                 </div>
             </section>
 
             <section class="py-24 bg-white">
                 <div class="max-w-7xl mx-auto px-6 lg:px-8">
-                    <div class="text-center max-w-2xl mx-auto mb-16" data-aos="fade-up">
+                    <div class="text-center mb-16" data-aos="fade-up">
                         <h2 class="text-brandAqua font-bold uppercase tracking-widest text-sm mb-2">Our Expertise</h2>
                         <h3 class="text-4xl font-extrabold text-brandDark">Complete Water Solutions</h3>
                     </div>
-
                     <div class="grid md:grid-cols-3 gap-8">
                         <div class="bg-gray-50 rounded-3xl p-10 hover-card" data-aos="fade-up" data-aos-delay="100">
                             <div class="w-14 h-14 bg-white rounded-xl shadow-sm flex items-center justify-center text-2xl text-brandBlue mb-6"><i class="fas fa-wrench"></i></div>
                             <h4 class="text-2xl font-bold text-brandDark mb-3">RO Repair</h4>
-                            <p class="text-gray-600 mb-6">Motor breakdown, leaks, or strange taste? We diagnose and fix it rapidly at your doorstep.</p>
-                            <a onclick="goToPage('services')" class="cursor-pointer text-brandBlue font-bold text-sm flex items-center hover:text-brandDark transition-colors">Learn More <i class="fas fa-arrow-right ml-2"></i></a>
+                            <p class="text-gray-600 mb-6">Motor breakdown, leaks, or strange taste? We diagnose and fix it rapidly.</p>
                         </div>
-                        <div class="bg-brandDark rounded-3xl p-10 hover-card shadow-xl transform md:-translate-y-4" data-aos="fade-up" data-aos-delay="200">
+                        <div class="bg-brandDark rounded-3xl p-10 hover-card shadow-xl md:-translate-y-4" data-aos="fade-up" data-aos-delay="200">
                             <div class="w-14 h-14 bg-white/10 rounded-xl flex items-center justify-center text-2xl text-white mb-6"><i class="fas fa-filter"></i></div>
                             <h4 class="text-2xl font-bold text-white mb-3">Filter Change</h4>
-                            <p class="text-gray-400 mb-6">Genuine carbon and sediment filter replacements to keep your water tasting sweet and pure.</p>
-                            <a onclick="goToPage('services')" class="cursor-pointer text-brandAqua font-bold text-sm flex items-center hover:text-white transition-colors">Learn More <i class="fas fa-arrow-right ml-2"></i></a>
+                            <p class="text-gray-400 mb-6">Genuine carbon and sediment filter replacements for sweet, pure taste.</p>
                         </div>
                         <div class="bg-gray-50 rounded-3xl p-10 hover-card" data-aos="fade-up" data-aos-delay="300">
                             <div class="w-14 h-14 bg-white rounded-xl shadow-sm flex items-center justify-center text-2xl text-brandBlue mb-6"><i class="fas fa-home"></i></div>
                             <h4 class="text-2xl font-bold text-brandDark mb-3">Installation</h4>
-                            <p class="text-gray-600 mb-6">Seamless setup of new RO systems or uninstallation/shifting if you are moving homes.</p>
-                            <a onclick="goToPage('services')" class="cursor-pointer text-brandBlue font-bold text-sm flex items-center hover:text-brandDark transition-colors">Learn More <i class="fas fa-arrow-right ml-2"></i></a>
+                            <p class="text-gray-600 mb-6">Seamless aesthetic setup of new RO systems, completely hiding messy wiring.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="py-24 bg-brandLight border-t border-gray-200">
+                <div class="max-w-7xl mx-auto px-6 lg:px-8 grid md:grid-cols-2 gap-16 items-center">
+                    <div class="image-reveal shadow-2xl h-[400px]" data-aos="fade-right">
+                        <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=2070&auto=format&fit=crop" alt="Pouring Clean Water" class="w-full h-full object-cover">
+                    </div>
+                    <div data-aos="fade-left">
+                        <h2 class="text-4xl font-extrabold text-brandDark mb-6">The Aayu Advantage.</h2>
+                        <div class="space-y-6">
+                            <div class="flex items-start">
+                                <div class="bg-white w-12 h-12 rounded-xl flex items-center justify-center text-brandBlue mr-4 shadow-sm"><i class="fas fa-microscope text-xl"></i></div>
+                                <div><h4 class="font-bold text-lg text-brandDark">Scientific Approach</h4><p class="text-gray-600 text-sm mt-1">We don't guess. We use digital TDS meters to calibrate your purification.</p></div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="bg-white w-12 h-12 rounded-xl flex items-center justify-center text-brandBlue mr-4 shadow-sm"><i class="fas fa-box-open text-xl"></i></div>
+                                <div><h4 class="font-bold text-lg text-brandDark">Open-Box Transparency</h4><p class="text-gray-600 text-sm mt-1">All genuine parts are unsealed in front of your eyes before installation.</p></div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="bg-white w-12 h-12 rounded-xl flex items-center justify-center text-brandBlue mr-4 shadow-sm"><i class="fas fa-stopwatch text-xl"></i></div>
+                                <div><h4 class="font-bold text-lg text-brandDark">24-Hour Turnaround</h4><p class="text-gray-600 text-sm mt-1">Book a service before 2 PM, and our technicians arrive the exact same day.</p></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
         </div>
 
-
         <div id="about" class="page-view">
-            <section class="pt-20 pb-20 bg-brandLight relative">
-                <div class="max-w-7xl mx-auto px-6 lg:px-8 text-center" data-aos="zoom-in">
-                    <h1 class="text-5xl md:text-7xl font-extrabold text-brandDark mb-6">The Standard of Purity.</h1>
-                    <p class="text-xl text-gray-600 max-w-2xl mx-auto">Founded by Rajesh Rawte, Aayu Water Solution ensures every home in Raipur has access to flawless water purification.</p>
+            <section class="pt-32 pb-20 bg-brandLight text-center">
+                <div class="max-w-4xl mx-auto px-6" data-aos="zoom-in">
+                    <h1 class="text-5xl md:text-7xl font-extrabold text-brandDark mb-6">The Architecture of Purity.</h1>
+                    <p class="text-xl text-gray-600">Founded by Rajesh Rawte, redefining the standard of water services in Raipur.</p>
                 </div>
             </section>
 
             <section class="py-24 bg-white">
                 <div class="max-w-7xl mx-auto px-6 lg:px-8 grid md:grid-cols-2 gap-16 items-center">
-                    <div class="bg-gray-100 aspect-square rounded-[3rem] relative flex items-center justify-center border border-gray-200 shadow-inner" data-aos="fade-right">
-                        <i class="fas fa-award text-9xl text-brandBlue/20"></i>
-                        <div class="absolute inset-0 bg-gradient-to-tr from-brandAqua/10 to-transparent rounded-[3rem]"></div>
-                    </div>
-                    <div data-aos="fade-left">
+                    <div data-aos="fade-right">
                         <h2 class="text-4xl font-extrabold text-brandDark mb-6">Local Experts, Global Standards.</h2>
-                        <p class="text-gray-600 mb-6 text-lg leading-relaxed">We noticed a gap in Raipur: local mechanics used cheap imitation parts, while corporate brands charged exorbitant AMC fees with slow service. We built Aayu Water to bridge that gap.</p>
-                        
-                        <div class="mt-10 space-y-8">
-                            <div class="flex items-start">
-                                <div class="w-14 h-14 bg-brandLight rounded-2xl flex items-center justify-center text-brandBlue mr-5 shrink-0"><i class="fas fa-check-double text-xl"></i></div>
-                                <div>
-                                    <h4 class="text-xl font-bold text-brandDark mb-1">100% Genuine Spares</h4>
-                                    <p class="text-gray-500">We unseal carbon filters and RO membranes directly in front of you.</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start">
-                                <div class="w-14 h-14 bg-brandLight rounded-2xl flex items-center justify-center text-brandBlue mr-5 shrink-0"><i class="fas fa-bolt text-xl"></i></div>
-                                <div>
-                                    <h4 class="text-xl font-bold text-brandDark mb-1">Same-Day Resolution</h4>
-                                    <p class="text-gray-500">Water is essential. If you call before 2 PM, we fix it the same day.</p>
-                                </div>
-                            </div>
+                        <p class="text-gray-600 mb-4 text-lg leading-relaxed">We noticed a severe gap in Raipur's market. Local mechanics relied on cheap imitation parts that failed quickly, while corporate brands charged exorbitant AMC fees combined with painfully slow service.</p>
+                        <p class="text-gray-600 text-lg leading-relaxed">Aayu Water Solution was built to bridge that gap. We bring the precision of corporate engineering and combine it with the speed and honesty of a local business.</p>
+                    </div>
+                    <div class="image-reveal shadow-2xl h-[450px]" data-aos="fade-left">
+                        <img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?q=80&w=2070&auto=format&fit=crop" alt="Modern Kitchen Setup" class="w-full h-full object-cover">
+                    </div>
+                </div>
+            </section>
+
+            <section class="py-20 bg-brandDark text-white">
+                <div class="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col md:flex-row items-center gap-12" data-aos="fade-up">
+                    <div class="w-32 h-32 bg-brandBlue rounded-full flex items-center justify-center text-4xl font-bold border-4 border-white/20 shrink-0">RR</div>
+                    <div>
+                        <h3 class="text-3xl font-bold mb-2">Rajesh Rawte</h3>
+                        <p class="text-brandAqua uppercase tracking-widest text-sm font-bold mb-4">Founder & Lead Technician</p>
+                        <p class="text-gray-300 text-lg max-w-2xl">"Our mission is simple: Never compromise on the spare parts, and never leave a customer waiting. We treat your family's drinking water with the same care we treat our own."</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="py-24 bg-white">
+                <div class="max-w-7xl mx-auto px-6 lg:px-8 text-center" data-aos="fade-up">
+                    <h2 class="text-3xl font-bold text-brandDark mb-12">Our Core Principles</h2>
+                    <div class="grid md:grid-cols-3 gap-10 text-left">
+                        <div class="p-8 border border-gray-100 rounded-3xl bg-gray-50 hover-card">
+                            <h4 class="text-xl font-bold text-brandDark mb-3">01. Absolute Transparency</h4>
+                            <p class="text-gray-600">Clear pricing beforehand. Defective parts are shown to the customer before replacement. No hidden fees.</p>
+                        </div>
+                        <div class="p-8 border border-gray-100 rounded-3xl bg-gray-50 hover-card">
+                            <h4 class="text-xl font-bold text-brandDark mb-3">02. Engineering Precision</h4>
+                            <p class="text-gray-600">We utilize scientific testing methods rather than guesswork to ensure optimal TDS and pH balancing.</p>
+                        </div>
+                        <div class="p-8 border border-gray-100 rounded-3xl bg-gray-50 hover-card">
+                            <h4 class="text-xl font-bold text-brandDark mb-3">03. Design Aesthetics</h4>
+                            <p class="text-gray-600">Clean installations respecting the interior design of modern modular kitchens. We hide the clutter.</p>
                         </div>
                     </div>
                 </div>
@@ -276,73 +244,105 @@
 
 
         <div id="services" class="page-view">
-            <section class="pt-20 pb-20 bg-brandDark text-white">
-                <div class="max-w-7xl mx-auto px-6 lg:px-8 text-center" data-aos="fade-up">
+            <section class="pt-32 pb-20 bg-brandDark text-white text-center">
+                <div class="max-w-4xl mx-auto px-6" data-aos="fade-up">
                     <h1 class="text-5xl md:text-7xl font-extrabold mb-6">Technical Capabilities.</h1>
-                    <p class="text-xl text-gray-400 max-w-2xl mx-auto">Advanced diagnostic, repair, and installation protocols.</p>
+                    <p class="text-xl text-gray-400">Advanced diagnostic, repair, and installation protocols for residential systems.</p>
                 </div>
             </section>
 
-            <section class="py-24 bg-white">
-                <div class="max-w-7xl mx-auto px-6 lg:px-8 space-y-24">
-                    
-                    <div class="grid md:grid-cols-2 gap-16 items-center" data-aos="fade-up">
-                        <div>
-                            <span class="text-brandBlue font-bold uppercase tracking-widest text-sm mb-3 block">Service 01</span>
-                            <h2 class="text-4xl font-extrabold text-brandDark mb-5">Motor & Electrical Repair</h2>
-                            <p class="text-gray-600 mb-6 text-lg leading-relaxed">If your RO is making strange noises, vibrating heavily, or not turning on, the booster pump or SMPS adapter is likely failing. We diagnose electrical faults precisely and replace faulty pumps with high-pressure original motors.</p>
-                            <a onclick="goToPage('contact')" class="cursor-pointer font-bold text-brandBlue hover:text-brandDark transition-colors">Book Repair Request →</a>
-                        </div>
-                        <div class="bg-brandLight h-80 rounded-[2rem] border border-gray-200 flex items-center justify-center"><i class="fas fa-plug-circle-bolt text-7xl text-gray-300"></i></div>
+            <section class="py-20 bg-white">
+                <div class="max-w-7xl mx-auto px-6 lg:px-8 grid md:grid-cols-2 gap-16 items-center">
+                    <div data-aos="fade-right">
+                        <span class="text-brandBlue font-bold uppercase tracking-widest text-sm mb-3 block">Service 01</span>
+                        <h2 class="text-4xl font-extrabold text-brandDark mb-5">Motor & Electrical Diagnostics</h2>
+                        <p class="text-gray-600 mb-6 text-lg leading-relaxed">If your RO is making strange noises, vibrating heavily, or not turning on, the booster pump or SMPS adapter is likely failing. We diagnose electrical faults precisely to avoid unnecessary part changes.</p>
+                        <ul class="space-y-3 mb-8 text-gray-700 font-medium">
+                            <li><i class="fas fa-check text-brandAqua mr-2"></i> 100/150 GPD High-Pressure Pumps</li>
+                            <li><i class="fas fa-check text-brandAqua mr-2"></i> SMPS Power Adapter Replacement</li>
+                            <li><i class="fas fa-check text-brandAqua mr-2"></i> Float Switch & Auto-cut Fixes</li>
+                        </ul>
                     </div>
-
-                    <div class="grid md:grid-cols-2 gap-16 items-center" data-aos="fade-up">
-                        <div class="bg-brandLight h-80 rounded-[2rem] border border-gray-200 flex items-center justify-center md:order-1 order-2"><i class="fas fa-vial-circle-check text-7xl text-gray-300"></i></div>
-                        <div class="md:order-2 order-1">
-                            <span class="text-brandAqua font-bold uppercase tracking-widest text-sm mb-3 block">Service 02</span>
-                            <h2 class="text-4xl font-extrabold text-brandDark mb-5">Membrane & TDS Balancing</h2>
-                            <p class="text-gray-600 mb-6 text-lg leading-relaxed">Water tasting bitter or salty? The RO membrane is clogged. We test your raw water TDS and install the correct GPD membrane to ensure output water is perfectly balanced and healthy.</p>
-                            <a onclick="goToPage('contact')" class="cursor-pointer font-bold text-brandAqua hover:text-brandDark transition-colors">Book Filter Change →</a>
-                        </div>
+                    <div class="image-reveal shadow-2xl h-[350px]" data-aos="fade-left">
+                        <img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?q=80&w=2070&auto=format&fit=crop" alt="Technical Repair" class="w-full h-full object-cover">
                     </div>
+                </div>
+            </section>
 
+            <section class="py-20 bg-brandLight">
+                <div class="max-w-7xl mx-auto px-6 lg:px-8 grid md:grid-cols-2 gap-16 items-center">
+                    <div class="image-reveal shadow-2xl h-[350px] md:order-1 order-2" data-aos="fade-right">
+                        <img src="https://images.unsplash.com/photo-1627883407630-b4bdc7e7baec?q=80&w=2070&auto=format&fit=crop" alt="Water Filtration" class="w-full h-full object-cover">
+                    </div>
+                    <div class="md:order-2 order-1" data-aos="fade-left">
+                        <span class="text-brandAqua font-bold uppercase tracking-widest text-sm mb-3 block">Service 02</span>
+                        <h2 class="text-4xl font-extrabold text-brandDark mb-5">Multi-Stage Filtration Upgrade</h2>
+                        <p class="text-gray-600 mb-6 text-lg leading-relaxed">Water tasting bitter or salty? The RO membrane is clogged. We test your raw water TDS and install the correct membrane to ensure output water is perfectly balanced and retains essential minerals.</p>
+                        <ul class="space-y-3 text-gray-700 font-medium">
+                            <li><i class="fas fa-check text-brandBlue mr-2"></i> Sealed RO Membrane (75/80/100 GPD)</li>
+                            <li><i class="fas fa-check text-brandBlue mr-2"></i> Premium Activated Carbon Filters</li>
+                            <li><i class="fas fa-check text-brandBlue mr-2"></i> Sediment & Pre-Filter Change</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="py-20 bg-white">
+                <div class="max-w-7xl mx-auto px-6 lg:px-8 grid md:grid-cols-2 gap-16 items-center">
+                    <div data-aos="fade-right">
+                        <span class="text-indigo-500 font-bold uppercase tracking-widest text-sm mb-3 block">Service 03</span>
+                        <h2 class="text-4xl font-extrabold text-brandDark mb-5">Architectural Installation</h2>
+                        <p class="text-gray-600 mb-6 text-lg leading-relaxed">Moving to a new home in Raipur? We provide seamless uninstallation and re-installation services. We specialize in under-sink and wall-mounted setups that respect your kitchen's aesthetic.</p>
+                        <a onclick="goToPage('contact')" class="cursor-pointer bg-brandDark text-white px-8 py-3.5 rounded-xl text-sm font-bold shadow-xl hover:bg-brandBlue transition-all">Book Installation</a>
+                    </div>
+                    <div class="image-reveal shadow-2xl h-[350px]" data-aos="fade-left">
+                        <img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?q=80&w=2074&auto=format&fit=crop" alt="Modern Kitchen Install" class="w-full h-full object-cover">
+                    </div>
                 </div>
             </section>
         </div>
 
 
         <div id="amc" class="page-view">
-            <section class="pt-20 pb-20 bg-brandLight">
-                <div class="max-w-7xl mx-auto px-6 lg:px-8 text-center" data-aos="zoom-in">
+            <section class="pt-32 pb-20 bg-brandLight text-center">
+                <div class="max-w-4xl mx-auto px-6" data-aos="zoom-in">
                     <h1 class="text-5xl md:text-7xl font-extrabold text-brandDark mb-6">Zero Downtime.</h1>
-                    <p class="text-xl text-gray-600 max-w-2xl mx-auto">Annual Maintenance Contracts engineered to keep your system performing perfectly all year.</p>
+                    <p class="text-xl text-gray-600">Annual Maintenance Contracts engineered for uninterrupted peace of mind.</p>
                 </div>
             </section>
 
-            <section class="py-24 bg-white">
-                <div class="max-w-5xl mx-auto px-6 lg:px-8 grid md:grid-cols-2 gap-8">
-                    <div class="bg-white p-10 rounded-[2rem] border border-gray-200 hover:border-brandBlue transition-all hover-card" data-aos="fade-up">
+            <section class="py-16 bg-white">
+                <div class="max-w-5xl mx-auto px-6 text-center" data-aos="fade-up">
+                    <h2 class="text-3xl font-bold text-brandDark mb-6">Why opt for a Maintenance Contract?</h2>
+                    <p class="text-gray-600 text-lg">RO systems degrade over time without regular cleaning. An AMC ensures your filters are replaced exactly when needed, preventing expensive motor failures and protecting your family from slowly creeping TDS levels.</p>
+                </div>
+            </section>
+
+            <section class="py-12 bg-white">
+                <div class="max-w-5xl mx-auto px-6 grid md:grid-cols-2 gap-8">
+                    <div class="bg-gray-50 p-10 rounded-[2rem] border border-gray-200 hover-card" data-aos="fade-up" data-aos-delay="100">
                         <h3 class="text-3xl font-extrabold text-brandDark mb-2">Essential Care</h3>
-                        <p class="text-gray-500 mb-8 pb-8 border-b border-gray-100">Preventative maintenance for new systems.</p>
+                        <p class="text-gray-500 mb-8 pb-8 border-b border-gray-200">Preventative maintenance for working systems.</p>
                         <ul class="space-y-4 mb-10 font-medium text-gray-700">
                             <li class="flex items-center"><i class="fas fa-check-circle text-brandAqua mr-3"></i> 3 Free Service Visits</li>
                             <li class="flex items-center"><i class="fas fa-check-circle text-brandAqua mr-3"></i> Free Pre-filter replacement</li>
-                            <li class="flex items-center"><i class="fas fa-times-circle text-gray-300 mr-3"></i> Internal spares not covered</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-brandAqua mr-3"></i> Digital Water Testing</li>
+                            <li class="flex items-center text-gray-400"><i class="fas fa-times-circle mr-3"></i> Internal spares not covered</li>
                         </ul>
-                        <a onclick="goToPage('contact')" class="cursor-pointer block w-full py-4 text-center rounded-xl border-2 border-brandDark text-brandDark font-bold hover:bg-brandDark hover:text-white transition-colors">Inquire Pricing</a>
+                        <a onclick="goToPage('contact')" class="cursor-pointer block w-full py-4 text-center rounded-xl border-2 border-brandDark text-brandDark font-bold hover:bg-brandDark hover:text-white transition-colors">Request Quote</a>
                     </div>
 
-                    <div class="bg-brandDark text-white p-10 rounded-[2rem] shadow-2xl relative md:-translate-y-4 hover:-translate-y-6 transition-transform duration-500" data-aos="fade-up" data-aos-delay="100">
+                    <div class="bg-brandDark text-white p-10 rounded-[2rem] shadow-2xl relative hover-card md:-translate-y-4" data-aos="fade-up" data-aos-delay="200">
                         <div class="absolute top-0 right-8 bg-brandAqua text-brandDark text-xs font-bold px-4 py-2 rounded-b-xl uppercase tracking-widest">Recommended</div>
-                        <h3 class="text-3xl font-extrabold mb-2 mt-4">Total Coverage</h3>
+                        <h3 class="text-3xl font-extrabold mb-2 mt-2">Total Coverage</h3>
                         <p class="text-gray-400 mb-8 pb-8 border-b border-white/10">Absolute peace of mind. All parts included.</p>
                         <ul class="space-y-4 mb-10 font-medium text-gray-200">
                             <li class="flex items-center"><i class="fas fa-check-circle text-brandAqua mr-3"></i> 4 Free Service Visits</li>
-                            <li class="flex items-center"><i class="fas fa-check-circle text-brandAqua mr-3"></i> ALL Filters replaced</li>
-                            <li class="flex items-center"><i class="fas fa-check-circle text-brandAqua mr-3"></i> Electrical Parts Covered</li>
-                            <li class="flex items-center"><i class="fas fa-check-circle text-brandAqua mr-3"></i> Membrane Replacement</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-brandAqua mr-3"></i> ALL Filters replaced (Carbon/Sediment)</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-brandAqua mr-3"></i> Electrical Parts Covered (Motor/SMPS)</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-brandAqua mr-3"></i> RO Membrane Replacement Included</li>
                         </ul>
-                        <a onclick="goToPage('contact')" class="cursor-pointer block w-full py-4 text-center rounded-xl bg-brandBlue text-white font-bold hover:bg-white hover:text-brandDark transition-colors">Get a Quote</a>
+                        <a onclick="goToPage('contact')" class="cursor-pointer block w-full py-4 text-center rounded-xl bg-brandBlue text-white font-bold hover:bg-white hover:text-brandDark transition-colors">Select Premium</a>
                     </div>
                 </div>
             </section>
@@ -350,40 +350,44 @@
 
 
         <div id="contact" class="page-view">
-            <section class="pt-20 pb-24 bg-white text-center">
-                <div class="max-w-5xl mx-auto px-6 lg:px-8" data-aos="fade-up">
+            <section class="pt-32 pb-16 bg-white text-center">
+                <div class="max-w-5xl mx-auto px-6" data-aos="fade-up">
                     <h1 class="text-5xl md:text-7xl font-extrabold text-brandDark mb-6">Initiate Request.</h1>
-                    <p class="text-xl text-gray-600 mb-12">Direct pipeline to our technical team via WhatsApp for fastest dispatch.</p>
-                    
-                    <div class="bg-brandLight border border-gray-200 rounded-[2rem] p-10 md:p-16 shadow-xl text-left">
-                        <div class="grid md:grid-cols-2 gap-16">
+                    <p class="text-xl text-gray-600">Direct pipeline to our technical team for immediate dispatch in Raipur.</p>
+                </div>
+            </section>
+
+            <section class="py-12 bg-white">
+                <div class="max-w-6xl mx-auto px-6">
+                    <div class="bg-brandLight border border-gray-200 rounded-[2rem] p-8 md:p-16 shadow-xl">
+                        <div class="grid md:grid-cols-2 gap-16 items-center">
                             
-                            <div>
-                                <h3 class="text-2xl font-extrabold text-brandDark mb-8">Operational Details</h3>
+                            <div data-aos="fade-right">
+                                <h3 class="text-3xl font-extrabold text-brandDark mb-8">Operational Details</h3>
                                 <div class="space-y-8">
-                                    <div class="flex items-center">
-                                        <div class="w-14 h-14 bg-white rounded-xl shadow-sm flex items-center justify-center text-brandBlue mr-5"><i class="fas fa-user-tie text-xl"></i></div>
-                                        <div><p class="text-xs text-gray-500 uppercase tracking-widest font-bold">Owner</p><p class="font-bold text-xl text-brandDark">Rajesh Rawte</p></div>
+                                    <div class="flex items-center bg-white p-4 rounded-2xl shadow-sm">
+                                        <div class="w-14 h-14 bg-brandLight rounded-xl flex items-center justify-center text-brandBlue mr-5"><i class="fas fa-user-tie text-xl"></i></div>
+                                        <div><p class="text-xs text-gray-500 uppercase tracking-widest font-bold">Lead Operator</p><p class="font-bold text-xl text-brandDark">Rajesh Rawte</p></div>
                                     </div>
-                                    <div class="flex items-center">
-                                        <div class="w-14 h-14 bg-white rounded-xl shadow-sm flex items-center justify-center text-brandBlue mr-5"><i class="fas fa-phone text-xl"></i></div>
+                                    <div class="flex items-center bg-white p-4 rounded-2xl shadow-sm">
+                                        <div class="w-14 h-14 bg-brandLight rounded-xl flex items-center justify-center text-brandBlue mr-5"><i class="fas fa-phone text-xl"></i></div>
                                         <div><p class="text-xs text-gray-500 uppercase tracking-widest font-bold">Direct Line</p><p class="font-bold text-xl text-brandDark">+91 9893888224</p></div>
                                     </div>
-                                    <div class="flex items-center">
-                                        <div class="w-14 h-14 bg-white rounded-xl shadow-sm flex items-center justify-center text-brandBlue mr-5"><i class="fas fa-map-pin text-xl"></i></div>
-                                        <div><p class="text-xs text-gray-500 uppercase tracking-widest font-bold">Location</p><p class="font-bold text-xl text-brandDark">Raipur, CG</p></div>
+                                    <div class="flex items-center bg-white p-4 rounded-2xl shadow-sm">
+                                        <div class="w-14 h-14 bg-brandLight rounded-xl flex items-center justify-center text-brandBlue mr-5"><i class="fas fa-map-pin text-xl"></i></div>
+                                        <div><p class="text-xs text-gray-500 uppercase tracking-widest font-bold">Headquarters</p><p class="font-bold text-xl text-brandDark">Raipur, Chhattisgarh</p></div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="bg-white p-8 rounded-[1.5rem] shadow-sm border border-gray-100">
-                                <h3 class="text-xl font-extrabold text-brandDark mb-6">Send Details</h3>
+                            <div class="bg-white p-8 rounded-[1.5rem] shadow-md border border-gray-100" data-aos="fade-left">
+                                <h3 class="text-2xl font-extrabold text-brandDark mb-6">Send Details to WhatsApp</h3>
                                 <form id="spaContactForm" class="space-y-5">
                                     <input type="text" id="cName" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-5 py-4 outline-none focus:border-brandBlue focus:bg-white transition-all font-medium" placeholder="Your Full Name">
-                                    <input type="text" id="cLoc" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-5 py-4 outline-none focus:border-brandBlue focus:bg-white transition-all font-medium" placeholder="Location in Raipur">
+                                    <input type="text" id="cLoc" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-5 py-4 outline-none focus:border-brandBlue focus:bg-white transition-all font-medium" placeholder="Sector/Location in Raipur">
                                     <select id="cReq" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-5 py-4 outline-none focus:border-brandBlue focus:bg-white transition-all font-medium appearance-none">
-                                        <option>Repair / Fix Issue</option>
-                                        <option>Filter Change</option>
+                                        <option>Urgent Repair / Fix Issue</option>
+                                        <option>Schedule Filter Change</option>
                                         <option>New RO Installation</option>
                                         <option>AMC Inquiry</option>
                                     </select>
@@ -392,59 +396,65 @@
                                     </button>
                                 </form>
                             </div>
-
                         </div>
                     </div>
+                </div>
+            </section>
+
+            <section class="py-16 bg-brandDark text-center">
+                <div class="max-w-4xl mx-auto px-6 text-white" data-aos="zoom-in">
+                    <i class="fas fa-clock text-4xl text-brandAqua mb-4"></i>
+                    <h3 class="text-2xl font-bold mb-2">Fast Dispatch Available</h3>
+                    <p class="text-gray-400">Our technicians are operating across Raipur. We guarantee rapid response for urgent breakdowns.</p>
                 </div>
             </section>
         </div>
 
     </main>
 
-    <footer class="bg-brandDark text-gray-400 pt-20 pb-10 border-t border-gray-800">
+    <footer class="bg-brandDark text-gray-400 pt-20 pb-10 border-t border-gray-800 relative z-10">
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
                 <div class="md:col-span-1">
                     <a onclick="goToPage('home')" class="cursor-pointer flex items-center mb-6">
-                        <div class="w-10 h-10 bg-brandBlue rounded-lg flex items-center justify-center mr-3">
-                            <i class="fas fa-droplet text-white text-lg"></i>
-                        </div>
+                        <div class="w-10 h-10 bg-brandBlue rounded-lg flex items-center justify-center mr-3"><i class="fas fa-droplet text-white text-lg"></i></div>
                         <span class="font-extrabold text-2xl text-white tracking-tight">Aayu<span class="text-brandBlue">Water.</span></span>
                     </a>
                     <p class="text-sm leading-relaxed mb-6">Premium engineering for residential and commercial water purification in Raipur. Pure water, delivered flawlessly.</p>
                 </div>
                 
                 <div>
-                    <h4 class="text-white font-bold mb-6 uppercase tracking-widest text-xs">Quick Links</h4>
+                    <h4 class="text-white font-bold mb-6 uppercase tracking-widest text-xs">Navigation</h4>
                     <ul class="space-y-3 text-sm font-medium">
-                        <li><a onclick="goToPage('about')" class="cursor-pointer hover:text-brandAqua transition-colors">About Us</a></li>
-                        <li><a onclick="goToPage('services')" class="cursor-pointer hover:text-brandAqua transition-colors">Services</a></li>
-                        <li><a onclick="goToPage('amc')" class="cursor-pointer hover:text-brandAqua transition-colors">AMC Contracts</a></li>
-                        <li><a onclick="goToPage('contact')" class="cursor-pointer hover:text-brandAqua transition-colors">Contact</a></li>
+                        <li><a onclick="goToPage('about')" class="cursor-pointer hover:text-brandAqua transition-colors">Our Story</a></li>
+                        <li><a onclick="goToPage('services')" class="cursor-pointer hover:text-brandAqua transition-colors">Technical Services</a></li>
+                        <li><a onclick="goToPage('amc')" class="cursor-pointer hover:text-brandAqua transition-colors">Maintenance Plans</a></li>
+                        <li><a onclick="goToPage('contact')" class="cursor-pointer hover:text-brandAqua transition-colors">Contact Us</a></li>
                     </ul>
                 </div>
                 
                 <div>
-                    <h4 class="text-white font-bold mb-6 uppercase tracking-widest text-xs">Services</h4>
+                    <h4 class="text-white font-bold mb-6 uppercase tracking-widest text-xs">Expertise</h4>
                     <ul class="space-y-3 text-sm font-medium">
-                        <li><a onclick="goToPage('services')" class="cursor-pointer hover:text-white transition-colors">Motor Repair</a></li>
-                        <li><a onclick="goToPage('services')" class="cursor-pointer hover:text-white transition-colors">Filter Change</a></li>
-                        <li><a onclick="goToPage('services')" class="cursor-pointer hover:text-white transition-colors">Installation</a></li>
+                        <li><a onclick="goToPage('services')" class="cursor-pointer hover:text-white transition-colors">Motor Diagnostics</a></li>
+                        <li><a onclick="goToPage('services')" class="cursor-pointer hover:text-white transition-colors">Filter Replacement</a></li>
+                        <li><a onclick="goToPage('services')" class="cursor-pointer hover:text-white transition-colors">TDS Balancing</a></li>
+                        <li><a onclick="goToPage('services')" class="cursor-pointer hover:text-white transition-colors">Installation Setup</a></li>
                     </ul>
                 </div>
 
                 <div>
-                    <h4 class="text-white font-bold mb-6 uppercase tracking-widest text-xs">Contact Us</h4>
+                    <h4 class="text-white font-bold mb-6 uppercase tracking-widest text-xs">Reach Us</h4>
                     <div class="space-y-4 text-sm font-medium">
                         <p class="flex items-center"><i class="fas fa-phone-alt w-6 text-brandBlue"></i> <a href="tel:9893888224" class="hover:text-white transition-colors">+91 9893888224</a></p>
                         <p class="flex items-center"><i class="fas fa-envelope w-6 text-brandBlue"></i> <a href="mailto:rajeshrawte88@gmail.com" class="hover:text-white transition-colors">rajeshrawte88@gmail.com</a></p>
-                        <p class="flex items-start"><i class="fas fa-map-marker-alt w-6 mt-1 text-brandBlue"></i> Raipur, CG</p>
+                        <p class="flex items-start"><i class="fas fa-map-marker-alt w-6 mt-1 text-brandBlue"></i> Raipur, Chhattisgarh</p>
                     </div>
                 </div>
             </div>
             
             <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center text-xs font-medium">
-                <p>&copy; 2026 Aayu Water Solution. Rajesh Rawte.</p>
+                <p>&copy; 2026 Aayu Water Solution. Operated by Rajesh Rawte.</p>
                 <div class="flex space-x-4 mt-4 md:mt-0">
                     <a href="#" class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center hover:bg-brandBlue text-white transition-colors"><i class="fab fa-facebook-f"></i></a>
                     <a href="#" class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center hover:bg-brandBlue text-white transition-colors"><i class="fab fa-instagram"></i></a>
@@ -455,43 +465,33 @@
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        // Initialize AOS
         AOS.init({ once: true, offset: 30, duration: 800, easing: 'ease-out-cubic' });
 
-        // --- SPA ROUTING LOGIC ---
+        // SPA ROUTING
         function goToPage(pageId) {
-            // 1. Hide all pages
             const pages = document.querySelectorAll('.page-view');
             pages.forEach(page => page.classList.remove('active'));
 
-            // 2. Show target page
             const targetPage = document.getElementById(pageId);
-            if (targetPage) {
-                targetPage.classList.add('active');
-            }
+            if (targetPage) targetPage.classList.add('active');
 
-            // 3. Update Active Nav Link
             const navLinks = document.querySelectorAll('.nav-link');
             navLinks.forEach(link => {
                 link.classList.remove('active');
-                if (link.getAttribute('onclick').includes(pageId)) {
-                    link.classList.add('active');
-                }
+                if (link.getAttribute('onclick').includes(pageId)) link.classList.add('active');
             });
 
-            // 4. Scroll to top
             window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // Slightly delay animation refresh to let the page render
+            setTimeout(() => { AOS.refreshHard(); }, 150);
 
-            // 5. Refresh Animations for new page
-            setTimeout(() => { AOS.refresh(); }, 100);
-
-            // 6. Close Mobile Menu if open
             if(document.getElementById('mobile-menu').classList.contains('open')) {
                 toggleMobileMenu();
             }
         }
 
-        // --- MOBILE MENU LOGIC ---
+        // MOBILE MENU
         const menuBtn = document.getElementById('menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
         const menuIcon = document.getElementById('menu-icon');
@@ -508,13 +508,13 @@
         }
         menuBtn.addEventListener('click', toggleMobileMenu);
 
-        // --- WHATSAPP FORM ---
+        // WHATSAPP FORM
         document.getElementById('spaContactForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const name = document.getElementById('cName').value;
             const loc = document.getElementById('cLoc').value;
             const req = document.getElementById('cReq').value;
-            const message = `*Website Request - Aayu Water*%0A%0A*Name:* ${name}%0A*Location:* ${loc}%0A*Need:* ${req}`;
+            const message = `*Aayu Water Service Request*%0A%0A*Name:* ${name}%0A*Location:* ${loc}%0A*Need:* ${req}`;
             window.open(`https://wa.me/919893888224?text=${encodeURIComponent(message)}`, '_blank');
         });
     </script>
