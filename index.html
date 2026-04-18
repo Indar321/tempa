@@ -3,27 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Aayu Water Solution - Trusted RO Sales & Service in Raipur. Expert repair, installation, and filter replacement.">
-    <meta name="keywords" content="RO service Raipur, water purifier repair, Aayu Water Solution, RO filter replacement">
-    <title>Aayu Water Solution | RO Service & Repair in Raipur</title>
+    <title>Aayu Water Solution | Premium RO Service in Raipur</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['Poppins', 'sans-serif'],
-                    },
+                    fontFamily: { sans: ['Outfit', 'sans-serif'], },
                     colors: {
-                        trustBlue: '#1e3a8a',
-                        waterBlue: '#2563eb',
-                        lightAqua: '#06b6d4',
+                        brandDark: '#0B1120',
+                        brandBlue: '#2563EB',
+                        brandAqua: '#06B6D4',
+                        brandLight: '#F8FAFC'
                     }
                 }
             }
@@ -31,243 +30,340 @@
     </script>
 
     <style>
-        .fade-in { animation: fadeIn 1s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .pulse-btn { animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        /* Figma/Framer Style Smoothness */
+        body { -webkit-font-smoothing: antialiased; }
+        
+        /* Water Blob Animation */
+        .water-blob {
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+            animation: morph 8s ease-in-out infinite;
+            box-shadow: inset 0 0 50px rgba(6, 182, 212, 0.2);
+        }
+        @keyframes morph {
+            0%, 100% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+            50% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+        }
+
+        /* Water Fill Hover Effect */
+        .water-hover-card {
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            transition: all 0.4s ease;
+        }
+        .water-hover-card::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 0;
+            background: linear-gradient(180deg, rgba(37,99,235,0.05) 0%, rgba(6,182,212,0.15) 100%);
+            z-index: -1;
+            transition: height 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+            border-radius: 50% 50% 0 0;
+        }
+        .water-hover-card:hover {
+            transform: translateY(-5px);
+            border-color: #2563EB;
+            box-shadow: 0 20px 40px -10px rgba(37,99,235,0.1);
+        }
+        .water-hover-card:hover::before {
+            height: 200%;
+            border-radius: 0;
+        }
+
+        /* Continuous Floating Animation */
+        .float-anim { animation: float 6s ease-in-out infinite; }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Glassmorphism */
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
     </style>
 </head>
-<body class="font-sans text-gray-800 bg-gray-50 selection:bg-waterBlue selection:text-white">
+<body class="font-sans text-gray-800 bg-brandLight">
 
-    <div class="bg-trustBlue text-white text-sm py-2 px-4 hidden md:flex justify-between items-center">
-        <div><i class="fas fa-map-marker-alt mr-2 text-lightAqua"></i> Raipur, Chhattisgarh, India</div>
-        <div class="flex space-x-4">
-            <a href="mailto:rajeshrawte88@gmail.com" class="hover:text-lightAqua transition"><i class="fas fa-envelope mr-2"></i>rajeshrawte88@gmail.com</a>
-            <a href="tel:9893888224" class="hover:text-lightAqua transition font-semibold"><i class="fas fa-phone mr-2"></i>+91 9893888224</a>
-        </div>
-    </div>
-
-    <nav class="bg-white shadow-md sticky top-0 z-50">
+    <nav class="glass-nav fixed w-full z-50 transition-all duration-300" id="navbar">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
-                <div class="flex-shrink-0 flex items-center">
-                    <i class="fas fa-tint text-waterBlue text-3xl mr-2"></i>
-                    <span class="font-bold text-2xl text-trustBlue">Aayu <span class="text-lightAqua">Water</span></span>
-                </div>
+                <a href="#" class="flex items-center group">
+                    <div class="w-10 h-10 bg-gradient-to-br from-brandBlue to-brandAqua rounded-full flex items-center justify-center mr-3 group-hover:scale-110 transition-transform duration-300">
+                        <i class="fas fa-tint text-white text-xl"></i>
+                    </div>
+                    <span class="font-bold text-2xl text-brandDark tracking-tight">Aayu<span class="text-brandBlue">Water</span></span>
+                </a>
+                
                 <div class="hidden md:flex space-x-8 items-center">
-                    <a href="#home" class="text-gray-600 hover:text-waterBlue transition font-medium">Home</a>
-                    <a href="#services" class="text-gray-600 hover:text-waterBlue transition font-medium">Services</a>
-                    <a href="#about" class="text-gray-600 hover:text-waterBlue transition font-medium">About Us</a>
-                    <a href="#contact" class="text-gray-600 hover:text-waterBlue transition font-medium">Contact</a>
-                    <a href="tel:9893888224" class="bg-waterBlue text-white px-6 py-2 rounded-full font-semibold hover:bg-trustBlue transition shadow-lg"><i class="fas fa-phone mr-2"></i> Call Now</a>
+                    <a href="#home" class="text-sm font-semibold text-gray-600 hover:text-brandBlue transition-colors">Home</a>
+                    <a href="#about" class="text-sm font-semibold text-gray-600 hover:text-brandBlue transition-colors">About</a>
+                    <a href="#services" class="text-sm font-semibold text-gray-600 hover:text-brandBlue transition-colors">Services</a>
+                    <a href="#plans" class="text-sm font-semibold text-gray-600 hover:text-brandBlue transition-colors">AMC Plans</a>
+                    <a href="#contact" class="bg-brandDark text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-brandBlue transition-all duration-300 shadow-lg hover:shadow-brandBlue/30">Book Service</a>
                 </div>
-                <div class="md:hidden flex items-center">
-                    <button class="text-trustBlue hover:text-waterBlue focus:outline-none">
-                        <i class="fas fa-bars text-2xl"></i>
-                    </button>
-                </div>
+
+                <button id="menu-btn" class="md:hidden text-brandDark focus:outline-none">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 absolute w-full shadow-xl">
+            <div class="px-4 pt-2 pb-6 space-y-2 flex flex-col">
+                <a href="#home" class="mobile-link block px-3 py-3 text-base font-semibold text-gray-800 hover:bg-gray-50 hover:text-brandBlue rounded-md">Home</a>
+                <a href="#about" class="mobile-link block px-3 py-3 text-base font-semibold text-gray-800 hover:bg-gray-50 hover:text-brandBlue rounded-md">About</a>
+                <a href="#services" class="mobile-link block px-3 py-3 text-base font-semibold text-gray-800 hover:bg-gray-50 hover:text-brandBlue rounded-md">Services</a>
+                <a href="#plans" class="mobile-link block px-3 py-3 text-base font-semibold text-gray-800 hover:bg-gray-50 hover:text-brandBlue rounded-md">AMC Plans</a>
+                <a href="#contact" class="mobile-link block px-3 py-3 mt-4 text-center text-base font-bold text-white bg-brandBlue rounded-md">Book Service Now</a>
             </div>
         </div>
     </nav>
 
-    <section id="home" class="relative bg-white overflow-hidden fade-in">
-        <div class="max-w-7xl mx-auto">
-            <div class="relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32 pt-20">
-                <main class="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
-                    <div class="sm:text-center lg:text-left">
-                        <h1 class="text-4xl tracking-tight font-extrabold text-trustBlue sm:text-5xl md:text-6xl">
-                            <span class="block">Pure Water,</span>
-                            <span class="block text-waterBlue">Healthy Life.</span>
-                        </h1>
-                        <p class="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
-                            Trusted RO Sales & Service in Raipur. Fast, affordable, and expert technicians right at your doorstep. Ensure your family drinks the safest water.
-                        </p>
-                        <div class="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
-                            <div class="rounded-md shadow">
-                                <a href="#contact" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-waterBlue hover:bg-trustBlue md:py-4 md:text-lg transition">
-                                    Book Service
-                                </a>
-                            </div>
-                            <div class="mt-3 sm:mt-0 sm:ml-3">
-                                <a href="tel:9893888224" class="w-full flex items-center justify-center px-8 py-3 border border-lightAqua text-base font-medium rounded-md text-waterBlue bg-white hover:bg-gray-50 md:py-4 md:text-lg transition">
-                                    <i class="fas fa-phone mr-2"></i> 9893888224
-                                </a>
-                            </div>
+    <section id="home" class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div data-aos="fade-right" data-aos-duration="1000">
+                    <div class="inline-block px-4 py-1.5 rounded-full bg-blue-100 border border-blue-200 text-brandBlue font-semibold text-sm mb-6">
+                        💧 #1 Rated Water Service in Raipur
+                    </div>
+                    <h1 class="text-5xl lg:text-7xl font-extrabold text-brandDark leading-tight tracking-tight mb-6">
+                        Pure Water.<br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-brandBlue to-brandAqua">Perfect Health.</span>
+                    </h1>
+                    <p class="text-lg text-gray-600 mb-8 max-w-lg leading-relaxed">
+                        Premium RO installation, rapid repair, and genuine filter replacement. We bring crystal clear, safe drinking water directly to your home or business.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="#contact" class="px-8 py-4 bg-brandBlue text-white rounded-full font-bold text-lg text-center hover:bg-brandDark transition-all shadow-xl hover:shadow-2xl transform hover:-translate-y-1">
+                            Book Inspection <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                        <a href="tel:9893888224" class="px-8 py-4 bg-white text-brandDark border border-gray-200 rounded-full font-bold text-lg text-center hover:border-brandBlue transition-all flex items-center justify-center">
+                            <i class="fas fa-phone-alt text-brandBlue mr-2"></i> 9893888224
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="relative lg:h-[600px] flex items-center justify-center" data-aos="fade-left" data-aos-duration="1200">
+                    <div class="absolute inset-0 bg-gradient-to-tr from-brandBlue to-brandAqua opacity-20 blur-3xl water-blob"></div>
+                    <div class="absolute w-3/4 h-3/4 bg-gradient-to-br from-blue-400 to-cyan-300 water-blob float-anim opacity-80 mix-blend-multiply"></div>
+                    
+                    <div class="relative z-10 w-64 h-64 md:w-80 md:h-80 bg-white rounded-full flex items-center justify-center shadow-2xl float-anim border-8 border-white/50 backdrop-blur-sm">
+                        <i class="fas fa-glass-water-droplet text-8xl text-brandBlue"></i>
+                    </div>
+                    
+                    <div class="absolute bottom-10 left-0 bg-white p-4 rounded-2xl shadow-xl flex items-center gap-4 animate-bounce" style="animation-duration: 3s;">
+                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-600 text-xl"><i class="fas fa-check"></i></div>
+                        <div>
+                            <p class="font-bold text-brandDark">100% Pure</p>
+                            <p class="text-xs text-gray-500">TDS Checked</p>
                         </div>
                     </div>
-                </main>
-            </div>
-        </div>
-        <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2 bg-gradient-to-br from-lightAqua to-waterBlue opacity-10 hidden lg:block">
-            <div class="w-full h-full flex items-center justify-center">
-                 <i class="fas fa-tint text-9xl text-waterBlue opacity-20"></i>
+                </div>
             </div>
         </div>
     </section>
 
-    <section class="py-16 bg-gradient-to-r from-trustBlue to-waterBlue text-white relative overflow-hidden">
-        <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none" style="background-image: url('data:image/svg+xml,%3Csvg width=\'100%\' height=\'100%\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cdefs%3E%3Cpattern id=\'a\' patternUnits=\'userSpaceOnUse\' width=\'20\' height=\'20\'%3E%3Ccircle cx=\'2\' cy=\'2\' r=\'2\' fill=\'%23ffffff\'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width=\'100%\' height=\'100%\' fill=\'url(%23a)\'/%3E%3C/svg%3E');"></div>
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-            <h2 class="text-3xl font-extrabold sm:text-4xl">Is Your Drinking Water 100% Safe?</h2>
-            <p class="mt-4 text-lg text-blue-100 max-w-2xl mx-auto">High TDS and hidden contaminants in Raipur's water can cause long-term health issues. Don't guess with your family's health.</p>
-            <div class="mt-8">
-                <a href="#contact" class="inline-flex items-center justify-center px-8 py-4 border border-transparent text-lg font-bold rounded-full text-trustBlue bg-white hover:bg-gray-100 shadow-xl pulse-btn transition">
-                    <i class="fas fa-vial mr-3 text-lightAqua"></i> Book FREE Water Inspection
+    <section class="bg-brandDark py-16 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-brandAqua via-transparent to-transparent"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10" data-aos="fade-up">
+            <div class="bg-gradient-to-r from-brandBlue/20 to-brandAqua/20 border border-white/10 rounded-3xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between backdrop-blur-md">
+                <div class="mb-6 md:mb-0 md:mr-8 text-center md:text-left">
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-2">Is your Raipur water safe?</h2>
+                    <p class="text-blue-200 text-lg">High TDS can damage your health and appliances. Get a free digital water test today.</p>
+                </div>
+                <a href="#contact" class="flex-shrink-0 px-8 py-4 bg-white text-brandDark rounded-full font-bold text-lg hover:bg-brandAqua hover:text-white transition-all duration-300 shadow-[0_0_20px_rgba(6,182,212,0.5)]">
+                    Claim Free Test 💧
                 </a>
             </div>
         </div>
     </section>
 
-    <section id="services" class="py-20 bg-gray-50">
+    <section id="about" class="py-24 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-base text-lightAqua font-semibold tracking-wide uppercase">Our Services</h2>
-                <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-trustBlue sm:text-4xl">Comprehensive Water Solutions</p>
+            <div class="text-center max-w-3xl mx-auto mb-16" data-aos="fade-up">
+                <h2 class="text-brandBlue font-bold tracking-widest uppercase text-sm mb-2">About Aayu Water</h2>
+                <h3 class="text-4xl font-extrabold text-brandDark">Expertise You Can Trust.</h3>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="lg:col-span-2 bg-brandLight rounded-3xl p-8 border border-gray-100 water-hover-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="w-12 h-12 bg-brandBlue text-white rounded-xl flex items-center justify-center text-xl mb-6"><i class="fas fa-bullseye"></i></div>
+                    <h4 class="text-2xl font-bold text-brandDark mb-3">Our Mission</h4>
+                    <p class="text-gray-600 leading-relaxed">Founded by Rajesh Rawte, Aayu Water Solution ensures every home in Raipur has access to flawless, affordable, and rapid water purification services using only 100% genuine spare parts.</p>
+                </div>
+                
+                <div class="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm water-hover-card flex flex-col justify-center items-center text-center" data-aos="fade-up" data-aos-delay="200">
+                    <h5 class="text-5xl font-extrabold text-brandAqua mb-2">24h</h5>
+                    <p class="text-gray-600 font-medium">Fast Resolution</p>
+                </div>
+
+                <div class="bg-brandDark rounded-3xl p-8 shadow-xl flex flex-col justify-center items-center text-center transform hover:scale-105 transition-transform" data-aos="fade-up" data-aos-delay="300">
+                    <h5 class="text-5xl font-extrabold text-white mb-2">5+</h5>
+                    <p class="text-blue-200 font-medium">Years Experience</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="services" class="py-24 bg-brandLight relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16" data-aos="fade-up">
+                <div class="max-w-2xl">
+                    <h2 class="text-brandBlue font-bold tracking-widest uppercase text-sm mb-2">What We Do</h2>
+                    <h3 class="text-4xl md:text-5xl font-extrabold text-brandDark tracking-tight">Complete Water Solutions</h3>
+                </div>
+                <a href="#contact" class="hidden md:inline-flex items-center font-bold text-brandBlue hover:text-brandDark transition-colors mt-4 md:mt-0">
+                    View All Services <i class="fas fa-arrow-right ml-2"></i>
+                </a>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-white rounded-xl shadow-md p-8 hover:shadow-xl transition border-t-4 border-waterBlue group">
-                    <div class="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center mb-6 group-hover:bg-waterBlue transition">
-                        <i class="fas fa-wrench text-2xl text-waterBlue group-hover:text-white"></i>
+                <div class="bg-white rounded-3xl p-10 border border-gray-100 water-hover-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="w-16 h-16 bg-blue-50 text-brandBlue rounded-2xl flex items-center justify-center text-2xl mb-8">
+                        <i class="fas fa-wrench"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-3">RO Repair & Maintenance</h3>
-                    <p class="text-gray-600 mb-6">Motor issues, leaks, or low water flow? Our experts diagnose and fix problems on the spot for all major brands.</p>
+                    <h4 class="text-2xl font-bold text-brandDark mb-4">RO Repair</h4>
+                    <p class="text-gray-600 mb-6">Motor breakdown, leaks, or strange taste? We diagnose and fix it rapidly at your doorstep.</p>
+                    <span class="text-sm font-bold text-brandBlue flex items-center">Book Repair <i class="fas fa-chevron-right ml-1 text-xs"></i></span>
                 </div>
 
-                <div class="bg-white rounded-xl shadow-md p-8 hover:shadow-xl transition border-t-4 border-lightAqua group">
-                    <div class="w-14 h-14 bg-cyan-100 rounded-full flex items-center justify-center mb-6 group-hover:bg-lightAqua transition">
-                        <i class="fas fa-sync-alt text-2xl text-lightAqua group-hover:text-white"></i>
+                <div class="bg-white rounded-3xl p-10 border border-gray-100 water-hover-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="w-16 h-16 bg-cyan-50 text-brandAqua rounded-2xl flex items-center justify-center text-2xl mb-8">
+                        <i class="fas fa-filter"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-3">Filter Replacement</h3>
-                    <p class="text-gray-600 mb-6">We replace sediment, carbon, and RO membranes using 100% genuine, sealed parts for pure taste.</p>
+                    <h4 class="text-2xl font-bold text-brandDark mb-4">Filter Change</h4>
+                    <p class="text-gray-600 mb-6">Genuine carbon and sediment filter replacements to keep your water tasting sweet and pure.</p>
+                    <span class="text-sm font-bold text-brandAqua flex items-center">Replace Filter <i class="fas fa-chevron-right ml-1 text-xs"></i></span>
                 </div>
 
-                <div class="bg-white rounded-xl shadow-md p-8 hover:shadow-xl transition border-t-4 border-trustBlue group">
-                    <div class="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center mb-6 group-hover:bg-trustBlue transition">
-                        <i class="fas fa-tools text-2xl text-trustBlue group-hover:text-white"></i>
+                <div class="bg-white rounded-3xl p-10 border border-gray-100 water-hover-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="w-16 h-16 bg-indigo-50 text-indigo-500 rounded-2xl flex items-center justify-center text-2xl mb-8">
+                        <i class="fas fa-home"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-3">RO Installation</h3>
-                    <p class="text-gray-600 mb-6">Moving to a new home? We provide safe, leak-free installation and uninstallation of all RO brands.</p>
+                    <h4 class="text-2xl font-bold text-brandDark mb-4">New Installation</h4>
+                    <p class="text-gray-600 mb-6">Seamless setup of new RO systems or uninstallation/shifting if you are moving homes.</p>
+                    <span class="text-sm font-bold text-indigo-500 flex items-center">Get Installed <i class="fas fa-chevron-right ml-1 text-xs"></i></span>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="about" class="py-20 bg-white">
+    <section id="plans" class="py-24 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
-                <div>
-                    <h2 class="text-3xl font-extrabold text-trustBlue mb-6">Why Choose Aayu Water Solution?</h2>
-                    <p class="text-gray-600 text-lg mb-8">Founded by Rajesh Rawte, our mission is to protect the health of Raipur by delivering flawless water purification services with honesty, speed, and affordability.</p>
-                    
-                    <ul class="space-y-6">
-                        <li class="flex items-start">
-                            <div class="flex-shrink-0">
-                                <i class="fas fa-check-circle text-lightAqua text-2xl"></i>
-                            </div>
-                            <p class="ml-4 text-lg font-medium text-gray-900">Fast Response <br><span class="text-sm font-normal text-gray-500">Same-day service across Raipur.</span></p>
-                        </li>
-                        <li class="flex items-start">
-                            <div class="flex-shrink-0">
-                                <i class="fas fa-check-circle text-lightAqua text-2xl"></i>
-                            </div>
-                            <p class="ml-4 text-lg font-medium text-gray-900">Expert Technicians <br><span class="text-sm font-normal text-gray-500">Verified and highly trained professionals.</span></p>
-                        </li>
-                        <li class="flex items-start">
-                            <div class="flex-shrink-0">
-                                <i class="fas fa-check-circle text-lightAqua text-2xl"></i>
-                            </div>
-                            <p class="ml-4 text-lg font-medium text-gray-900">Honest Pricing <br><span class="text-sm font-normal text-gray-500">No hidden charges, 100% genuine parts.</span></p>
-                        </li>
+            <div class="text-center max-w-3xl mx-auto mb-16" data-aos="fade-up">
+                <h2 class="text-brandBlue font-bold tracking-widest uppercase text-sm mb-2">Peace of Mind</h2>
+                <h3 class="text-4xl font-extrabold text-brandDark">Annual Maintenance Plans</h3>
+                <p class="mt-4 text-gray-600">Save money and ensure uninterrupted pure water with our yearly contracts.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <div class="bg-brandLight rounded-3xl p-10 border border-gray-200 hover:border-brandBlue transition-colors relative overflow-hidden" data-aos="fade-right">
+                    <h4 class="text-2xl font-bold text-brandDark mb-2">Basic AMC</h4>
+                    <p class="text-gray-500 mb-6">Essential care for working units.</p>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center text-gray-700"><i class="fas fa-check-circle text-brandAqua mr-3"></i> 3 Free Service Visits</li>
+                        <li class="flex items-center text-gray-700"><i class="fas fa-check-circle text-brandAqua mr-3"></i> Pre-filter replacement</li>
+                        <li class="flex items-center text-gray-700"><i class="fas fa-times-circle text-gray-300 mr-3"></i> Spare parts not included</li>
                     </ul>
+                    <a href="#contact" class="block w-full text-center py-3 rounded-full border-2 border-brandDark text-brandDark font-bold hover:bg-brandDark hover:text-white transition-colors">Inquire Price</a>
                 </div>
-                <div class="mt-10 lg:mt-0">
-                    <div class="grid grid-cols-2 gap-6">
-                        <div class="bg-gray-50 p-6 rounded-lg text-center border border-gray-100 shadow-sm">
-                            <i class="fas fa-award text-4xl text-waterBlue mb-4"></i>
-                            <h4 class="font-bold text-gray-900">100% Genuine</h4>
-                            <p class="text-sm text-gray-500">Spare Parts</p>
-                        </div>
-                        <div class="bg-gray-50 p-6 rounded-lg text-center border border-gray-100 shadow-sm">
-                            <i class="fas fa-map-marker-alt text-4xl text-waterBlue mb-4"></i>
-                            <h4 class="font-bold text-gray-900">Local Service</h4>
-                            <p class="text-sm text-gray-500">Raipur Based</p>
-                        </div>
-                        <div class="bg-gray-50 p-6 rounded-lg text-center border border-gray-100 shadow-sm col-span-2">
-                            <div class="flex items-center justify-center space-x-2 text-yellow-400 text-xl mb-2">
-                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                            </div>
-                            <p class="italic text-gray-600">"Rajesh and his team fixed my RO within 2 hours of calling. Very professional!"</p>
-                            <span class="text-sm font-bold text-gray-900 block mt-2">- Neha S., Raipur</span>
-                        </div>
-                    </div>
+
+                <div class="bg-brandDark rounded-3xl p-10 text-white relative overflow-hidden transform md:-translate-y-4 shadow-2xl" data-aos="fade-left">
+                    <div class="absolute top-0 right-0 bg-brandBlue text-xs font-bold px-3 py-1 rounded-bl-xl uppercase tracking-wider">Most Popular</div>
+                    <h4 class="text-2xl font-bold mb-2">Comprehensive AMC</h4>
+                    <p class="text-blue-200 mb-6">Total coverage, zero tension.</p>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center"><i class="fas fa-check-circle text-brandAqua mr-3"></i> 4 Free Service Visits</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-brandAqua mr-3"></i> All filters replaced yearly</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-brandAqua mr-3"></i> Electronic spares covered</li>
+                    </ul>
+                    <a href="#contact" class="block w-full text-center py-3 rounded-full bg-brandBlue text-white font-bold hover:bg-brandAqua transition-colors">Get a Quote</a>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="contact" class="py-20 bg-gray-50">
+    <section class="py-20 bg-brandLight border-t border-gray-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
-                <div class="grid grid-cols-1 lg:grid-cols-2">
-                    <div class="bg-trustBlue p-10 text-white">
-                        <h3 class="text-3xl font-extrabold mb-6">Contact Us</h3>
-                        <p class="mb-8 text-blue-200">Need urgent repair or a free inspection? Reach out to us immediately.</p>
+            <h3 class="text-center text-3xl font-extrabold text-brandDark mb-16" data-aos="fade-up">Our Simple Process</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10 text-center relative">
+                <div class="hidden md:block absolute top-10 left-[15%] right-[15%] h-0.5 bg-gray-200 z-0"></div>
+                
+                <div class="relative z-10" data-aos="fade-up" data-aos-delay="100">
+                    <div class="w-20 h-20 mx-auto bg-white border-4 border-brandLight shadow-lg rounded-full flex items-center justify-center text-2xl font-bold text-brandBlue mb-6">1</div>
+                    <h4 class="text-xl font-bold text-brandDark mb-2">Book Service</h4>
+                    <p class="text-gray-500 text-sm">Call or WhatsApp us with your RO issue.</p>
+                </div>
+                <div class="relative z-10" data-aos="fade-up" data-aos-delay="200">
+                    <div class="w-20 h-20 mx-auto bg-brandBlue text-white shadow-lg shadow-brandBlue/30 rounded-full flex items-center justify-center text-2xl font-bold mb-6">2</div>
+                    <h4 class="text-xl font-bold text-brandDark mb-2">Expert Inspection</h4>
+                    <p class="text-gray-500 text-sm">Our technician arrives on time to diagnose.</p>
+                </div>
+                <div class="relative z-10" data-aos="fade-up" data-aos-delay="300">
+                    <div class="w-20 h-20 mx-auto bg-white border-4 border-brandLight shadow-lg rounded-full flex items-center justify-center text-2xl font-bold text-brandAqua mb-6">3</div>
+                    <h4 class="text-xl font-bold text-brandDark mb-2">Pure Water</h4>
+                    <p class="text-gray-500 text-sm">Fast repair ensuring clean, safe water.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-24 bg-white relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-brandDark rounded-[40px] overflow-hidden shadow-2xl">
+                <div class="grid lg:grid-cols-2">
+                    <div class="p-12 md:p-16 relative overflow-hidden flex flex-col justify-center">
+                        <div class="absolute -top-24 -left-24 w-64 h-64 bg-brandBlue rounded-full mix-blend-screen filter blur-3xl opacity-50"></div>
+                        <div class="absolute -bottom-24 -right-24 w-64 h-64 bg-brandAqua rounded-full mix-blend-screen filter blur-3xl opacity-50"></div>
                         
-                        <div class="space-y-6">
-                            <div class="flex items-center">
-                                <i class="fas fa-phone-alt text-lightAqua text-xl w-8"></i>
-                                <div>
-                                    <p class="text-sm text-blue-200">Call Us</p>
-                                    <a href="tel:9893888224" class="text-xl font-bold hover:text-lightAqua transition">+91 9893888224</a>
+                        <div class="relative z-10">
+                            <h2 class="text-4xl font-extrabold text-white mb-6">Let's fix your water today.</h2>
+                            <p class="text-blue-100 text-lg mb-10">Skip the waiting lines. Message us directly on WhatsApp and get an expert at your door in hours.</p>
+                            
+                            <div class="space-y-6">
+                                <div class="flex items-center text-white">
+                                    <div class="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center mr-4 backdrop-blur-sm"><i class="fas fa-user"></i></div>
+                                    <div><p class="text-sm text-blue-200">Owner</p><p class="font-bold text-lg">Rajesh Rawte</p></div>
                                 </div>
-                            </div>
-                            <div class="flex items-center">
-                                <i class="fas fa-envelope text-lightAqua text-xl w-8"></i>
-                                <div>
-                                    <p class="text-sm text-blue-200">Email Us</p>
-                                    <a href="mailto:rajeshrawte88@gmail.com" class="text-lg font-medium hover:text-lightAqua transition">rajeshrawte88@gmail.com</a>
-                                </div>
-                            </div>
-                            <div class="flex items-center">
-                                <i class="fas fa-user text-lightAqua text-xl w-8"></i>
-                                <div>
-                                    <p class="text-sm text-blue-200">Owner</p>
-                                    <p class="text-lg font-medium">Rajesh Rawte</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start">
-                                <i class="fas fa-map-marker-alt text-lightAqua text-xl w-8 mt-1"></i>
-                                <div>
-                                    <p class="text-sm text-blue-200">Location</p>
-                                    <p class="text-lg font-medium">Raipur, Chhattisgarh, India</p>
+                                <div class="flex items-center text-white">
+                                    <div class="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center mr-4 backdrop-blur-sm"><i class="fas fa-map-marker-alt"></i></div>
+                                    <div><p class="text-sm text-blue-200">Location</p><p class="font-bold text-lg">Raipur, Chhattisgarh</p></div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="p-10">
-                        <h3 class="text-2xl font-bold text-gray-900 mb-6">Request a Callback</h3>
-                        <form action="#" method="POST" class="space-y-6">
+                    <div class="bg-white p-12 md:p-16">
+                        <h3 class="text-2xl font-bold text-brandDark mb-8">Send Details directly to WhatsApp</h3>
+                        
+                        <form id="waForm" class="space-y-6">
                             <div>
-                                <label for="name" class="block text-sm font-medium text-gray-700">Full Name</label>
-                                <input type="text" id="name" name="name" class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-waterBlue focus:border-waterBlue" placeholder="Your Name">
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Your Name</label>
+                                <input type="text" id="waName" required class="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brandBlue focus:border-brandBlue outline-none transition-all" placeholder="John Doe">
                             </div>
                             <div>
-                                <label for="phone" class="block text-sm font-medium text-gray-700">Phone Number</label>
-                                <input type="tel" id="phone" name="phone" class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-waterBlue focus:border-waterBlue" placeholder="Your Phone Number">
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Location/Address</label>
+                                <input type="text" id="waLocation" required class="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brandBlue focus:border-brandBlue outline-none transition-all" placeholder="Sector 4, Raipur">
                             </div>
                             <div>
-                                <label for="service" class="block text-sm font-medium text-gray-700">Service Needed</label>
-                                <select id="service" name="service" class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-waterBlue focus:border-waterBlue bg-white">
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">What do you need?</label>
+                                <select id="waService" class="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brandBlue focus:border-brandBlue outline-none transition-all appearance-none">
                                     <option>RO Repair</option>
-                                    <option>Filter Replacement</option>
+                                    <option>Filter Change</option>
                                     <option>New RO Installation</option>
-                                    <option>Free Water Inspection</option>
+                                    <option>Free Water Test</option>
+                                    <option>AMC Inquiry</option>
                                 </select>
                             </div>
-                            <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-waterBlue hover:bg-trustBlue focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-waterBlue transition">
-                                Send Request
+                            <button type="submit" class="w-full bg-[#25D366] hover:bg-[#128C7E] text-white font-bold text-lg py-4 rounded-xl transition-all flex justify-center items-center shadow-lg shadow-green-500/30 transform hover:-translate-y-1">
+                                <i class="fab fa-whatsapp text-2xl mr-2"></i> Send to WhatsApp
                             </button>
                         </form>
                     </div>
@@ -276,33 +372,79 @@
         </div>
     </section>
 
-    <footer class="bg-gray-900 text-white py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
-            <div class="mb-6 md:mb-0 text-center md:text-left">
-                <div class="flex items-center justify-center md:justify-start mb-4">
-                    <i class="fas fa-tint text-lightAqua text-3xl mr-2"></i>
-                    <span class="font-bold text-2xl text-white">Aayu <span class="text-lightAqua">Water</span></span>
+    <footer class="bg-gray-900 pt-20 pb-10 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-12">
+                <div class="flex items-center mb-6 md:mb-0">
+                    <i class="fas fa-tint text-brandAqua text-3xl mr-2"></i>
+                    <span class="font-extrabold text-2xl text-white tracking-tight">Aayu<span class="text-brandBlue">Water</span></span>
                 </div>
-                <p class="text-gray-400 text-sm">© 2026 Aayu Water Solution. All rights reserved.</p>
+                <div class="flex space-x-6">
+                    <a href="#home" class="text-gray-400 hover:text-white text-sm font-medium transition">Home</a>
+                    <a href="#about" class="text-gray-400 hover:text-white text-sm font-medium transition">About</a>
+                    <a href="#services" class="text-gray-400 hover:text-white text-sm font-medium transition">Services</a>
+                </div>
             </div>
-            <div class="flex space-x-6 text-gray-400">
-                <a href="#home" class="hover:text-white transition">Home</a>
-                <a href="#services" class="hover:text-white transition">Services</a>
-                <a href="#about" class="hover:text-white transition">About</a>
-                <a href="#contact" class="hover:text-white transition">Contact</a>
+            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-500 text-sm">© 2026 Aayu Water Solution. All rights reserved.</p>
+                <p class="text-gray-600 text-sm mt-4 md:mt-0">Operated by Rajesh Rawte | Raipur</p>
             </div>
         </div>
     </footer>
 
-    <a href="https://wa.me/919893888224" target="_blank" class="fixed bottom-6 right-6 bg-green-500 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl hover:bg-green-600 hover:scale-110 transition-transform z-50 pulse-btn">
-        <i class="fab fa-whatsapp text-3xl"></i>
-    </a>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     
-    <div class="md:hidden fixed bottom-0 left-0 w-full z-40 bg-white border-t border-gray-200 p-3 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
-        <a href="tel:9893888224" class="w-full flex items-center justify-center bg-waterBlue text-white py-3 rounded-md font-bold text-lg">
-            <i class="fas fa-phone-alt mr-2"></i> Call Now
-        </a>
-    </div>
+    <script>
+        // Initialize Scroll Animations
+        AOS.init({
+            once: true,
+            offset: 50,
+            duration: 800,
+            easing: 'ease-out-cubic',
+        });
 
+        // Mobile Menu Toggle
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Close menu on link click
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Navbar blur on scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 20) {
+                nav.classList.add('shadow-md');
+            } else {
+                nav.classList.remove('shadow-md');
+            }
+        });
+
+        // Direct-to-WhatsApp Form Handler
+        document.getElementById('waForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('waName').value;
+            const location = document.getElementById('waLocation').value;
+            const service = document.getElementById('waService').value;
+            const ownerPhone = "919893888224"; // Rajesh's number
+            
+            // Format message
+            const message = `*New Service Request* 💧%0A%0A*Name:* ${name}%0A*Location:* ${location}%0A*Service Needed:* ${service}%0A%0APlease let me know how soon a technician can visit.`;
+            
+            // Redirect to WhatsApp
+            const waUrl = `https://wa.me/${ownerPhone}?text=${message}`;
+            window.open(waUrl, '_blank');
+        });
+    </script>
 </body>
 </html>
