@@ -1,420 +1,143 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CineDaily - Animated Promo</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;700&display=swap');
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cinematic Landing</title>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0a0a0a;
+      color: #fff;
+      font-family: 'Oswald', sans-serif;
+      overflow-x: hidden;
+    }.container {
+  width: 90%;
+  margin: auto;
+  padding: 40px 0;
+}
 
-        :root {
-            --bg-dark: #0a0a0a;
-            --bg-light: #f4f4f4;
-            --text-light: #ffffff;
-            --text-dark: #000000;
-            --accent-red: #e50914;
-        }
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  font-size: 14px;
+  opacity: 0.7;
+}
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+.hero {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-light);
-            overflow-x: hidden;
-            /* Smooth scrolling fallback */
-            scroll-behavior: smooth; 
-        }
+.hero h1 {
+  font-size: 12vw;
+  font-weight: 700;
+  letter-spacing: 5px;
+  position: absolute;
+  text-transform: uppercase;
+  z-index: 2;
+  mix-blend-mode: difference;
+}
 
-        /* --- NAVIGATION --- */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            padding: 20px 50px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 100;
-            mix-blend-mode: difference;
-        }
+.hero img {
+  width: 400px;
+  z-index: 1;
+  transform: scale(0.9);
+  transition: transform 1s ease;
+}
 
-        .logo {
-            font-weight: 700;
-            font-size: 1.2rem;
-            letter-spacing: 2px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
+.hero:hover img {
+  transform: scale(1);
+}
 
-        .logo span {
-            color: var(--accent-red);
-        }
+.section {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  opacity: 0;
+  transform: translateY(50px);
+  transition: all 1s ease;
+}
 
-        .nav-links {
-            display: flex;
-            gap: 30px;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+.section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
 
-        .nav-links a {
-            color: var(--text-light);
-            text-decoration: none;
-            opacity: 0.7;
-            transition: opacity 0.3s;
-        }
+.horizontal {
+  display: flex;
+  gap: 40px;
+  padding: 100px 0;
+  overflow-x: auto;
+}
 
-        .nav-links a:hover { opacity: 1; }
+.card {
+  min-width: 300px;
+  height: 400px;
+  background: #111;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  transition: transform 0.4s ease;
+}
 
-        /* --- HERO SECTION --- */
-        .hero {
-            position: relative;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
-        }
+.card:hover {
+  transform: scale(1.05);
+}
 
-        .cast-names {
-            position: absolute;
-            top: 20%;
-            width: 80%;
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            z-index: 2;
-        }
+.cursor {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s ease;
+  z-index: 999;
+}
 
-        .giant-title {
-            font-family: 'Anton', sans-serif;
-            font-size: 18vw;
-            color: var(--text-light);
-            line-height: 1;
-            letter-spacing: 1vw;
-            z-index: 1;
-            white-space: nowrap;
-        }
-
-        .hero-character {
-            position: absolute;
-            bottom: -5%;
-            height: 85vh;
-            z-index: 3;
-            filter: drop-shadow(0px 0px 30px rgba(229, 9, 20, 0.3));
-        }
-
-        /* --- DIRECTOR SECTION --- */
-        .director-section {
-            background-color: var(--bg-light);
-            color: var(--text-dark);
-            padding: 100px 50px;
-            position: relative;
-            z-index: 4; /* Overlaps the hero naturally */
-        }
-
-        .stats-container {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 50px;
-            transform: translateY(-80px);
-        }
-
-        .stat-circle {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: var(--text-dark);
-            color: var(--text-light);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Anton', sans-serif;
-            font-size: 1.5rem;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-        }
-
-        .stat-circle.red { background: var(--accent-red); }
-
-        .stat-circle span {
-            font-family: 'Inter', sans-serif;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 5px;
-        }
-
-        .director-title {
-            text-align: center;
-            font-family: 'Anton', sans-serif;
-            font-size: 8vw;
-            line-height: 1.1;
-            text-transform: uppercase;
-            margin-top: 20px;
-        }
-
-        .director-title span {
-            font-family: 'Inter', sans-serif;
-            font-size: 2vw;
-            display: block;
-            font-weight: 300;
-            letter-spacing: 5px;
-            margin-bottom: -10px;
-        }
-
-        /* --- DETAILS SECTION --- */
-        .details-section {
-            background-color: var(--bg-light);
-            color: var(--text-dark);
-            padding: 50px;
-        }
-
-        .section-header {
-            text-align: center;
-            font-size: 2rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            margin-bottom: 60px;
-        }
-
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 40px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .card {
-            background: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            /* Hidden by default for GSAP to reveal */
-            opacity: 0;
-            transform: translateY(50px); 
-        }
-
-        .card img {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-
-        .card h3 {
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-        }
-
-        .card p {
-            font-size: 0.9rem;
-            color: #555;
-            line-height: 1.6;
-        }
-
-        /* --- FOOTER --- */
-        .footer {
-            background: var(--bg-light);
-            padding: 100px 50px;
-            text-align: center;
-            overflow: hidden;
-        }
-
-        .footer-title {
-            font-family: 'Anton', sans-serif;
-            font-size: 6vw;
-            color: var(--text-dark);
-            margin-bottom: 20px;
-        }
-
-        .footer-image {
-            height: 400px;
-            object-fit: contain;
-            border-radius: 20px;
-        }
-    </style>
+  </style>
 </head>
-<body>
+<body><div class="cursor" id="cursor"></div><div class="container">
+  <header>
+    <div>Brand</div>
+    <div>Menu</div>
+  </header>
+</div><section class="hero">
+  <h1>Virox</h1>
+  <img src="https://via.placeholder.com/400" alt="visual" />
+</section><section class="section">Cinematic Experience</section><section class="horizontal">
+  <div class="card">01</div>
+  <div class="card">02</div>
+  <div class="card">03</div>
+  <div class="card">04</div>
+</section><section class="section">Scroll Animation</section><script>
+  const sections = document.querySelectorAll('.section');
 
-    <nav>
-        <div class="logo">CINE<span>+</span>DAILY</div>
-        <div class="nav-links">
-            <a href="#">Top Casts</a>
-            <a href="#">Production</a>
-            <a href="#">Box Office</a>
-            <a href="#">IMAX 3D</a>
-        </div>
-    </nav>
+  window.addEventListener('scroll', () => {
+    sections.forEach(sec => {
+      const rect = sec.getBoundingClientRect();
+      if (rect.top < window.innerHeight - 100) {
+        sec.classList.add('visible');
+      }
+    });
+  });
 
-    <section class="hero">
-        <div class="cast-names">
-            <span>Ryan Reynolds</span>
-            <span>Karan Soni</span>
-            <span>Emma Corrin</span>
-            <span>Hugh Jackman</span>
-        </div>
-        
-        <h1 class="giant-title">DEADPOOL</h1>
-        
-        <img src="https://images.unsplash.com/photo-1608889175123-8ee362201f81?q=80&w=1000&auto=format&fit=crop" class="hero-character" alt="Hero Character">
-    </section>
-
-    <section class="director-section">
-        <div class="stats-container">
-            <div class="stat-circle">
-                <span>Trailer</span>
-                1:47
-            </div>
-            <div class="stat-circle red">
-                <span>Rule</span>
-                6
-            </div>
-            <div class="stat-circle red">
-                <span>May</span>
-                3
-            </div>
-        </div>
-
-        <h2 class="director-title">
-            <span>Directed By</span>
-            SHAWN LEVY
-        </h2>
-    </section>
-
-    <section class="details-section">
-        <h3 class="section-header">Release Date, Cast, and Everything About The Film!</h3>
-        
-        <div class="grid-container">
-            <div class="card">
-                <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=800&auto=format&fit=crop" alt="Scene 1">
-                <h3>X-Men Returns</h3>
-                <p>Deadpool's integration into the wider cinematic universe brings familiar faces back to the big screen.</p>
-            </div>
-            <div class="card" style="background: var(--text-dark); color: var(--text-light);">
-                <img src="https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?q=80&w=800&auto=format&fit=crop" alt="Poster">
-                <h3>Official Poster</h3>
-                <p style="color: #aaa;">In Cinemas Worldwide.<br>IMAX & 3D Supported.</p>
-                <button style="margin-top: 20px; padding: 10px 20px; background: var(--accent-red); color: white; border: none; cursor: pointer; font-weight: bold; width: 100%;">BOOK NOW</button>
-            </div>
-            <div class="card">
-                <img src="https://images.unsplash.com/photo-1440404653325-ab127d49abc1?q=80&w=800&auto=format&fit=crop" alt="Scene 2">
-                <h3>Premieres</h3>
-                <p>The highly anticipated sequel hits theaters globally. Expect massive box office records to be shattered.</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="footer">
-        <h2 class="footer-title">DEADPOOL III</h2>
-        <img src="https://images.unsplash.com/photo-1588196749597-9ff046892e86?q=80&w=800&auto=format&fit=crop" class="footer-image" alt="Footer Character">
-    </section>
-
-    <script>
-        // Register the ScrollTrigger plugin
-        gsap.registerPlugin(ScrollTrigger);
-
-        // 1. Hero Text Parallax (Moves up and fades out as you scroll down)
-        gsap.to(".giant-title", {
-            y: -250,           // Moves up 250px
-            scale: 0.8,        // Shrinks slightly
-            opacity: 0,        // Fades out
-            scrollTrigger: {
-                trigger: ".hero",
-                start: "top top",
-                end: "bottom center",
-                scrub: 1       // Smoothly links the animation to the scrollbar
-            }
-        });
-
-        // 2. Hero Character Parallax (Moves slightly up to create depth)
-        gsap.to(".hero-character", {
-            y: -100,
-            scrollTrigger: {
-                trigger: ".hero",
-                start: "top top",
-                end: "bottom top",
-                scrub: 1
-            }
-        });
-
-        // 3. Cast Names Out (Fades them out early in the scroll)
-        gsap.to(".cast-names", {
-            opacity: 0,
-            y: -50,
-            scrollTrigger: {
-                trigger: ".hero",
-                start: "top top",
-                end: "center center",
-                scrub: true
-            }
-        });
-
-        // 4. Staggered reveal for the Stat Circles (Pop up sequentially)
-        gsap.from(".stat-circle", {
-            y: 100,
-            opacity: 0,
-            duration: 1,
-            stagger: 0.2,      // 0.2s delay between each circle
-            ease: "back.out(1.7)",
-            scrollTrigger: {
-                trigger: ".director-section",
-                start: "top 80%", // Starts when the top of the section is 80% down the viewport
-            }
-        });
-
-        // 5. Director Title reveal
-        gsap.from(".director-title", {
-            scale: 0.8,
-            opacity: 0,
-            duration: 1.5,
-            ease: "power3.out",
-            scrollTrigger: {
-                trigger: ".director-section",
-                start: "top 60%"
-            }
-        });
-
-        // 6. Staggered reveal for Information Cards
-        gsap.to(".card", {
-            y: 0,
-            opacity: 1,
-            duration: 1,
-            stagger: 0.2,
-            ease: "power2.out",
-            scrollTrigger: {
-                trigger: ".details-section",
-                start: "top 70%"
-            }
-        });
-
-        // 7. Footer Animation
-        gsap.from(".footer-title", {
-            y: 100,
-            opacity: 0,
-            duration: 1,
-            scrollTrigger: {
-                trigger: ".footer",
-                start: "top 80%"
-            }
-        });
-    </script>
-</body>
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+</script></body>
 </html>
