@@ -1,329 +1,773 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Japan Tours</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Syncopate:wght@700&display=swap" rel="stylesheet">
-    <style>
-        /* Base Styles & Variables */
-        :root {
-            --bg-dark: #0a0a0a;
-            --text-light: #ffffff;
-            --text-muted: #a0a0a0;
-            --accent-gold: #cfaa6b;
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digital Trade — Premium Digital Assets</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Barlow+Condensed:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --yellow: #CAFF00;
+    --black: #0A0A0A;
+    --white: #F5F5F0;
+    --gray: #1A1A1A;
+    --mid: #2A2A2A;
+  }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-light);
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-        }
+  html { scroll-behavior: smooth; }
 
-        /* Reusable Glassmorphism */
-        .glass {
-            background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-        }
+  body {
+    background: var(--yellow);
+    font-family: 'Space Mono', monospace;
+    color: var(--white);
+    overflow-x: hidden;
+    cursor: none;
+  }
 
-        /* Typography */
-        h2 {
-            font-family: 'Syncopate', sans-serif;
-            text-align: center;
-            font-size: 2rem;
-            letter-spacing: 5px;
-            margin: 4rem 0 2rem;
-            position: relative;
-        }
-        
-        h2::before, h2::after {
-            content: "";
-            position: absolute;
-            top: 50%;
-            width: 30%;
-            height: 1px;
-            background: var(--glass-border);
-        }
-        h2::before { left: 0; }
-        h2::after { right: 0; }
+  /* Custom cursor */
+  .cursor {
+    width: 12px; height: 12px;
+    background: var(--yellow);
+    border-radius: 50%;
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    mix-blend-mode: difference;
+    transition: transform 0.1s ease;
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1px solid var(--yellow);
+    border-radius: 50%;
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9998;
+    mix-blend-mode: difference;
+    transition: transform 0.25s ease;
+  }
 
-        /* Navigation */
-        nav {
-            position: fixed;
-            top: 0; width: 100%;
-            padding: 1.5rem 4rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 100;
-        }
-        .nav-links { display: flex; gap: 2rem; }
-        .nav-links a { color: var(--text-light); text-decoration: none; font-size: 0.9rem; }
-        .book-btn {
-            padding: 0.5rem 1.5rem;
-            border: 1px solid var(--text-light);
-            border-radius: 20px;
-            background: transparent;
-            color: white;
-            cursor: pointer;
-        }
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: var(--black);
+    border-bottom: 1px solid #222;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2rem;
+    height: 60px;
+    transition: transform 0.3s ease;
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    color: var(--yellow);
+    letter-spacing: 0.1em;
+    text-decoration: none;
+  }
+  .nav-links {
+    display: flex; gap: 2.5rem; list-style: none;
+  }
+  .nav-links a {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: #888;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover, .nav-links a.active { color: var(--yellow); }
+  .nav-icons { display: flex; gap: 1rem; align-items: center; }
+  .nav-icons span {
+    font-size: 0.7rem; color: #888; cursor: pointer;
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 0.1em;
+  }
+  .nav-icons span:hover { color: var(--yellow); }
+  .nav-icons .cart-badge {
+    background: var(--yellow); color: var(--black);
+    font-size: 0.55rem; font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 2px;
+  }
+  .mobile-menu-btn { display: none; color: var(--yellow); font-size: 1.5rem; cursor: pointer; }
 
-        /* Hero Section */
-        .hero {
-            height: 100vh;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            background: url('https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=2070&auto=format&fit=crop') center/cover;
-        }
-        .hero::after {
-            content: '';
-            position: absolute;
-            bottom: 0; left: 0; width: 100%; height: 40%;
-            background: linear-gradient(to top, var(--bg-dark), transparent);
-        }
-        .hero-title {
-            font-family: 'Syncopate', sans-serif;
-            font-size: 12vw;
-            text-align: center;
-            color: rgba(255,255,255,0.8);
-            z-index: 1;
-        }
+  /* SECTIONS */
+  section { width: 100%; background: var(--black); }
 
-        /* Mini Image Cards in Hero */
-        .hero-cards {
-            display: flex;
-            gap: 1rem;
-            position: absolute;
-            bottom: 20%;
-            left: 5%;
-            z-index: 2;
-        }
-        .hero-card {
-            width: 100px; height: 140px;
-            background-size: cover;
-            background-position: center;
-            border-radius: 8px;
-            border: 1px solid var(--glass-border);
-            display: flex;
-            align-items: flex-end;
-            padding: 0.5rem;
-            font-size: 0.7rem;
-        }
+  /* ===== HERO ===== */
+  #hero {
+    min-height: 100vh;
+    padding-top: 60px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 1px solid #222;
+  }
+  .hero-left {
+    padding: 6rem 3rem 4rem;
+    border-right: 1px solid #222;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .hero-tag {
+    font-size: 0.75rem; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--yellow); margin-bottom: 1rem;
+  }
+  .hero-sub {
+    font-size: 0.75rem; color: #888; line-height: 1.8;
+    max-width: 400px; margin-bottom: 3rem;
+  }
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4rem, 10vw, 11rem);
+    line-height: 0.85;
+    color: var(--white);
+    letter-spacing: -0.02em;
+    margin-bottom: 3rem;
+  }
+  .hero-title span { color: var(--yellow); }
+  .btn-primary {
+    display: inline-flex; align-items: center; justify-content: center; gap: 1rem;
+    background: var(--yellow); color: var(--black);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem; font-weight: 700;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    padding: 1.2rem 2rem;
+    text-decoration: none; border: none;
+    transition: background 0.2s, transform 0.2s;
+    cursor: pointer; width: fit-content;
+  }
+  .btn-primary:hover { background: var(--white); transform: translate(-4px,-4px); box-shadow: 4px 4px 0 rgba(202,255,0,0.2); }
 
-        /* Timeline Section */
-        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
-        
-        .timeline-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            margin-top: 4rem;
-        }
-        .timeline-text { color: var(--text-muted); line-height: 1.6; }
-        .accent { color: var(--accent-gold); }
-        
-        .timeline {
-            border-left: 2px solid var(--glass-border);
-            padding-left: 2rem;
-            position: relative;
-        }
-        .timeline-item {
-            margin-bottom: 3rem;
-            position: relative;
-        }
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -35px; top: 0;
-            width: 10px; height: 10px;
-            background: var(--text-light);
-            border-radius: 50%;
-        }
-        .timeline-img {
-            width: 150px; height: 100px;
-            object-fit: cover;
-            border-radius: 8px;
-            margin-top: 1rem;
-        }
+  .hero-right { display: grid; grid-template-rows: 1.5fr 1fr; }
+  .hero-visual {
+    position: relative; overflow: hidden;
+    border-bottom: 1px solid #222; background: var(--mid);
+  }
+  .hero-visual img {
+    width: 100%; height: 100%; object-fit: cover;
+    opacity: 0.6; mix-blend-mode: luminosity; transition: opacity 0.5s, transform 5s ease;
+  }
+  .hero-visual:hover img { opacity: 0.8; transform: scale(1.05); }
+  .hero-visual-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(202,255,0,0.1) 0%, transparent 80%);
+  }
+  .hero-stats { display: grid; grid-template-columns: 1fr 1fr; }
+  .stat-box { padding: 3rem; border-right: 1px solid #222; display: flex; flex-direction: column; justify-content: center; }
+  .stat-box:last-child { border-right: none; }
+  .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3rem, 5vw, 4.5rem); color: var(--yellow); line-height: 1; }
+  .stat-label { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: #666; margin-top: 0.5rem; }
 
-        /* Included Grid */
-        .included-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1.5rem;
-            margin-top: 3rem;
-        }
-        .included-card {
-            padding: 1.5rem;
-            text-align: left;
-        }
-        .included-card h4 { margin-bottom: 0.5rem; font-size: 1.2rem; }
-        .included-card p { color: var(--text-muted); font-size: 0.9rem; }
+  /* ===== MARQUEE ===== */
+  .marquee-section {
+    background: var(--yellow); color: var(--black);
+    padding: 1rem 0; overflow: hidden; border-bottom: 1px solid var(--black);
+    display: flex; white-space: nowrap;
+  }
+  .marquee-content {
+    font-family: 'Bebas Neue', sans-serif; font-size: 3rem;
+    display: flex; gap: 3rem; animation: scroll 20s linear infinite;
+  }
+  @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-        /* Footer / Contact */
-        .footer-section {
-            position: relative;
-            margin-top: 5rem;
-            padding: 10rem 2rem 4rem;
-            background: url('https://images.unsplash.com/photo-1522850959516-58f958d4c0b4?q=80&w=2000&auto=format&fit=crop') center/cover;
-        }
-        .footer-section::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to bottom, var(--bg-dark), rgba(0,0,0,0.4));
-        }
-        .contact-form {
-            position: relative;
-            z-index: 2;
-            max-width: 400px;
-            padding: 2rem;
-        }
-        .contact-form input {
-            width: 100%;
-            background: transparent;
-            border: none;
-            border-bottom: 1px solid var(--glass-border);
-            color: white;
-            padding: 0.8rem 0;
-            margin-bottom: 1.5rem;
-            outline: none;
-        }
-        .contact-form button {
-            width: 100%;
-            padding: 1rem;
-            background: white;
-            color: black;
-            border: none;
-            border-radius: 4px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-    </style>
+  /* ===== MENU / NAV PANEL ===== */
+  #menu-panel { background: var(--white); display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid #222; }
+  .menu-left { background: var(--black); padding: 5rem 3rem; display: flex; flex-direction: column; justify-content: center; }
+  .big-nav-item {
+    font-family: 'Bebas Neue', sans-serif; font-size: clamp(3rem, 6vw, 6.5rem);
+    line-height: 0.9; color: var(--white); letter-spacing: 0.02em;
+    display: flex; align-items: center; gap: 1rem; border-bottom: 1px solid #222;
+    padding: 1.5rem 0; cursor: pointer; transition: color 0.3s;
+  }
+  .big-nav-item:hover { color: var(--yellow); }
+  .big-nav-item .nav-num { font-family: 'Space Mono', monospace; font-size: 0.8rem; color: #555; align-self: flex-start; margin-top: 0.8rem; }
+  .big-nav-item .arrow-icon { margin-left: auto; font-size: 1.5rem; opacity: 0; transition: all 0.3s; }
+  .big-nav-item:hover .arrow-icon { opacity: 1; transform: translate(10px, -10px) rotate(45deg); color: var(--yellow); }
+
+  .menu-right { background: var(--white); padding: 5rem 3rem; display: flex; flex-direction: column; }
+  .menu-right h3 { font-family: 'Space Mono', monospace; font-size: 0.8rem; letter-spacing: 0.3em; text-transform: uppercase; color: #888; margin-bottom: 3rem; }
+  .product-link { display: flex; align-items: center; justify-content: space-between; padding: 1.5rem 0; border-bottom: 1px solid #ddd; cursor: pointer; color: var(--black); text-decoration: none; transition: padding-left 0.3s; }
+  .product-link-name { font-family: 'Barlow Condensed', sans-serif; font-size: 1.5rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+  .product-link-tag { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: #fff; background: var(--black); padding: 4px 10px; }
+  .product-link:hover { padding-left: 1rem; }
+  .product-link:hover .product-link-name { text-decoration: line-through; text-decoration-color: var(--yellow); text-decoration-thickness: 3px; }
+
+  /* ===== SERVICES ===== */
+  #services { padding: 6rem 3rem; border-bottom: 1px solid #222; }
+  .section-heading { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3rem, 8vw, 6rem); color: var(--white); margin-bottom: 4rem; line-height: 0.9; }
+  .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+  .service-card { padding: 3rem 2rem; background: var(--gray); border: 1px solid #333; transition: all 0.3s; position: relative; overflow: hidden; }
+  .service-card:hover { border-color: var(--yellow); transform: translateY(-10px); }
+  .service-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--yellow); transform: scaleX(0); transform-origin: left; transition: transform 0.3s; }
+  .service-card:hover::before { transform: scaleX(1); }
+  .service-icon { font-size: 3rem; margin-bottom: 2rem; color: var(--yellow); }
+  .service-title { font-family: 'Barlow Condensed', sans-serif; font-size: 1.8rem; font-weight: 700; text-transform: uppercase; margin-bottom: 1rem; }
+  .service-desc { font-size: 0.8rem; color: #888; line-height: 1.6; }
+
+  /* ===== TEAM ===== */
+  #team { border-bottom: 1px solid #222; display: grid; grid-template-columns: auto 1fr; }
+  .team-title-block { padding: 4rem 2rem; border-right: 1px solid #222; display: flex; align-items: center; }
+  .vertical-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(4rem, 8vw, 6rem); color: var(--yellow); writing-mode: vertical-rl; transform: rotate(180deg); margin: 0; }
+  .team-members { display: grid; grid-template-columns: repeat(4, 1fr); }
+  .member-card { border-right: 1px solid #222; border-bottom: 1px solid #222; padding: 3rem 2rem; position: relative; transition: background 0.3s; cursor: pointer; }
+  .member-card:hover { background: var(--gray); }
+  .member-num { font-family: 'Bebas Neue', sans-serif; font-size: 4rem; color: #333; line-height: 1; margin-bottom: 1.5rem; transition: color 0.3s; }
+  .member-card:hover .member-num { color: var(--yellow); }
+  .member-photo { width: 100%; aspect-ratio: 1; background: var(--mid); margin-bottom: 1.5rem; overflow: hidden; }
+  .member-photo img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%) contrast(1.2); transition: filter 0.5s, transform 0.5s; }
+  .member-card:hover .member-photo img { filter: grayscale(0%); transform: scale(1.1); }
+  .member-name { font-family: 'Barlow Condensed', sans-serif; font-size: 1.2rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--white); }
+  .member-role { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: #666; margin-top: 0.4rem; }
+
+  /* ===== CATALOG ===== */
+  #catalog { border-bottom: 1px solid #222; }
+  .catalog-header { padding: 4rem 3rem 2rem; border-bottom: 1px solid #222; display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 2rem; }
+  .filter-tags { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+  .tag { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; padding: 8px 16px; border: 1px solid #333; color: #888; cursor: pointer; transition: all 0.2s; }
+  .tag.active, .tag:hover { background: var(--yellow); color: var(--black); border-color: var(--yellow); }
+
+  .catalog-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
+  .catalog-card { border-right: 1px solid #222; border-bottom: 1px solid #222; padding: 3rem 2rem; transition: background 0.2s; cursor: pointer; display: flex; flex-direction: column; }
+  .catalog-card:hover { background: var(--gray); }
+  .catalog-thumb { width: 100%; aspect-ratio: 16/10; background: #111; margin-bottom: 2rem; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+  .catalog-thumb img { width: 100%; height: 100%; object-fit: cover; opacity: 0.5; transition: opacity 0.3s, transform 0.5s; }
+  .catalog-card:hover .catalog-thumb img { opacity: 0.8; transform: scale(1.05); }
+  .catalog-thumb-label { position: absolute; font-family: 'Bebas Neue', sans-serif; font-size: 3rem; color: rgba(255,255,255,0.1); z-index: 1; }
+  .catalog-thumb-badge { position: absolute; top: 1rem; left: 1rem; background: var(--yellow); color: var(--black); font-size: 0.6rem; font-weight: 700; letter-spacing: 0.15em; padding: 4px 10px; z-index: 2; }
+  .catalog-card-name { font-family: 'Barlow Condensed', sans-serif; font-size: 1.4rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--white); margin-bottom: 0.5rem; }
+  .catalog-card-meta { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 1.5rem; }
+  .catalog-card-price { font-size: 1rem; color: var(--yellow); }
+
+  /* ===== SCRAMBLE EFFECT OVERRIDES ===== */
+  .scramble-link { display: inline-block; }
+
+  /* ===== CONTACT ===== */
+  #contact { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid #222; }
+  .contact-left { padding: 6rem 3rem; border-right: 1px solid #222; display: flex; flex-direction: column; justify-content: center; background: url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1000&q=80') center/cover; position: relative; }
+  .contact-left::before { content: ''; position: absolute; inset: 0; background: rgba(10,10,10,0.85); }
+  .contact-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(5rem, 10vw, 8rem); line-height: 0.85; color: var(--white); position: relative; z-index: 1; }
+  .contact-title em { color: var(--yellow); font-style: normal; }
+  .contact-right { padding: 6rem 3rem; display: flex; flex-direction: column; justify-content: center; gap: 2rem; }
+  .form-group { display: flex; flex-direction: column; gap: 0.8rem; }
+  .form-label { font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase; color: #888; }
+  .form-input { background: transparent; border: none; border-bottom: 1px solid #333; padding: 0.8rem 0; color: var(--white); font-family: 'Space Mono', monospace; font-size: 1rem; outline: none; transition: border-color 0.3s; }
+  .form-input:focus { border-color: var(--yellow); }
+  .form-textarea { resize: none; height: 100px; }
+
+  /* ===== ADVANCED FOOTER ===== */
+  footer { background: var(--black); padding: 6rem 3rem 2rem; border-top: 1px solid #222; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 4rem; margin-bottom: 4rem; border-bottom: 1px solid #222; padding-bottom: 4rem; }
+  .footer-col h4 { font-family: 'Space Mono', monospace; font-size: 0.8rem; color: var(--yellow); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 2rem; }
+  .footer-logo-lg { font-family: 'Bebas Neue', sans-serif; font-size: 4rem; color: var(--white); line-height: 1; margin-bottom: 1.5rem; text-decoration: none; display: block; }
+  .footer-desc { font-size: 0.8rem; color: #666; line-height: 1.8; max-width: 300px; margin-bottom: 2rem; }
+  .newsletter-form { display: flex; border-bottom: 1px solid #444; }
+  .newsletter-form input { background: transparent; border: none; padding: 0.8rem 0; color: var(--white); font-family: 'Space Mono', monospace; flex: 1; outline: none; }
+  .newsletter-form button { background: transparent; border: none; color: var(--yellow); font-family: 'Space Mono', monospace; font-weight: bold; cursor: pointer; padding: 0 1rem; }
+  
+  .footer-links-list { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
+  .footer-links-list a { color: #888; text-decoration: none; font-size: 0.8rem; transition: color 0.3s; display: inline-block; }
+  .footer-links-list a:hover { color: var(--yellow); transform: translateX(5px); }
+  
+  .footer-address { font-size: 0.8rem; color: #888; line-height: 1.8; }
+  .footer-address span { color: var(--white); }
+
+  .footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+  .footer-copy { font-size: 0.7rem; color: #555; letter-spacing: 0.1em; text-transform: uppercase; }
+  .social-links { display: flex; gap: 1.5rem; }
+  .social-links a { color: var(--white); text-decoration: none; font-size: 1rem; transition: color 0.3s; }
+  .social-links a:hover { color: var(--yellow); }
+
+  /* Scroll reveal animation */
+  .reveal { opacity: 0; transform: translateY(50px); transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* RESPONSIVE DESIGN */
+  @media (max-width: 1024px) {
+    #hero, #menu-panel, #contact { grid-template-columns: 1fr; }
+    .hero-right { grid-template-rows: 50vh auto; }
+    .team-members, .catalog-grid { grid-template-columns: repeat(2, 1fr); }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    #team { grid-template-columns: 1fr; }
+    .team-title-block { border-right: none; border-bottom: 1px solid #222; }
+    .vertical-title { writing-mode: horizontal-tb; transform: none; }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 0 1.5rem; }
+    .nav-links { display: none; /* Mobile menu hidden by default */ flex-direction: column; position: absolute; top: 60px; left: 0; width: 100%; background: var(--black); padding: 2rem; border-bottom: 1px solid #222; }
+    .nav-links.active { display: flex; }
+    .mobile-menu-btn { display: block; }
+    .team-members, .catalog-grid, .services-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .hero-left, .stat-box, .menu-left, .menu-right, .contact-left, .contact-right { padding: 3rem 1.5rem; }
+    .big-nav-item { flex-wrap: wrap; }
+    .member-card:nth-child(even) { border-right: 1px solid #222; }
+  }
+</style>
 </head>
 <body>
 
-    <nav>
-        <div>🌐 JAPAN TOURS</div>
-        <div class="nav-links">
-            <a href="#">About</a>
-            <a href="#">Included</a>
-            <a href="#">Contacts</a>
-        </div>
-        <button class="book-btn">Book</button>
-    </nav>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
 
-    <section class="hero">
-        <h1 class="hero-title">JAPAN</h1>
-        <div class="hero-cards">
-            <div class="hero-card glass" style="background-image: url('https://images.unsplash.com/photo-1480796927426-f609979314bd?q=80&w=400&auto=format&fit=crop');">3 cities in Japan</div>
-            <div class="hero-card glass" style="background-image: url('https://images.unsplash.com/photo-1503899036084-c55cdd92da26?q=80&w=400&auto=format&fit=crop');">10 days</div>
-            <div class="hero-card glass" style="background-image: url('https://images.unsplash.com/photo-1551641506-ee5bf4cb45f1?q=80&w=400&auto=format&fit=crop');">Eat ramen</div>
-        </div>
-    </section>
+<nav id="navbar">
+  <a href="#" class="nav-logo scramble-link">DIGITAL TRADE</a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#hero" class="active scramble-link">HOME</a></li>
+    <li><a href="#services" class="scramble-link">SERVICES</a></li>
+    <li><a href="#catalog" class="scramble-link">MARKET</a></li>
+    <li><a href="#team" class="scramble-link">TEAM</a></li>
+    <li><a href="#contact" class="scramble-link">CONTACT</a></li>
+  </ul>
+  <div class="nav-icons">
+    <span class="scramble-link">SEARCH</span>
+    <span class="cart-badge">CART (3)</span>
+    <span class="mobile-menu-btn" id="mobileMenuBtn">☰</span>
+  </div>
+</nav>
 
-    <div class="container">
-        <h2>ABOUT THE TOUR</h2>
-        <div class="timeline-container">
-            <div class="timeline-text gs-reveal">
-                <p>We've planned a simple and convenient 10-day itinerary for your trip to Japan. You'll visit three cities:<br><span class="accent">Osaka, Kyoto, and Tokyo.</span></p>
-                <br><br>
-                <p>No need to worry about routes, schedules, or finding places. We'll show you where to go, what to see, and where to eat, so you can simply <span class="accent">enjoy the journey.</span></p>
-            </div>
-            
-            <div class="timeline">
-                <div class="timeline-item gs-reveal">
-                    <h4>Days 1-3 • Osaka</h4>
-                    <img src="https://images.unsplash.com/photo-1590559899731-a382839cecdf?q=80&w=400&auto=format&fit=crop" class="timeline-img">
-                </div>
-                <div class="timeline-item gs-reveal">
-                    <h4>Days 4-6 • Kyoto</h4>
-                    <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=400&auto=format&fit=crop" class="timeline-img">
-                </div>
-                <div class="timeline-item gs-reveal">
-                    <h4>Days 7-10 • Tokyo</h4>
-                    <img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?q=80&w=400&auto=format&fit=crop" class="timeline-img">
-                </div>
-            </div>
-        </div>
-
-        <h2>WHAT'S INCLUDED</h2>
-        <div class="included-grid">
-            <div class="included-card glass gs-reveal">
-                <h4>👨‍🏫 Guides</h4>
-                <p>2 awesome guides who know everything about Japan!</p>
-            </div>
-            <div class="included-card glass gs-reveal">
-                <h4>✈️ Flights</h4>
-                <p>Routes: Moscow — Osaka, Tokyo — Moscow</p>
-            </div>
-            <div class="included-card glass gs-reveal">
-                <h4>🚕 Transfers</h4>
-                <p>From the airport to the hotels</p>
-            </div>
-            <div class="included-card glass gs-reveal">
-                <h4>🏨 Hotels</h4>
-                <p>Comfortable accommodation (breakfasts included)</p>
-            </div>
-        </div>
+<section id="hero">
+  <div class="hero-left reveal">
+    <div>
+      <p class="hero-tag">▸ Digital Trade Platform — Est. 2024</p>
+      <p class="hero-sub">Empowering creators and agencies with high-end digital assets. Software licenses, premium UI/UX kits, custom models, and enterprise API access.</p>
     </div>
+    <div class="hero-title scramble-target">TRADE<br><span>DIGITAL</span><br>ASSETS↓</div>
+    <a href="#catalog" class="btn-primary scramble-link">Explore Market →</a>
+  </div>
+  <div class="hero-right">
+    <div class="hero-visual">
+      <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1200&q=80" alt="Cyber Security Tech">
+      <div class="hero-visual-overlay"></div>
+      <div style="position:absolute; bottom:2rem; left:2rem; z-index:2;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:5rem;color:var(--yellow);line-height:1;">LIVE</div>
+        <div style="font-family:'Space Mono',monospace;font-size:0.8rem;color:#fff;letter-spacing:0.2em;">MARKET DATA SYNCED</div>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-box">
+        <div class="stat-num scramble-target">24K+</div>
+        <div class="stat-label">Active Traders</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num scramble-target">1.2M</div>
+        <div class="stat-label">Assets Listed</div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <section class="footer-section">
-        <div class="contact-form glass gs-reveal">
-            <h3>Want to join us, but still have questions?</h3>
-            <p style="margin-bottom: 2rem; font-size: 0.9rem; color: var(--text-muted);">Leave a request</p>
-            <input type="text" placeholder="Your name">
-            <input type="tel" placeholder="Phone number">
-            <input type="text" placeholder="Comment">
-            <button>Send</button>
-        </div>
-    </section>
+<div class="marquee-section">
+  <div class="marquee-content">
+    <span>DIGITAL TRADE AI ✦ UI/UX DESIGN ✦ BRAND STRATEGY ✦ APPAREL MOCKUPS ✦ E-COMMERCE ✦ WEB3 ASSETS ✦</span>
+    <span>DIGITAL TRADE AI ✦ UI/UX DESIGN ✦ BRAND STRATEGY ✦ APPAREL MOCKUPS ✦ E-COMMERCE ✦ WEB3 ASSETS ✦</span>
+  </div>
+</div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<section id="services">
+  <h2 class="section-heading reveal">CORE <span style="color:var(--yellow);">SERVICES</span></h2>
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <div class="service-icon">✦</div>
+      <h3 class="service-title scramble-link">UI/UX Strategy</h3>
+      <p class="service-desc">Awwwards-winning cinematic layouts, immersive user experiences, and premium interfaces crafted for modern digital brands.</p>
+    </div>
+    <div class="service-card reveal" style="transition-delay:0.1s">
+      <div class="service-icon">◈</div>
+      <h3 class="service-title scramble-link">Asset Marketplace</h3>
+      <p class="service-desc">Buy and sell exclusive digital goods including typography packs, 3D mockups, street-wear templates, and high-end graphic bundles.</p>
+    </div>
+    <div class="service-card reveal" style="transition-delay:0.2s">
+      <div class="service-icon">⟡</div>
+      <h3 class="service-title scramble-link">Creative Dev</h3>
+      <p class="service-desc">Hardware-accelerated web experiences, custom GSAP animations, WebGL integrations, and robust Single Page Applications.</p>
+    </div>
+  </div>
+</section>
 
-    <script>
-        gsap.registerPlugin(ScrollTrigger);
+<section id="menu-panel">
+  <div class="menu-left">
+    <div class="big-nav-item reveal">
+      <span class="nav-num">01</span> <span class="scramble-link">EVENT</span> <span class="arrow-icon">↗</span>
+    </div>
+    <div class="big-nav-item reveal" style="transition-delay:0.1s">
+      <span class="nav-num">02</span> <span class="scramble-link">COLLAB</span> <span class="arrow-icon">↗</span>
+    </div>
+    <div class="big-nav-item reveal" style="transition-delay:0.2s">
+      <span class="nav-num">03</span> <span class="scramble-link">AGENCY</span> <span class="arrow-icon">↗</span>
+    </div>
+    <div class="big-nav-item reveal" style="transition-delay:0.3s">
+      <span class="nav-num">04</span> <span class="scramble-link">JOURNAL</span> <span class="arrow-icon">↗</span>
+    </div>
+  </div>
+  <div class="menu-right reveal">
+    <h3>— Trending Products</h3>
+    <a class="product-link" href="#">
+      <span class="product-link-name scramble-link">Cinematic Web Kit ×</span><span class="product-link-tag" style="background:var(--yellow); color:var(--black);">NEW</span>
+    </a>
+    <a class="product-link" href="#">
+      <span class="product-link-name scramble-link">Streetwear Mockup Pro</span><span class="product-link-tag">HOT</span>
+    </a>
+    <a class="product-link" href="#">
+      <span class="product-link-name scramble-link">Typography Vault V2</span><span class="product-link-tag">EXCLUSIVE</span>
+    </a>
+    <a class="product-link" href="#">
+      <span class="product-link-name scramble-link">GSAP Animation Snippets</span><span class="product-link-tag">DEV</span>
+    </a>
+  </div>
+</section>
 
-        // Hero Parallax Effect
-        gsap.to(".hero-title", {
-            y: 150,
-            ease: "none",
-            scrollTrigger: {
-                trigger: ".hero",
-                start: "top top",
-                end: "bottom top",
-                scrub: true
-            }
-        });
+<section id="catalog">
+  <div class="catalog-header reveal">
+    <div class="section-heading" style="margin-bottom:0;">ASSET <span style="color:var(--yellow);">MARKET</span></div>
+    <div class="filter-tags">
+      <div class="tag active">ALL</div>
+      <div class="tag scramble-link">MOCKUPS</div>
+      <div class="tag scramble-link">UI KITS</div>
+      <div class="tag scramble-link">TEMPLATES</div>
+      <div class="tag scramble-link">CODE</div>
+    </div>
+  </div>
+  <div class="catalog-grid">
+    <div class="catalog-card reveal">
+      <div class="catalog-thumb">
+        <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80" alt="Abstract 3D">
+        <span class="catalog-thumb-label">3D</span>
+        <div class="catalog-thumb-badge">HOT</div>
+      </div>
+      <div class="catalog-card-name scramble-link">Abstract 3D Shapes Pack</div>
+      <div class="catalog-card-meta">
+        <span class="catalog-card-price">$45.00 USD</span>
+        <span style="color:#555;">↗</span>
+      </div>
+    </div>
+    <div class="catalog-card reveal" style="transition-delay:0.1s">
+      <div class="catalog-thumb">
+        <img src="https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&w=600&q=80" alt="Brand Identity">
+        <span class="catalog-thumb-label">BRAND</span>
+        <div class="catalog-thumb-badge" style="background:#fff;">NEW</div>
+      </div>
+      <div class="catalog-card-name scramble-link">Studio Brand Identity Kit</div>
+      <div class="catalog-card-meta">
+        <span class="catalog-card-price">$120.00 USD</span>
+        <span style="color:#555;">↗</span>
+      </div>
+    </div>
+    <div class="catalog-card reveal" style="transition-delay:0.2s">
+      <div class="catalog-thumb">
+        <img src="https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&w=600&q=80" alt="Code">
+        <span class="catalog-thumb-label">CODE</span>
+      </div>
+      <div class="catalog-card-name scramble-link">Dark Mode Admin Dashboard</div>
+      <div class="catalog-card-meta">
+        <span class="catalog-card-price">$89.00 USD</span>
+        <span style="color:#555;">↗</span>
+      </div>
+    </div>
+    <div class="catalog-card reveal">
+      <div class="catalog-thumb">
+        <img src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=600&q=80" alt="Apparel">
+        <span class="catalog-thumb-label">MERCH</span>
+      </div>
+      <div class="catalog-card-name scramble-link">Oversized Tee Mockups Vol.1</div>
+      <div class="catalog-card-meta">
+        <span class="catalog-card-price">$35.00 USD</span>
+        <span style="color:#555;">↗</span>
+      </div>
+    </div>
+    <div class="catalog-card reveal" style="transition-delay:0.1s">
+      <div class="catalog-thumb">
+        <img src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=600&q=80" alt="UI Kit">
+        <span class="catalog-thumb-label">UI/UX</span>
+        <div class="catalog-thumb-badge" style="background:#FF3366; color:#fff;">SALE</div>
+      </div>
+      <div class="catalog-card-name scramble-link">E-Commerce App Wireframes</div>
+      <div class="catalog-card-meta">
+        <span class="catalog-card-price"><strike style="color:#555">$90</strike> $49.00 USD</span>
+        <span style="color:#555;">↗</span>
+      </div>
+    </div>
+    <div class="catalog-card reveal" style="transition-delay:0.2s">
+      <div class="catalog-thumb" style="background:#111;">
+        <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=600&q=80" alt="Script">
+        <span class="catalog-thumb-label">API</span>
+      </div>
+      <div class="catalog-card-name scramble-link">Crypto Price Ticker API</div>
+      <div class="catalog-card-meta">
+        <span class="catalog-card-price">$15.00 / mo</span>
+        <span style="color:#555;">↗</span>
+      </div>
+    </div>
+  </div>
+</section>
 
-        // Stagger reveal for all sections marked with 'gs-reveal'
-        gsap.utils.toArray('.gs-reveal').forEach(function(elem) {
-            gsap.fromTo(elem, 
-                { y: 50, opacity: 0 }, 
-                {
-                    y: 0, 
-                    opacity: 1, 
-                    duration: 1, 
-                    ease: "power3.out",
-                    scrollTrigger: {
-                        trigger: elem,
-                        start: "top 85%", // Triggers when element is 85% down the viewport
-                        toggleActions: "play none none reverse"
-                    }
-                }
-            );
-        });
-    </script>
+<section id="team">
+  <div class="team-title-block reveal">
+    <h2 class="vertical-title">THE CREATIVES</h2>
+  </div>
+  <div class="team-members">
+    <div class="member-card reveal">
+      <div class="member-num scramble-target">01</div>
+      <div class="member-photo">
+        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80" alt="Aria">
+      </div>
+      <div class="member-name scramble-link">Aria Chen</div>
+      <div class="member-role">Art Director</div>
+    </div>
+    <div class="member-card reveal" style="transition-delay:0.1s">
+      <div class="member-num scramble-target">02</div>
+      <div class="member-photo">
+        <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=400&q=80" alt="Kai">
+      </div>
+      <div class="member-name scramble-link">Kai Okafor</div>
+      <div class="member-role">Lead Developer</div>
+    </div>
+    <div class="member-card reveal" style="transition-delay:0.2s">
+      <div class="member-num scramble-target">03</div>
+      <div class="member-photo">
+        <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=400&q=80" alt="Mira">
+      </div>
+      <div class="member-name scramble-link">Mira Volkov</div>
+      <div class="member-role">UI/UX Specialist</div>
+    </div>
+    <div class="member-card reveal" style="transition-delay:0.3s">
+      <div class="member-num scramble-target">04</div>
+      <div class="member-photo">
+        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80" alt="Dev">
+      </div>
+      <div class="member-name scramble-link">Dev Santos</div>
+      <div class="member-role">Brand Strategist</div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="contact-left reveal">
+    <div class="contact-title scramble-target">INITIATE<br>NEW<br><em>PROJECT</em></div>
+  </div>
+  <div class="contact-right reveal">
+    <div class="form-group">
+      <label class="form-label">NAME_</label>
+      <input class="form-input" type="text" placeholder="Enter your full name">
+    </div>
+    <div class="form-group">
+      <label class="form-label">EMAIL_</label>
+      <input class="form-input" type="email" placeholder="hello@brand.com">
+    </div>
+    <div class="form-group">
+      <label class="form-label">BUDGET_</label>
+      <select class="form-input" style="background:var(--black); color:var(--white);">
+        <option>&lt; $5k</option>
+        <option>$5k - $10k</option>
+        <option>$10k+</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">PROJECT DETAILS_</label>
+      <textarea class="form-input form-textarea" placeholder="Tell us about your vision..."></textarea>
+    </div>
+    <button class="btn-primary" style="margin-top:1rem;">SUBMIT REQUEST ↗</button>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid reveal">
+    <div class="footer-col">
+      <a href="#" class="footer-logo-lg scramble-link">DIGITAL TRADE</a>
+      <p class="footer-desc">A premium marketplace and creative studio building high-end digital solutions, awwwards-style experiences, and next-gen assets for global creators.</p>
+      <form class="newsletter-form">
+        <input type="email" placeholder="Subscribe to dispatch...">
+        <button type="submit">JOIN</button>
+      </form>
+    </div>
+    <div class="footer-col">
+      <h4>NAVIGATION</h4>
+      <ul class="footer-links-list">
+        <li><a href="#hero" class="scramble-link">Platform</a></li>
+        <li><a href="#services" class="scramble-link">Studio Services</a></li>
+        <li><a href="#catalog" class="scramble-link">Marketplace</a></li>
+        <li><a href="#" class="scramble-link">Case Studies</a></li>
+        <li><a href="#" class="scramble-link">Careers</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>LEGAL</h4>
+      <ul class="footer-links-list">
+        <li><a href="#" class="scramble-link">Terms of Service</a></li>
+        <li><a href="#" class="scramble-link">Privacy Policy</a></li>
+        <li><a href="#" class="scramble-link">Licensing Info</a></li>
+        <li><a href="#" class="scramble-link">Refund Policy</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>BASE OF OPERATIONS</h4>
+      <p class="footer-address">
+        <span>Teknaar Chowk, Awarbhata</span><br>
+        Dantewada, Chhattisgarh<br>
+        India
+      </p>
+      <p class="footer-address" style="margin-top:1.5rem;">
+        <span>hello@digitaltrade.ai</span><br>
+        +91 (0) 000-000-0000
+      </p>
+    </div>
+  </div>
+  <div class="footer-bottom reveal">
+    <div class="footer-copy">© 2026 DIGITAL TRADE AI — ALL RIGHTS RESERVED.</div>
+    <div class="social-links">
+      <a href="#" class="scramble-link">TW/X</a>
+      <a href="#" class="scramble-link">IG</a>
+      <a href="#" class="scramble-link">BEHANCE</a>
+      <a href="#" class="scramble-link">GITHUB</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // --- CUSTOM CURSOR ---
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  
+  // Disable custom cursor on touch devices
+  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  if(!isTouchDevice) {
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+    function animateCursor() {
+      cursor.style.transform = `translate(${mx-6}px, ${my-6}px)`;
+      rx += (mx - rx) * 0.15;
+      ry += (my - ry) * 0.15;
+      ring.style.transform = `translate(${rx-18}px, ${ry-18}px)`;
+      requestAnimationFrame(animateCursor);
+    }
+    animateCursor();
+  } else {
+    cursor.style.display = 'none';
+    ring.style.display = 'none';
+    document.body.style.cursor = 'auto';
+  }
+
+  // Hide cursor on interactive elements
+  const interactables = document.querySelectorAll('a, button, input, textarea, .tag, .member-card, .catalog-card');
+  interactables.forEach(el => {
+    el.addEventListener('mouseenter', () => { if(!isTouchDevice) ring.style.transform = `translate(${rx-18}px, ${ry-18}px) scale(1.5)`; });
+    el.addEventListener('mouseleave', () => { if(!isTouchDevice) ring.style.transform = `translate(${rx-18}px, ${ry-18}px) scale(1)`; });
+  });
+
+  // --- MOBILE MENU ---
+  const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+  const navLinksList = document.getElementById('navLinks');
+  mobileMenuBtn.addEventListener('click', () => {
+    navLinksList.classList.toggle('active');
+    mobileMenuBtn.textContent = navLinksList.classList.contains('active') ? '✕' : '☰';
+  });
+
+  // --- FILTER TAGS ---
+  document.querySelectorAll('.tag').forEach(tag => {
+    tag.addEventListener('click', () => {
+      document.querySelectorAll('.tag').forEach(t => t.classList.remove('active'));
+      tag.classList.add('active');
+    });
+  });
+
+  // --- SCROLL REVEAL (Intersection Observer) ---
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }});
+  }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // --- NAVBAR HIDE ON SCROLL ---
+  let lastScroll = 0;
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    const currentScroll = window.pageYOffset;
+    if (currentScroll > 100 && currentScroll > lastScroll && !navLinksList.classList.contains('active')) {
+      navbar.style.transform = 'translateY(-100%)';
+    } else {
+      navbar.style.transform = 'translateY(0)';
+    }
+    lastScroll = currentScroll;
+  });
+
+  // --- SCRAMBLE TEXT EFFECT ---
+  class TextScramble {
+    constructor(el) {
+      this.el = el;
+      this.chars = '!<>-_\\/[]{}—=+*^?#________';
+      this.originalText = el.innerText;
+      this.update = this.update.bind(this);
+    }
+    setText(newText) {
+      const oldText = this.el.innerText;
+      const length = Math.max(oldText.length, newText.length);
+      const promise = new Promise((resolve) => this.resolve = resolve);
+      this.queue = [];
+      for (let i = 0; i < length; i++) {
+        const from = oldText[i] || '';
+        const to = newText[i] || '';
+        const start = Math.floor(Math.random() * 20);
+        const end = start + Math.floor(Math.random() * 20);
+        this.queue.push({ from, to, start, end });
+      }
+      cancelAnimationFrame(this.frameRequest);
+      this.frame = 0;
+      this.update();
+      return promise;
+    }
+    update() {
+      let output = '';
+      let complete = 0;
+      for (let i = 0, n = this.queue.length; i < n; i++) {
+        let { from, to, start, end, char } = this.queue[i];
+        if (this.frame >= end) {
+          complete++;
+          output += to;
+        } else if (this.frame >= start) {
+          if (!char || Math.random() < 0.28) {
+            char = this.randomChar();
+            this.queue[i].char = char;
+          }
+          output += `<span style="color: var(--yellow); opacity: 0.8;">${char}</span>`;
+        } else {
+          output += from;
+        }
+      }
+      this.el.innerHTML = output;
+      if (complete === this.queue.length) {
+        this.resolve();
+      } else {
+        this.frameRequest = requestAnimationFrame(this.update);
+        this.frame++;
+      }
+    }
+    randomChar() {
+      return this.chars[Math.floor(Math.random() * this.chars.length)];
+    }
+  }
+
+  // Apply scramble effect on hover for specific elements
+  document.querySelectorAll('.scramble-link').forEach(el => {
+    const scrambler = new TextScramble(el);
+    let isAnimating = false;
+    el.addEventListener('mouseenter', () => {
+      if(isAnimating) return;
+      isAnimating = true;
+      scrambler.setText(el.innerText).then(() => { isAnimating = false; });
+    });
+  });
+
+  // Apply auto-scramble on load for targets
+  document.querySelectorAll('.scramble-target').forEach(el => {
+    // Save original text including HTML if needed, but here we assume simple text strings
+    const originalText = el.innerText;
+    const scrambler = new TextScramble(el);
+    setTimeout(() => {
+        scrambler.setText(originalText);
+    }, 500 + Math.random() * 1000); // Random delay for organic feel
+  });
+</script>
 </body>
 </html>
