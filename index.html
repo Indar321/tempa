@@ -148,9 +148,11 @@
         .btn-outline:hover { transform: translate(-4px, -4px); box-shadow: var(--shadow-brutal); background: var(--fg); color: var(--bg); }
 
         /* Forms */
-        .form-group { margin-bottom: 35px; width: 100%; }
-        .form-input { width: 100%; padding: 20px; background: transparent; border: none; border-bottom: var(--border-heavy); color: var(--fg); font-size: 1.1rem; font-family: var(--font-mono); transition: var(--transition); border-radius: 0; }
-        .form-input:focus { border-color: #fff; background: rgba(255,255,255,0.05); }
+        .contact-form-box { padding: 5rem 4rem; display: flex; flex-direction: column; justify-content: center; }
+        @media (max-width: 768px) { .contact-form-box { padding: 3rem 2rem; } }
+        .form-group { margin-bottom: 45px; width: 100%; }
+        .form-input { width: 100%; padding: 25px 15px; background: transparent; border: none; border-bottom: var(--border-heavy); color: var(--fg); font-size: 1.2rem; font-family: var(--font-mono); transition: var(--transition); border-radius: 0; }
+        .form-input:focus { border-color: #fff; background: rgba(255,255,255,0.05); outline: none; }
 
         /* Grids */
         .grid-2 { display: grid; grid-template-columns: 1fr; gap: 40px; width: 100%; }
@@ -254,7 +256,7 @@
         .manifesto-list li:hover { padding-left: 3rem; color: #888; background: rgba(255,255,255,0.05); }
 
         .sidebar-panel { display: flex; flex-direction: column; gap: 30px; }
-        .sidebar-block { border: var(--border-heavy); padding: 40px; transition: var(--transition); background: var(--bg); }
+        .sidebar-block { border: var(--border-heavy); padding: 50px 40px; transition: var(--transition); background: var(--bg); }
         .sidebar-block.highlight { background: var(--fg); color: var(--bg); }
 
         /* --- FOOTER ARCHITECTURE --- */
@@ -729,37 +731,37 @@
                         <p>Transmit project parameters to our secure line.</p>
                     </div>
                     
-                    <div class="split-layout">
+                    <div class="split-layout" style="gap: 80px; align-items: start;">
                         <div>
-                            <form id="whatsapp-form" class="brutal-box">
+                            <form id="whatsapp-form" class="brutal-box contact-form-box">
                                 <div class="form-group">
                                     <input type="text" id="wa-name" class="form-input" placeholder="[INPUT_FIELD NAME: ____________ ]" required>
                                 </div>
                                 <div class="form-group">
                                     <input type="email" id="wa-email" class="form-input" placeholder="[INPUT_FIELD EMAIL: ___________ ]" required>
                                 </div>
-                                <div class="form-group" style="margin-bottom: 50px;">
-                                    <textarea id="wa-message" class="form-input" style="height: 120px; resize: none;" placeholder="[INPUT_FIELD MESSAGE: _________ ]" required></textarea>
+                                <div class="form-group" style="margin-bottom: 60px;">
+                                    <textarea id="wa-message" class="form-input" style="height: 180px; resize: vertical;" placeholder="[INPUT_FIELD MESSAGE: _________ ]" required></textarea>
                                 </div>
-                                <button type="submit" class="btn-primary scrambler" style="width: 100%;">TRANSMIT DATA // ↗</button>
+                                <button type="submit" class="btn-primary scrambler" style="width: 100%; padding: 1.5rem;">TRANSMIT DATA // ↗</button>
                             </form>
                         </div>
                         
                         <div class="sidebar-panel">
-                            <div class="sidebar-block highlight brutal-box">
-                                <h4 class="mono-text" style="color: var(--bg); font-size: 1.1rem; margin-bottom: 15px;">TRANSMISSION SLA</h4>
-                                <p style="font-family: var(--font-display); font-size: 1.5rem; line-height: 1.2;">All inquiries receive a structural review within 12 operating hours.</p>
+                            <div class="sidebar-block highlight brutal-box" style="padding: 50px 40px;">
+                                <h4 class="mono-text" style="color: var(--bg); font-size: 1.2rem; margin-bottom: 20px;">TRANSMISSION SLA</h4>
+                                <p style="font-family: var(--font-display); font-size: 1.8rem; line-height: 1.2;">All inquiries receive a structural review within 12 operating hours.</p>
                             </div>
 
-                            <div class="sidebar-block invert-hover brutal-box">
-                                <h4 class="mono-text" style="font-size: 1.1rem; margin-bottom: 15px;">DIRECT COMMS</h4>
-                                <a href="mailto:trade@digital.com" target="_blank" class="scrambler mono-text" style="display: block; font-size: 1.3rem; margin-top: 10px; cursor: pointer; font-weight: 800;">trade@digital.com</a>
-                                <p class="scrambler mono-text" style="font-size: 1.3rem; margin-top: 10px; cursor: pointer; font-weight: 800;">+91 7646846030</p>
+                            <div class="sidebar-block invert-hover brutal-box" style="padding: 50px 40px;">
+                                <h4 class="mono-text" style="font-size: 1.2rem; margin-bottom: 20px;">DIRECT COMMS</h4>
+                                <a href="mailto:trade@digital.com" target="_blank" class="scrambler mono-text" style="display: block; font-size: 1.5rem; margin-top: 10px; cursor: pointer; font-weight: 800;">trade@digital.com</a>
+                                <p class="scrambler mono-text" style="font-size: 1.5rem; margin-top: 15px; cursor: pointer; font-weight: 800;">+91 7646846030</p>
                             </div>
                             
-                            <div class="sidebar-block invert-hover brutal-box">
-                                <h4 class="mono-text" style="font-size: 1.1rem; margin-bottom: 15px;">HEADQUARTERS</h4>
-                                <p style="font-family: var(--font-display); font-size: 1.5rem; text-transform: uppercase; line-height: 1.2;">Teknaar Chowk, Awarbhata<br>Dantewada, Chhattisgarh</p>
+                            <div class="sidebar-block invert-hover brutal-box" style="padding: 50px 40px;">
+                                <h4 class="mono-text" style="font-size: 1.2rem; margin-bottom: 20px;">HEADQUARTERS</h4>
+                                <p style="font-family: var(--font-display); font-size: 1.8rem; text-transform: uppercase; line-height: 1.2;">Teknaar Chowk, Awarbhata<br>Dantewada, Chhattisgarh</p>
                             </div>
                         </div>
                     </div>
@@ -780,12 +782,12 @@
 
         <div class="footer-menus">
             <div class="footer-links mono-text">
-                <h4>DISCIPLINES</h4>
+                <h4>LEGAL & POLICIES</h4>
                 <ul>
-                    <li><a href="#services" class="nav-trigger scrambler" data-target="view-services">Web Architecture</a></li>
-                    <li><a href="#services" class="nav-trigger scrambler" data-target="view-services">Shopify Dev</a></li>
-                    <li><a href="#services" class="nav-trigger scrambler" data-target="view-services">Brand Identity</a></li>
-                    <li><a href="#services" class="nav-trigger scrambler" data-target="view-services">Graphic Systems</a></li>
+                    <li><a href="#" class="scrambler">Privacy Policy</a></li>
+                    <li><a href="#" class="scrambler">Terms of Service</a></li>
+                    <li><a href="#" class="scrambler">Refund Policy</a></li>
+                    <li><a href="#" class="scrambler">Cookie Policy</a></li>
                 </ul>
             </div>
 
@@ -800,19 +802,19 @@
             </div>
             
             <div class="footer-links mono-text">
-                <h4>SOCIAL GRID</h4>
+                <h4>EXTERNAL NODES</h4>
                 <ul>
-                    <li><a href="https://instagram.com" class="scrambler" target="_blank">Instagram</a></li>
-                    <li><a href="https://behance.net" class="scrambler" target="_blank">Behance</a></li>
-                    <li><a href="https://linkedin.com" class="scrambler" target="_blank">LinkedIn</a></li>
-                    <li><a href="https://twitter.com" class="scrambler" target="_blank">X (Twitter)</a></li>
+                    <li><a href="https://www.instagram.com/digitaltrade.ai?igsh=eXo2OTM3dHFrd2ds" class="scrambler" target="_blank">Instagram</a></li>
+                    <li><a href="https://pin.it/4h4tCK0pp" class="scrambler" target="_blank">Pinterest</a></li>
+                    <li><a href="https://drive.google.com/drive/folders/1XteHizeNIl9MrOOQgcNbJc51s2g1Uqit?usp=sharing" class="scrambler" target="_blank">Portfolio Drive</a></li>
+                    <li><a href="https://drive.google.com/drive/folders/174L5uJtrfoIHunC644RHR-4dUVua4Xy4?usp=sharing" class="scrambler" target="_blank">Logo Vault</a></li>
                 </ul>
             </div>
         </div>
 
         <div class="footer-bottom mono-text">
             <p>© 2026 DIGITAL TRADE. ALL RIGHTS RESERVED.</p>
-            <p>ARCHITECT: INDRAJEET PISDA | BUILD 4.0 (COMPLETE OS)</p>
+            <p>ARCHITECT: INDRAJEET PISDA | BUILD 4.5 (REFINED)</p>
         </div>
     </footer>
 
