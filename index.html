@@ -253,7 +253,7 @@
         .sidebar-block { border: var(--border-heavy); padding: 40px; transition: var(--transition); background: var(--bg); }
         .sidebar-block.highlight { background: var(--fg); color: var(--bg); }
 
-        /* --- 5. UPDATED FOOTER ARCHITECTURE --- */
+        /* --- FOOTER ARCHITECTURE --- */
         footer { border-top: var(--border-heavy); padding: 100px 0 40px; font-family: var(--font-mono); font-size: 0.9rem; text-align: center; }
         
         .footer-top-center { display: flex; flex-direction: column; align-items: center; margin-bottom: 80px; }
@@ -273,7 +273,7 @@
         .footer-bottom { display: flex; flex-direction: column; gap: 20px; color: #666; text-transform: uppercase; font-weight: 800; }
         @media(min-width: 768px) { .footer-bottom { flex-direction: row; justify-content: space-between; align-items: center; } }
 
-        /* --- 6. MOBILE SIDEBAR MENU --- */
+        /* --- MOBILE SIDEBAR MENU --- */
         @media (max-width: 1024px) {
             .header-actions .btn-primary { display: none; }
             .mobile-toggle { display: block; width: 50px; height: 50px; border: var(--border-heavy); background: var(--bg); position: relative; z-index: 90001; transition: var(--transition); cursor: none; }
@@ -337,7 +337,7 @@
 
                 <div class="mobile-menu-footer">
                     <div style="font-size: 0.9rem; color: #888; margin-bottom: 25px; line-height: 1.5; font-weight: 800;">TEKNAAR CHOWK, AWARBHATA<br>DANTEWADA, CG</div>
-                    <a href="#contact" class="nav-trigger" data-target="view-contact" style="font-size: 1.2rem; font-weight: 800; border-bottom: 2px solid #fff; padding-bottom: 5px; width: fit-content; margin-bottom: 40px; color: #fff;">EMAIL US</a>
+                    <a href="mailto:trade@digital.com" target="_blank" class="nav-trigger" style="font-size: 1.2rem; font-weight: 800; border-bottom: 2px solid #fff; padding-bottom: 5px; width: fit-content; margin-bottom: 40px; color: #fff;">EMAIL US</a>
                     <div style="font-size: 0.8rem; color: #555; font-weight: 800;">©2026 DIGITAL TRADE</div>
                 </div>
             </nav>
@@ -751,7 +751,7 @@
 
                             <div class="sidebar-block invert-hover brutal-box">
                                 <h4 class="mono-text" style="font-size: 1.1rem; margin-bottom: 15px;">DIRECT COMMS</h4>
-                                <p class="scrambler mono-text" style="font-size: 1.3rem; margin-top: 10px; cursor: pointer; font-weight: 800;">trade@digital.com</p>
+                                <a href="mailto:trade@digital.com" target="_blank" class="scrambler mono-text" style="display: block; font-size: 1.3rem; margin-top: 10px; cursor: pointer; font-weight: 800;">trade@digital.com</a>
                                 <p class="scrambler mono-text" style="font-size: 1.3rem; margin-top: 10px; cursor: pointer; font-weight: 800;">+91 7646846030</p>
                             </div>
                             
@@ -800,17 +800,17 @@
             <div class="footer-links mono-text">
                 <h4>SOCIAL GRID</h4>
                 <ul>
-                    <li><a href="#" class="scrambler" target="_blank">Instagram</a></li>
-                    <li><a href="#" class="scrambler" target="_blank">Behance</a></li>
-                    <li><a href="#" class="scrambler" target="_blank">LinkedIn</a></li>
-                    <li><a href="#" class="scrambler" target="_blank">X (Twitter)</a></li>
+                    <li><a href="https://instagram.com" class="scrambler" target="_blank">Instagram</a></li>
+                    <li><a href="https://behance.net" class="scrambler" target="_blank">Behance</a></li>
+                    <li><a href="https://linkedin.com" class="scrambler" target="_blank">LinkedIn</a></li>
+                    <li><a href="https://twitter.com" class="scrambler" target="_blank">X (Twitter)</a></li>
                 </ul>
             </div>
         </div>
 
         <div class="footer-bottom mono-text">
             <p>© 2026 DIGITAL TRADE. ALL RIGHTS RESERVED.</p>
-            <p>ARCHITECT: INDRAJEET PISDA | BUILD 2.2 (STRUCTURAL)</p>
+            <p>ARCHITECT: INDRAJEET PISDA | BUILD 2.3 (SECURE)</p>
         </div>
     </footer>
 
@@ -839,7 +839,7 @@
                 });
             });
 
-            // --- 1. ADVANCED CANVAS TRAIL CURSOR (Integrated with Brutal Theme) ---
+            // --- 1. ADVANCED CANVAS TRAIL CURSOR ---
             if (!isTouchDevice && window.innerWidth > 1024) {
                 const canvas = document.getElementById('cursor-canvas');
                 const ctx = canvas.getContext('2d');
@@ -952,7 +952,7 @@
             });
             navOverlayBg.addEventListener('click', closeMobileNav);
 
-            // --- 4. ADVANCED SPA ROUTING ---
+            // --- 4. ADVANCED SPA ROUTING (SAFEGUARDED FOR _BLANK) ---
             const views = document.querySelectorAll('.view-section');
 
             window.navigateTo = function(targetId) {
@@ -985,13 +985,16 @@
 
             document.querySelectorAll('.nav-trigger').forEach(trigger => {
                 trigger.addEventListener('click', function(e) {
-                    if(this.getAttribute('target') !== '_blank') {
-                        e.preventDefault();
-                        const targetId = this.getAttribute('data-target');
-                        if(document.getElementById(targetId) && document.getElementById(targetId).classList.contains('active')){ closeMobileNav(); return; }
-                        navigateTo(targetId);
-                        history.pushState(null, null, `#${targetId.replace('view-', '')}`);
+                    // IF THE LINK IS EXPLICITLY MARKED AS _BLANK, DO NOT INTERFERE
+                    if(this.getAttribute('target') === '_blank') {
+                        return; // Let the browser open it in a new tab naturally
                     }
+                    
+                    e.preventDefault();
+                    const targetId = this.getAttribute('data-target');
+                    if(document.getElementById(targetId) && document.getElementById(targetId).classList.contains('active')){ closeMobileNav(); return; }
+                    navigateTo(targetId);
+                    history.pushState(null, null, `#${targetId.replace('view-', '')}`);
                 });
             });
 
@@ -1010,7 +1013,7 @@
                 });
             });
 
-            // --- 6. WHATSAPP FORM LOGIC ---
+            // --- 6. WHATSAPP FORM LOGIC (FORCED NEW TAB) ---
             const waForm = document.getElementById('whatsapp-form');
             if (waForm) {
                 waForm.addEventListener('submit', function(event) {
