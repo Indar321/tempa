@@ -108,6 +108,10 @@
         body.nav-active .nav-overlay-bg { opacity: 1; visibility: visible; }
 
         /* SPACING MAINTENANCE */
+        .view-section { display: none; min-height: 100vh; padding-top: var(--header-height); opacity: 0; width: 100%; }
+        .view-section.active { display: block; opacity: 1; animation: smoothFadeUp 0.6s cubic-bezier(0.19, 1, 0.22, 1) forwards; }
+        @keyframes smoothFadeUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
+
         .section-padding { padding: 120px 0; width: 100%; position: relative; border-bottom: var(--border-light); }
         .section-header { margin-bottom: 80px; display: flex; flex-direction: column; gap: 20px; }
         .section-header h2 { font-family: var(--font-display); font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 800; text-transform: uppercase; line-height: 1; letter-spacing: -1px; margin: 0;}
@@ -285,7 +289,6 @@
             .mobile-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(4px, 4px); }
             .mobile-toggle.active span:nth-child(2) { transform: rotate(-45deg) translate(3px, -3px); }
 
-            /* Updated Sidebar Style */
             .nav-links { 
                 position: fixed; top: 0; right: -100%; left: auto; 
                 width: 85vw; max-width: 450px; height: 100vh; 
@@ -306,7 +309,6 @@
             
             .mobile-menu-footer { display: flex; margin-top: auto; padding-top: 60px; flex-direction: column; font-family: var(--font-mono); width: 100%; }
             
-            /* Disable canvas cursor on mobile to prevent overflow/lag */
             #cursor-canvas, .custom-cursor-dot { display: none !important; }
         }
         @media (min-width: 1025px) { .mobile-toggle, .mobile-menu-footer { display: none; } }
@@ -810,7 +812,7 @@
 
         <div class="footer-bottom mono-text">
             <p>© 2026 DIGITAL TRADE. ALL RIGHTS RESERVED.</p>
-            <p>ARCHITECT: INDRAJEET PISDA | BUILD 2.3 (SECURE)</p>
+            <p>ARCHITECT: INDRAJEET PISDA | BUILD 4.0 (COMPLETE OS)</p>
         </div>
     </footer>
 
@@ -952,7 +954,7 @@
             });
             navOverlayBg.addEventListener('click', closeMobileNav);
 
-            // --- 4. ADVANCED SPA ROUTING (SAFEGUARDED FOR _BLANK) ---
+            // --- 4. ADVANCED SPA ROUTING (GLITCH EFFECT NAV) ---
             const views = document.querySelectorAll('.view-section');
 
             window.navigateTo = function(targetId) {
@@ -985,9 +987,9 @@
 
             document.querySelectorAll('.nav-trigger').forEach(trigger => {
                 trigger.addEventListener('click', function(e) {
-                    // IF THE LINK IS EXPLICITLY MARKED AS _BLANK, DO NOT INTERFERE
+                    // IF THE LINK IS EXPLICITLY MARKED AS _BLANK, LET IT OPEN NATURALLY
                     if(this.getAttribute('target') === '_blank') {
-                        return; // Let the browser open it in a new tab naturally
+                        return; 
                     }
                     
                     e.preventDefault();
