@@ -1,611 +1,803 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TRADEX — Digital Trade</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-<style>
-  :root {
-    /* Original TRADEX Color Palette Restored */
-    --bg-dark: #0A0A0A;
-    --surface: #1A1A1A;
-    --surface-sunken: #111111;
-    --neon-accent: #CAFF00; /* Original Yellow */
-    --neon-glow: rgba(202, 255, 0, 0.4);
-    --neon-glow-strong: rgba(202, 255, 0, 0.8);
-    --text-main: #F5F5F0;
-    --text-muted: #888888;
-    --border-color: #2A2A2A;
-    --border-highlight: rgba(255, 255, 255, 0.05);
-  }
-
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    background-color: var(--bg-dark);
-    /* Grid Background */
-    background-image: 
-      linear-gradient(var(--border-highlight) 1px, transparent 1px),
-      linear-gradient(90deg, var(--border-highlight) 1px, transparent 1px);
-    background-size: 40px 40px;
-    font-family: 'Inter', sans-serif;
-    color: var(--text-main);
-    overflow-x: hidden;
-  }
-
-  /* Custom Glowing Cursor */
-  .cursor {
-    width: 8px; height: 8px;
-    background: var(--neon-accent);
-    box-shadow: 0 0 10px var(--neon-accent);
-    border-radius: 50%;
-    position: fixed; top: 0; left: 0;
-    pointer-events: none; z-index: 9999;
-    transition: transform 0.1s ease;
-  }
-  .cursor-ring {
-    width: 40px; height: 40px;
-    border: 1px solid var(--neon-accent);
-    border-radius: 50%;
-    position: fixed; top: 0; left: 0;
-    pointer-events: none; z-index: 9998;
-    box-shadow: inset 0 0 10px var(--neon-glow), 0 0 10px var(--neon-glow);
-    transition: transform 0.25s ease, width 0.2s, height 0.2s;
-  }
-
-  /* Typography */
-  h1, h2, h3, .logo-text {
-    font-weight: 700;
-    letter-spacing: 0.02em;
-  }
-  .mono {
-    font-family: 'Space Mono', monospace;
-  }
-
-  /* =========================================
-     NAV - 6th Style
-     ========================================= */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    background: rgba(10, 10, 10, 0.85);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border-color);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-    display: grid; 
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center;
-    padding: 0 3rem;
-    height: 70px;
-  }
-  .nav-left {
-    display: flex; gap: 2.5rem; justify-content: flex-start;
-  }
-  .nav-right {
-    display: flex; gap: 2.5rem; justify-content: flex-end; align-items: center;
-  }
-  .nav-logo {
-    font-size: 1.8rem;
-    color: var(--text-main);
-    letter-spacing: 0.15em;
-    text-shadow: 0 0 15px rgba(255,255,255,0.1);
-  }
-  nav a {
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: var(--text-muted);
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.3s, text-shadow 0.3s;
-  }
-  nav a:hover, nav a.active { 
-    color: var(--neon-accent); 
-    text-shadow: 0 0 8px var(--neon-glow);
-  }
-  .nav-icons {
-    display: flex; align-items: center; gap: 1.5rem;
-  }
-  .search-box {
-    background: var(--surface-sunken);
-    border: 1px solid var(--border-color);
-    border-radius: 20px;
-    padding: 0.4rem 1rem;
-    display: flex; align-items: center; gap: 0.5rem;
-    transition: all 0.3s ease;
-  }
-  .search-box:focus-within {
-    border-color: var(--neon-accent);
-    box-shadow: 0 0 10px var(--neon-glow);
-  }
-  .search-box input {
-    background: transparent; border: none; outline: none;
-    color: var(--text-main); font-size: 0.7rem; width: 100px;
-  }
-  .search-box svg { fill: var(--text-muted); width: 14px; height: 14px; }
-
-  /* =========================================
-     UI COMPONENTS (Cards & Buttons)
-     ========================================= */
-  .ui-card {
-    background: var(--surface);
-    border: 1px solid var(--border-color);
-    border-radius: 16px;
-    padding: 2rem;
-    box-shadow: 8px 8px 16px rgba(0,0,0,0.6);
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-  }
-  .ui-card::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
-  }
-  .ui-card:hover {
-    border-color: var(--neon-glow-strong);
-    box-shadow: 0 0 20px var(--neon-glow);
-    transform: translateY(-3px);
-  }
-
-  .ui-btn {
-    background: var(--neon-accent);
-    color: #000;
-    border: none;
-    padding: 0.8rem 1.8rem;
-    border-radius: 30px; /* Pill shape */
-    font-weight: 700;
-    font-size: 0.8rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    cursor: pointer;
-    box-shadow: 0 4px 15px var(--neon-glow);
-    transition: all 0.2s ease;
-    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
-  }
-  .ui-btn:hover {
-    background: #e1ff55;
-    box-shadow: 0 6px 20px var(--neon-glow-strong);
-    transform: translateY(-2px);
-  }
-  .ui-btn-secondary {
-    background: var(--surface);
-    color: var(--text-main);
-    border: 1px solid var(--border-color);
-    box-shadow: none;
-  }
-  .ui-btn-secondary:hover {
-    background: var(--surface-sunken);
-    border-color: var(--neon-accent);
-    color: var(--neon-accent);
-    box-shadow: 0 0 15px var(--neon-glow);
-  }
-
-  /* Chip/Toggle */
-  .ui-chip {
-    background: var(--surface-sunken);
-    border: 1px solid var(--border-color);
-    color: var(--text-muted);
-    padding: 0.4rem 1rem;
-    border-radius: 20px;
-    font-size: 0.7rem;
-    cursor: pointer;
-    transition: all 0.3s;
-  }
-  .ui-chip.active {
-    background: rgba(202, 255, 0, 0.1);
-    border-color: var(--neon-accent);
-    color: var(--neon-accent);
-    box-shadow: 0 0 10px var(--neon-glow);
-  }
-
-  /* Inputs */
-  .ui-input {
-    width: 100%;
-    background: var(--surface-sunken);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    padding: 1rem;
-    color: var(--text-main);
-    font-family: 'Space Mono', monospace;
-    font-size: 0.8rem;
-    outline: none;
-    transition: all 0.3s;
-  }
-  .ui-input:focus {
-    border-color: var(--neon-accent);
-    box-shadow: 0 0 12px var(--neon-glow);
-  }
-
-  /* =========================================
-     LAYOUT SECTIONS
-     ========================================= */
-  section { padding: 6rem 3rem; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
-  
-  /* HERO */
-  #hero {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;
-    padding-top: 120px; align-items: center;
-  }
-  .hero-text h1 {
-    font-size: clamp(3rem, 6vw, 5.5rem);
-    line-height: 1.1; margin-bottom: 1.5rem;
-  }
-  .hero-text h1 span {
-    color: var(--neon-accent);
-    text-shadow: 0 0 20px var(--neon-glow);
-  }
-  .hero-sub {
-    color: var(--text-muted); line-height: 1.6; margin-bottom: 2.5rem;
-    max-width: 400px; font-size: 0.95rem;
-  }
-  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
-  .hero-stats {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
-  }
-  .stat-card .mono { font-size: 2.5rem; color: var(--neon-accent); margin-bottom: 0.5rem; display: block;}
-  .stat-card span { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); }
-
-  /* CATALOG (MARKET) */
-  .section-header {
-    display: flex; justify-content: space-between; align-items: flex-end;
-    margin-bottom: 3rem; flex-wrap: wrap; gap: 1rem;
-  }
-  .section-title { font-size: 2.5rem; letter-spacing: 0.05em; }
-  .filter-group { display: flex; gap: 0.8rem; flex-wrap: wrap; }
-  
-  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
-  
-  .product-card { padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; }
-  .product-img {
-    background: var(--surface-sunken);
-    border-radius: 12px; height: 180px;
-    display: flex; align-items: center; justify-content: center;
-    position: relative;
-    border: 1px solid var(--border-color);
-  }
-  .badge {
-    position: absolute; top: 1rem; left: 1rem;
-    background: var(--neon-accent); color: #000;
-    font-size: 0.6rem; font-weight: 700; padding: 0.2rem 0.6rem;
-    border-radius: 10px; text-transform: uppercase;
-  }
-  .product-info { display: flex; justify-content: space-between; align-items: center; }
-  .product-title { font-size: 1.1rem; font-weight: 500; }
-  .product-price { color: var(--neon-accent); font-weight: 700; }
-
-  /* TEAM */
-  .team-grid {
-    display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem;
-  }
-  .member-card { text-align: center; }
-  .avatar {
-    width: 120px; height: 120px; border-radius: 50%;
-    margin: 0 auto 1.5rem;
-    background: var(--surface-sunken);
-    border: 2px solid var(--border-color);
-    display: flex; align-items: center; justify-content: center;
-    transition: border-color 0.3s, box-shadow 0.3s;
-  }
-  .member-card:hover .avatar {
-    border-color: var(--neon-accent);
-    box-shadow: 0 0 20px var(--neon-glow);
-  }
-
-  /* CONTACT / CART SPLIT */
-  .split-section {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;
-  }
-  .form-group { margin-bottom: 1.5rem; }
-  .form-group label {
-    display: block; font-size: 0.7rem; color: var(--text-muted);
-    margin-bottom: 0.5rem; letter-spacing: 0.1em; text-transform: uppercase;
-  }
-
-  /* CART SPECIFICS */
-  .cart-item {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 1rem; background: var(--surface-sunken);
-    border-radius: 12px; margin-bottom: 1rem;
-    border: 1px solid var(--border-color);
-  }
-  .cart-total-box {
-    background: rgba(202, 255, 0, 0.05);
-    border: 1px solid var(--neon-accent);
-    border-radius: 16px; padding: 1.5rem;
-    margin-top: 2rem; box-shadow: 0 0 15px var(--neon-glow);
-  }
-  .cart-row { display: flex; justify-content: space-between; margin-bottom: 0.8rem; font-size: 0.9rem; }
-  .cart-row.grand { font-size: 1.5rem; color: var(--neon-accent); font-weight: 700; margin-top: 1rem; border-top: 1px solid var(--border-color); padding-top: 1rem;}
-
-  /* Scroll reveal */
-  .reveal {
-    opacity: 0; transform: translateY(20px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
-  }
-  .reveal.visible { opacity: 1; transform: translateY(0); }
-
-  /* =========================================
-     MOBILE RESPONSIVENESS
-     ========================================= */
-  @media (max-width: 1024px) {
-    .team-grid { grid-template-columns: repeat(2, 1fr); }
-  }
-
-  @media (max-width: 768px) {
-    /* Hide custom cursor on mobile */
-    .cursor, .cursor-ring { display: none; }
-
-    /* Nav adjustments */
-    nav {
-      padding: 0 1.5rem;
-      grid-template-columns: auto 1fr;
-      height: 60px;
-    }
-    .nav-left, .nav-right > a { display: none; }
-    .nav-right { justify-content: flex-end; }
-    .search-box { width: 140px; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DIGITAL TRADE | Precision Architecture</title>
     
-    /* Layout adjustments */
-    section { padding: 4rem 1.5rem; min-height: auto; }
-    
-    #hero {
-      grid-template-columns: 1fr;
-      gap: 3rem;
-      padding-top: 100px;
-      text-align: center;
-    }
-    .hero-sub { margin: 0 auto 2.5rem; }
-    .hero-actions { justify-content: center; }
-    
-    .hero-stats { grid-template-columns: 1fr; }
-    
-    .grid-3 { grid-template-columns: 1fr; }
-    
-    .split-section { grid-template-columns: 1fr; gap: 3rem; }
-  }
-</style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;700;800&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+
+    <style>
+        /* CSS VARIABLES */
+        :root {
+            --bg: #050505;
+            --fg: #f4f4f5;
+            --accent: #ff3333; /* Used sparingly for terminal errors/alerts */
+            --font-display: 'Space Grotesk', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --border-heavy: 3px solid var(--fg);
+            --border-light: 1px solid rgba(244, 244, 245, 0.2);
+            --border-dashed: 1px dashed rgba(244, 244, 245, 0.4);
+            --shadow-brutal: 8px 8px 0 var(--fg);
+        }
+
+        /* RESET & BASE */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none; /* Custom cursor */
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--fg);
+            font-family: var(--font-body);
+            line-height: 1.5;
+            overflow-x: hidden;
+            /* Subtle Grid Architecture Background */
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            background-position: center top;
+        }
+
+        ::selection {
+            background: var(--fg);
+            color: var(--bg);
+        }
+
+        /* CUSTOM CURSOR */
+        .cursor-dot, .cursor-outline {
+            position: fixed;
+            top: 0; left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 9999;
+            pointer-events: none;
+        }
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--fg);
+            mix-blend-mode: difference;
+        }
+        .cursor-outline {
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+            mix-blend-mode: difference;
+        }
+
+        /* TYPOGRAPHY */
+        h1, h2, h3, h4 {
+            font-family: var(--font-display);
+            text-transform: uppercase;
+            line-height: 1.1;
+        }
+        
+        .mono-text {
+            font-family: var(--font-mono);
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+
+        /* LAYOUT & CONTAINERS */
+        .container {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        section {
+            padding: 6rem 0;
+            border-bottom: var(--border-light);
+        }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+
+        /* BRUTALIST UI ELEMENTS */
+        .brutal-box {
+            border: var(--border-heavy);
+            padding: 2rem;
+            background: var(--bg);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+        }
+        .brutal-box:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: var(--shadow-brutal);
+        }
+
+        .invert-hover {
+            transition: background 0.3s, color 0.3s;
+        }
+        .invert-hover:hover {
+            background: var(--fg);
+            color: var(--bg);
+        }
+        .invert-hover:hover .mono-text { color: var(--bg); }
+
+        .btn {
+            display: inline-block;
+            font-family: var(--font-mono);
+            text-transform: uppercase;
+            padding: 1rem 2rem;
+            background: var(--fg);
+            color: var(--bg);
+            border: var(--border-heavy);
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.2s;
+            position: relative;
+        }
+        .btn:hover {
+            background: var(--bg);
+            color: var(--fg);
+            box-shadow: 6px 6px 0 var(--fg);
+            transform: translate(-2px, -2px);
+        }
+
+        /* GLITCH EFFECT */
+        .glitch {
+            position: relative;
+            display: inline-block;
+        }
+        .glitch::before, .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg);
+        }
+        .glitch::before {
+            left: 2px;
+            text-shadow: -2px 0 var(--fg);
+            clip: rect(24px, 550px, 90px, 0);
+            animation: glitch-anim 3s infinite linear alternate-reverse;
+        }
+        .glitch::after {
+            left: -2px;
+            text-shadow: -2px 0 var(--fg);
+            clip: rect(85px, 550px, 140px, 0);
+            animation: glitch-anim 2.5s infinite linear alternate-reverse;
+        }
+        @keyframes glitch-anim {
+            0% { clip: rect(10px, 9999px, 31px, 0); }
+            5% { clip: rect(70px, 9999px, 11px, 0); }
+            10% { clip: rect(40px, 9999px, 61px, 0); }
+            15% { clip: rect(90px, 9999px, 21px, 0); }
+            20% { clip: rect(20px, 9999px, 81px, 0); }
+            25% { clip: rect(60px, 9999px, 41px, 0); }
+            100% { clip: rect(60px, 9999px, 41px, 0); }
+        }
+
+        /* BLINKING CURSOR */
+        .blink { animation: blinker 1s linear infinite; }
+        @keyframes blinker { 50% { opacity: 0; } }
+
+        /* HEADER & NAV */
+        header.nav-header {
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: var(--border-heavy);
+            position: sticky;
+            top: 0;
+            background: rgba(5, 5, 5, 0.9);
+            backdrop-filter: blur(5px);
+            z-index: 100;
+        }
+        .logo {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            letter-spacing: -1px;
+        }
+        .menu-btn {
+            font-family: var(--font-mono);
+            background: none;
+            border: none;
+            color: var(--fg);
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* HERO SECTION */
+        .hero {
+            padding: 8rem 0;
+            border-bottom: var(--border-heavy);
+        }
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 8rem);
+            letter-spacing: -0.05em;
+            margin-bottom: 2rem;
+        }
+        .hero-terminal {
+            font-family: var(--font-mono);
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 1.5rem;
+            display: inline-block;
+            margin-bottom: 3rem;
+            background: rgba(255,255,255,0.02);
+        }
+        .status-online { color: #00ff00; }
+        
+        .hero-split {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            align-items: end;
+        }
+        .hero-image-block {
+            width: 100%;
+            height: 300px;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                var(--fg) 10px,
+                var(--fg) 12px
+            );
+            border: var(--border-heavy);
+        }
+
+        /* MARQUEE */
+        .marquee-wrapper {
+            background: var(--fg);
+            color: var(--bg);
+            padding: 1rem 0;
+            overflow: hidden;
+            white-space: nowrap;
+            display: flex;
+            border-top: var(--border-heavy);
+            border-bottom: var(--border-heavy);
+            transform: rotate(-1deg) scale(1.02);
+            position: relative;
+            z-index: 10;
+        }
+        .marquee-content {
+            display: flex;
+            animation: scroll 20s linear infinite;
+        }
+        .marquee-content span {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            padding: 0 2rem;
+            text-transform: uppercase;
+        }
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* PROCESS SECTION */
+        .process-num {
+            font-family: var(--font-display);
+            font-size: 5rem;
+            line-height: 1;
+            margin-bottom: 1rem;
+            border-bottom: var(--border-heavy);
+            padding-bottom: 1rem;
+        }
+        
+        /* STATS SECTION */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            border: var(--border-heavy);
+        }
+        .stat-item {
+            padding: 3rem 2rem;
+            border-right: var(--border-heavy);
+            border-bottom: var(--border-heavy);
+        }
+        .stat-item:nth-child(4n) { border-right: none; }
+        .stat-item:nth-child(n+5) { border-bottom: none; }
+        .stat-num {
+            font-family: var(--font-display);
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        /* ABOUT / PHILOSOPHY */
+        .manifesto-list {
+            list-style: none;
+        }
+        .manifesto-list li {
+            font-family: var(--font-mono);
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            font-weight: 800;
+            border-bottom: var(--border-light);
+            padding: 0.5rem 0;
+            display: flex;
+            justify-content: space-between;
+        }
+        .manifesto-list li:hover {
+            padding-left: 20px;
+            transition: padding-left 0.2s;
+            color: #888;
+        }
+        .manifesto-text {
+            font-size: 1.5rem;
+            max-width: 600px;
+        }
+
+        /* PORTFOLIO */
+        .portfolio-card {
+            border: var(--border-heavy);
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 1.5rem;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        .portfolio-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            transition: background 0.3s;
+        }
+        .portfolio-card:hover::before { background: rgba(0,0,0,0); }
+        .portfolio-card > * { position: relative; z-index: 2; }
+
+        /* PRICING */
+        .price-card {
+            border: var(--border-heavy);
+            padding: 3rem 2rem;
+        }
+        .price-tier {
+            font-family: var(--font-mono);
+            border: 1px solid var(--fg);
+            display: inline-block;
+            padding: 0.2rem 1rem;
+            margin-bottom: 2rem;
+        }
+        .price-amount {
+            font-family: var(--font-display);
+            font-size: 4rem;
+            border-bottom: var(--border-dashed);
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+        }
+        .price-code {
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        /* FAQ ACCORDION */
+        .faq-item {
+            border-bottom: var(--border-heavy);
+        }
+        .faq-question {
+            width: 100%;
+            text-align: left;
+            background: none;
+            border: none;
+            color: var(--fg);
+            font-family: var(--font-mono);
+            font-size: 1.2rem;
+            padding: 2rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            color: #aaa;
+            padding-bottom: 0;
+        }
+        .faq-item.active .faq-answer {
+            padding-bottom: 2rem;
+        }
+        .faq-icon {
+            font-size: 1.5rem;
+            transition: transform 0.3s;
+        }
+        .faq-item.active .faq-icon {
+            transform: rotate(45deg);
+        }
+
+        /* CONTACT FORM */
+        .contact-form input, .contact-form textarea {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: var(--border-heavy);
+            color: var(--fg);
+            font-family: var(--font-mono);
+            font-size: 1.2rem;
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+        }
+        .contact-form input:focus, .contact-form textarea:focus {
+            outline: none;
+            border-color: #fff;
+            background: rgba(255,255,255,0.05);
+        }
+        
+        /* FOOTER */
+        footer {
+            padding: 4rem 0;
+            border-top: var(--border-heavy);
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+        }
+        
+        /* MOBILE RESPONSIVE */
+        @media (max-width: 1024px) {
+            .grid-4 { grid-template-columns: repeat(2, 1fr); }
+            .hero-split { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .grid-2, .grid-3 { grid-template-columns: 1fr; }
+            .stat-grid { grid-template-columns: 1fr; border-right: var(--border-heavy); }
+            .stat-item { border-right: none; }
+            .hero h1 { font-size: 3.5rem; }
+            .manifesto-list li { font-size: 1.8rem; }
+        }
+    </style>
 </head>
 <body>
 
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
 
-<nav>
-  <div class="nav-left">
-    <a href="#hero" class="active">HOME</a>
-    <a href="#catalog">PRODUCTS</a>
-  </div>
-  <div class="nav-logo logo-text">TRADEX</div>
-  <div class="nav-right">
-    <a href="#team">ABOUT US</a>
-    <a href="#contact">CONTACTS</a>
-    <div class="nav-icons">
-      <div class="search-box">
-        <input type="text" placeholder="Search...">
-        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-      </div>
-    </div>
-  </div>
-</nav>
+    <header class="nav-header">
+        <div class="logo">DIGITAL TRADE</div>
+        <button class="menu-btn">[ MENU ] <span class="blink">_</span></button>
+    </header>
 
-<section id="hero">
-  <div class="hero-text reveal">
-    <div class="ui-chip active" style="display:inline-block; margin-bottom: 1.5rem;">System OS Online</div>
-    <h1>TRADE<br><span>DIGITAL</span><br>ASSETS</h1>
-    <p class="hero-sub">Buy, sell, and exchange software licenses, API access, structured datasets, and premium components in a secure ecosystem.</p>
-    <div class="hero-actions">
-      <button class="ui-btn">Engage Market →</button>
-      <button class="ui-btn ui-btn-secondary mono">View Docs</button>
-    </div>
-  </div>
-  
-  <div class="hero-stats reveal" style="transition-delay: 0.2s;">
-    <div class="ui-card stat-card">
-      <span class="mono">14K+</span>
-      <span>Active Nodes</span>
-    </div>
-    <div class="ui-card stat-card">
-      <span class="mono">$2.4M</span>
-      <span>Volume (24h)</span>
-    </div>
-    <div class="ui-card stat-card" style="grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center;">
-      <div>
-        <span style="color: var(--neon-accent); font-weight: bold; font-size: 1.2rem;">Live Market Data</span>
-        <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 0.3rem;">Latency: 12ms</div>
-      </div>
-      <div style="width: 60px; height: 30px; background: var(--surface-sunken); border-radius: 15px; border: 1px solid var(--neon-accent); position: relative; box-shadow: 0 0 10px var(--neon-glow);">
-        <div style="width: 24px; height: 24px; background: var(--neon-accent); border-radius: 50%; position: absolute; right: 2px; top: 2px; box-shadow: 0 0 8px var(--neon-glow);"></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="catalog">
-  <div class="section-header reveal">
-    <h2 class="section-title">MARKET<span style="color: var(--neon-accent);">_</span></h2>
-    <div class="filter-group mono">
-      <div class="ui-chip active">All</div>
-      <div class="ui-chip">APIs</div>
-      <div class="ui-chip">Data</div>
-      <div class="ui-chip">Models</div>
-    </div>
-  </div>
-  
-  <div class="grid-3">
-    <div class="ui-card product-card reveal">
-      <div class="product-img">
-        <span class="badge">HOT</span>
-        <span class="mono" style="color: #444;">COMMERCE_API</span>
-      </div>
-      <div class="product-info">
-        <div class="product-title">Commerce API Suite</div>
-        <div class="product-price mono">$89.00</div>
-      </div>
-      <button class="ui-btn ui-btn-secondary" style="width: 100%;">Initialize ←</button>
-    </div>
-    
-    <div class="ui-card product-card reveal" style="transition-delay: 0.1s;">
-      <div class="product-img">
-        <span class="mono" style="color: #444;">DATA_VOL_4</span>
-      </div>
-      <div class="product-info">
-        <div class="product-title">Market Dataset Vol.4</div>
-        <div class="product-price mono">$290.00</div>
-      </div>
-      <button class="ui-btn ui-btn-secondary" style="width: 100%;">Initialize ←</button>
-    </div>
-
-    <div class="ui-card product-card reveal" style="transition-delay: 0.2s;">
-      <div class="product-img">
-        <span class="badge" style="background: #F5F5F0;">NEW</span>
-        <span class="mono" style="color: #444;">AUTO_KIT_V2</span>
-      </div>
-      <div class="product-info">
-        <div class="product-title">Dev Automation Kit</div>
-        <div class="product-price mono">$45.00</div>
-      </div>
-      <button class="ui-btn ui-btn-secondary" style="width: 100%;">Initialize ←</button>
-    </div>
-  </div>
-</section>
-
-<section id="team">
-  <div class="section-header reveal">
-    <h2 class="section-title">OPERATORS<span style="color: var(--neon-accent);">_</span></h2>
-  </div>
-  <div class="team-grid">
-    <div class="ui-card member-card reveal">
-      <div class="avatar mono" style="color: var(--text-muted); font-size: 0.8rem;">AC</div>
-      <h3 style="margin-bottom: 0.3rem;">Aria Chen</h3>
-      <p style="font-size: 0.7rem; color: var(--neon-accent); text-transform: uppercase; letter-spacing: 0.1em;">Lead Trader</p>
-    </div>
-    <div class="ui-card member-card reveal" style="transition-delay: 0.1s;">
-      <div class="avatar mono" style="color: var(--text-muted); font-size: 0.8rem;">KO</div>
-      <h3 style="margin-bottom: 0.3rem;">Kai Okafor</h3>
-      <p style="font-size: 0.7rem; color: var(--neon-accent); text-transform: uppercase; letter-spacing: 0.1em;">API Architect</p>
-    </div>
-    <div class="ui-card member-card reveal" style="transition-delay: 0.2s;">
-      <div class="avatar mono" style="color: var(--text-muted); font-size: 0.8rem;">MV</div>
-      <h3 style="margin-bottom: 0.3rem;">Mira Volkov</h3>
-      <p style="font-size: 0.7rem; color: var(--neon-accent); text-transform: uppercase; letter-spacing: 0.1em;">Data Curator</p>
-    </div>
-    <div class="ui-card member-card reveal" style="transition-delay: 0.3s;">
-      <div class="avatar mono" style="color: var(--text-muted); font-size: 0.8rem;">DS</div>
-      <h3 style="margin-bottom: 0.3rem;">Dev Santos</h3>
-      <p style="font-size: 0.7rem; color: var(--neon-accent); text-transform: uppercase; letter-spacing: 0.1em;">Tokenomics</p>
-    </div>
-  </div>
-</section>
-
-<section id="contact">
-  <div class="split-section">
-    <div class="ui-card reveal">
-      <h2 class="section-title" style="font-size: 1.8rem; margin-bottom: 2rem;">COMMS_LINK</h2>
-      <div class="form-group">
-        <label>Identity String (Name)</label>
-        <input type="text" class="ui-input" placeholder="Enter identity">
-      </div>
-      <div class="form-group">
-        <label>Network Address (Email)</label>
-        <input type="email" class="ui-input" placeholder="sys@network.io">
-      </div>
-      <div class="form-group">
-        <label>Data Payload (Message)</label>
-        <textarea class="ui-input" rows="4" placeholder="Transmit message..."></textarea>
-      </div>
-      <button class="ui-btn">Transmit Payload</button>
-    </div>
-
-    <div class="reveal" style="display: flex; flex-direction: column;">
-      <h2 class="section-title" style="font-size: 1.8rem; margin-bottom: 2rem; color: var(--text-muted);">ACTIVE_CART</h2>
-      
-      <div class="cart-item">
-        <div>
-          <div style="font-weight: 500; margin-bottom: 0.2rem;">Commerce API Suite</div>
-          <div class="ui-chip" style="display: inline-block; padding: 0.2rem 0.5rem; font-size: 0.6rem;">Qty: 1</div>
+    <section class="hero container" style="border-bottom: none;">
+        <div class="hero-split">
+            <div>
+                <div class="hero-terminal">
+                    <div>[SYSTEM STATUS: <span class="status-online">ONLINE</span>]</div>
+                    <div>> MISSION: RE-ENGINEERING DIGITAL ENVIRONMENTS</div>
+                    <div>> AWAITING INPUT<span class="blink">_</span></div>
+                </div>
+                <h1 class="glitch" data-text="PRECISION ARCHITECTURE">PRECISION<br>ARCHITECTURE</h1>
+                <a href="#contact" class="btn" data-cursor="hover">INITIATE PROJECT</a>
+            </div>
+            <div class="hero-image-block brutal-box"></div>
         </div>
-        <div class="mono" style="color: var(--neon-accent);">$89.00</div>
-      </div>
+    </section>
 
-      <div class="cart-item">
-        <div>
-          <div style="font-weight: 500; margin-bottom: 0.2rem;">AI Inference License</div>
-          <div class="ui-chip" style="display: inline-block; padding: 0.2rem 0.5rem; font-size: 0.6rem;">Qty: 1</div>
+    <div class="marquee-wrapper">
+        <div class="marquee-content">
+            <span>// BRANDING // UI/UX // WEB DEVELOPMENT // DESIGN SYSTEMS // AUTOMATION //</span>
+            <span>// BRANDING // UI/UX // WEB DEVELOPMENT // DESIGN SYSTEMS // AUTOMATION //</span>
+            <span>// BRANDING // UI/UX // WEB DEVELOPMENT // DESIGN SYSTEMS // AUTOMATION //</span>
+            <span>// BRANDING // UI/UX // WEB DEVELOPMENT // DESIGN SYSTEMS // AUTOMATION //</span>
         </div>
-        <div class="mono" style="color: var(--neon-accent);">$35.00</div>
-      </div>
-
-      <div class="cart-total-box">
-        <div class="cart-row">
-          <span>Subtotal</span>
-          <span class="mono">$124.00</span>
-        </div>
-        <div class="cart-row">
-          <span>Network Fee (Tax)</span>
-          <span class="mono">$12.40</span>
-        </div>
-        <div class="cart-row grand">
-          <span>TOTAL</span>
-          <span class="mono">$136.40</span>
-        </div>
-        <button class="ui-btn" style="width: 100%; margin-top: 1.5rem;">Execute Transaction</button>
-      </div>
     </div>
-  </div>
-</section>
 
-<script>
-  // Custom Cursor Logic (Only runs on desktop devices)
-  if (window.innerWidth > 768) {
-    const cursor = document.getElementById('cursor');
-    const ring = document.getElementById('cursorRing');
-    let mx = 0, my = 0, rx = 0, ry = 0;
-    
-    document.addEventListener('mousemove', e => { 
-      mx = e.clientX; my = e.clientY; 
-    });
-    
-    function animateCursor() {
-      cursor.style.transform = `translate(${mx - 4}px, ${my - 4}px)`;
-      rx += (mx - rx) * 0.15;
-      ry += (my - ry) * 0.15;
-      ring.style.transform = `translate(${rx - 20}px, ${ry - 20}px)`;
-      requestAnimationFrame(animateCursor);
-    }
-    animateCursor();
+    <section id="process" class="container">
+        <div class="grid-3">
+            <div class="brutal-box invert-hover">
+                <div class="process-num">01</div>
+                <h3 class="mono-text" style="margin-bottom: 1rem;">SYSTEM ANALYSIS</h3>
+                <p>Deconstructing current operational frameworks to identify structural weaknesses and digital friction points.</p>
+                <br>
+                <div class="mono-text" style="color: #666;">
+                    - LOG.DATA<br>
+                    - USER.BEHAVIOR<br>
+                    - METRICS.SCAN
+                </div>
+            </div>
+            <div class="brutal-box invert-hover">
+                <div class="process-num">02</div>
+                <h3 class="mono-text" style="margin-bottom: 1rem;">STRUCTURAL BUILD</h3>
+                <p>Architecting scalable design systems and robust backend integrations utilizing brutalist principles.</p>
+                <br>
+                <div class="mono-text" style="color: #666;">
+                    - WIREFRAME.GEN<br>
+                    - COMPONENT.LIB<br>
+                    - API.CONNECT
+                </div>
+            </div>
+            <div class="brutal-box invert-hover">
+                <div class="process-num">03</div>
+                <h3 class="mono-text" style="margin-bottom: 1rem;">DEPLOYMENT</h3>
+                <p>Execution of front-end deliverables and continuous monitoring of system integrity post-launch.</p>
+                <br>
+                <div class="mono-text" style="color: #666;">
+                    - PUSH.PROD<br>
+                    - QA.TEST<br>
+                    - MONITOR.ACT
+                </div>
+            </div>
+        </div>
+    </section>
 
-    // Hover effects for cursor on interactive elements
-    const interactives = document.querySelectorAll('a, button, .ui-chip, .ui-card');
-    interactives.forEach(el => {
-      el.addEventListener('mouseenter', () => {
-        ring.style.width = '60px';
-        ring.style.height = '60px';
-        ring.style.transform = `translate(${rx - 30}px, ${ry - 30}px)`;
-        ring.style.backgroundColor = 'rgba(202, 255, 0, 0.1)';
-      });
-      el.addEventListener('mouseleave', () => {
-        ring.style.width = '40px';
-        ring.style.height = '40px';
-        ring.style.backgroundColor = 'transparent';
-      });
-    });
-  }
+    <section id="stats" class="container">
+        <div class="stat-grid">
+            <div class="stat-item">
+                <div class="stat-num glitch" data-text="150+">150+</div>
+                <div class="mono-text">[PROJECTS_SHIPPED]</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num">99%</div>
+                <div class="mono-text">[UPTIME_GUARANTEE]</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num">12</div>
+                <div class="mono-text">[GLOBAL_AWARDS]</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num glitch" data-text="'89">'89</div>
+                <div class="mono-text">[AGENCY_FOUNDED]</div>
+            </div>
+        </div>
+    </section>
 
-  // Filter Chips Toggle
-  document.querySelectorAll('.filter-group .ui-chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-      document.querySelectorAll('.filter-group .ui-chip').forEach(c => c.classList.remove('active'));
-      chip.classList.add('active');
-    });
-  });
+    <section id="about" class="container">
+        <div class="grid-2">
+            <div>
+                <p class="manifesto-text" style="font-weight: 600; margin-bottom: 2rem;">
+                    WE ARE AN INDUSTRIAL DIGITAL DESIGN FIRM. WE BELIEVE IN FUNCTION OVER FRILLS, BOLD TYPOGRAPHY, AND STRUCTURAL INTEGRITY. NO FLUFF. JUST PRECISION ARCHITECTURE FOR THE MODERN WEB.
+                </p>
+                <div class="mono-text" style="border: 1px solid var(--fg); padding: 1rem; display: inline-block;">
+                    SYS_ADMIN: DIGITAL_TRADE<br>
+                    LOCATION: SECTOR_04<br>
+                    STATUS: ACTIVE
+                </div>
+            </div>
+            <div>
+                <ul class="manifesto-list">
+                    <li>METHOD <span class="mono-text" style="font-size: 0.8rem;">[01]</span></li>
+                    <li>SYSTEM <span class="mono-text" style="font-size: 0.8rem;">[02]</span></li>
+                    <li>BUILD <span class="mono-text" style="font-size: 0.8rem;">[03]</span></li>
+                    <li>INDEX <span class="mono-text" style="font-size: 0.8rem;">[04]</span></li>
+                    <li>PLAYER <span class="mono-text" style="font-size: 0.8rem;">[05]</span></li>
+                    <li>MODULE <span class="mono-text" style="font-size: 0.8rem;">[06]</span></li>
+                </ul>
+            </div>
+        </div>
+    </section>
 
-  // Scroll Reveal Observer
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-  }, { threshold: 0.1 });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-</script>
+    <section id="work" class="container">
+        <div style="display: flex; justify-content: space-between; align-items: end; margin-bottom: 3rem;">
+            <h2>CASE STUDIES</h2>
+            <div class="mono-text">[VIEW_ALL_INDEX]</div>
+        </div>
+        <div class="grid-2">
+            <div class="brutal-box invert-hover" style="grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; padding: 0;">
+                <div style="padding: 3rem;">
+                    <h3 style="font-size: 3rem; margin-bottom: 1rem;">NEXUS OS</h3>
+                    <p class="mono-text" style="margin-bottom: 2rem;">[SYSTEM REDESIGN]</p>
+                    <p>Complete structural overhaul of a fintech dashboard using brutalist high-contrast metrics.</p>
+                </div>
+                <div style="background: #222; border-left: var(--border-heavy); min-height: 300px;">
+                    </div>
+            </div>
+            
+            <div class="portfolio-card" style="background-color: #111;">
+                <h3 class="mono-text">AEROCORP</h3>
+                <div style="margin-top: auto;">
+                    <div class="mono-text" style="border-top: var(--border-light); padding-top: 1rem;">WEB DEVELOPMENT</div>
+                </div>
+            </div>
+            <div class="portfolio-card" style="background-color: #1a1a1a;">
+                <h3 class="mono-text">SYNDICATE LOGISTICS</h3>
+                <div style="margin-top: auto;">
+                    <div class="mono-text" style="border-top: var(--border-light); padding-top: 1rem;">BRANDING / UI</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing" class="container">
+        <h2 style="margin-bottom: 3rem;">DEPLOYMENT TIERS</h2>
+        <div class="grid-3">
+            <div class="price-card brutal-box">
+                <div class="price-tier">BASIC.EXE</div>
+                <div class="price-amount">$5K</div>
+                <div class="price-code">
+                    {<br>
+                    &nbsp;&nbsp;pages: 5,<br>
+                    &nbsp;&nbsp;design: "brutal",<br>
+                    &nbsp;&nbsp;cms: false,<br>
+                    &nbsp;&nbsp;support: "email"<br>
+                    }
+                </div>
+            </div>
+            <div class="price-card brutal-box" style="background: var(--fg); color: var(--bg);">
+                <div class="price-tier" style="border-color: var(--bg);">PRO.EXE</div>
+                <div class="price-amount" style="border-color: var(--bg);">$12K</div>
+                <div class="price-code" style="color: #333;">
+                    {<br>
+                    &nbsp;&nbsp;pages: 15,<br>
+                    &nbsp;&nbsp;design: "customized",<br>
+                    &nbsp;&nbsp;cms: "headless",<br>
+                    &nbsp;&nbsp;support: "priority"<br>
+                    }
+                </div>
+            </div>
+            <div class="price-card brutal-box">
+                <div class="price-tier">ENTERPRISE.EXE</div>
+                <div class="price-amount">CUSTOM</div>
+                <div class="price-code">
+                    {<br>
+                    &nbsp;&nbsp;pages: "infinite",<br>
+                    &nbsp;&nbsp;systems: "integrated",<br>
+                    &nbsp;&nbsp;sla: "99.9%",<br>
+                    &nbsp;&nbsp;contact: "direct_line"<br>
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="faq" class="container">
+        <div class="grid-2">
+            <div>
+                <h2>SYSTEM QUERIES</h2>
+                <div class="mono-text" style="margin-top: 1rem;">[FAQ_INDEX_DB]</div>
+            </div>
+            <div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        WHAT IS YOUR STANDARD DEPLOYMENT TIMELINE?
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Standard architectural builds typically run between 6 to 8 weeks depending on systemic complexity and API integrations required.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        DO YOU HANDLE BACKEND INFRASTRUCTURE?
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Yes. We build full-stack solutions utilizing headless CMS architectures and edge computing nodes.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        CAN WE REQUEST REVISIONS POST-LAUNCH?
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Post-launch modifications are handled via our SLA retainers. Structural integrity must be maintained through formal ticketing.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="container">
+        <div class="grid-2">
+            <div>
+                <h2 style="font-size: 4rem; margin-bottom: 2rem;">ESTABLISH<br>CONNECTION</h2>
+                <div class="brutal-box" style="display: inline-block; padding: 1rem;">
+                    <div class="mono-text" style="margin-bottom: 0.5rem;">[ DIRECT COMMS ]</div>
+                    <a href="#" class="btn" style="width: 100%; text-align: center;">WHATSAPP INTEGRATION // ↗</a>
+                </div>
+            </div>
+            <div>
+                <form class="contact-form" onsubmit="event.preventDefault();">
+                    <input type="text" placeholder="[INPUT_FIELD NAME: ____________ ]">
+                    <input type="email" placeholder="[INPUT_FIELD EMAIL: ___________ ]">
+                    <textarea rows="4" placeholder="[INPUT_FIELD MESSAGE: _________ ]"></textarea>
+                    <button type="submit" class="btn" style="width: 100%;">TRANSMIT DATA</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer class="container">
+        <div class="grid-3" style="border-bottom: var(--border-heavy); padding-bottom: 2rem; margin-bottom: 2rem;">
+            <div>
+                <div class="logo">DIGITAL TRADE</div>
+                <p style="margin-top: 1rem; color: #888;">© 2026 SYSTEM ARCHITECTS.</p>
+            </div>
+            <div>
+                <div style="margin-bottom: 1rem;">// INDEX</div>
+                <ul style="list-style: none; line-height: 2;">
+                    <li><a href="#" style="color: var(--fg); text-decoration: none;">SERVICES</a></li>
+                    <li><a href="#" style="color: var(--fg); text-decoration: none;">METHODOLOGY</a></li>
+                    <li><a href="#" style="color: var(--fg); text-decoration: none;">TERMINAL</a></li>
+                </ul>
+            </div>
+            <div style="text-align: right;">
+                <div style="border: 1px solid var(--fg); padding: 1rem; display: inline-block; text-align: left;">
+                    SYS_CLOCK: <span id="clock" class="blink">00:00:00</span><br>
+                    SERVER: EU-WEST-1<br>
+                    END_OF_FILE.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Custom Cursor Logic
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+
+        window.addEventListener('mousemove', (e) => {
+            const posX = e.clientX;
+            const posY = e.clientY;
+
+            // Dot follows exactly
+            cursorDot.style.left = `${posX}px`;
+            cursorDot.style.top = `${posY}px`;
+
+            // Outline follows with slight delay using animation frame
+            cursorOutline.animate({
+                left: `${posX}px`,
+                top: `${posY}px`
+            }, { duration: 500, fill: "forwards" });
+        });
+
+        // Add cursor hover effects to links and buttons
+        const interactables = document.querySelectorAll('a, button, .invert-hover');
+        interactables.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursorOutline.style.width = '60px';
+                cursorOutline.style.height = '60px';
+                cursorOutline.style.backgroundColor = 'rgba(255,255,255,0.1)';
+            });
+            el.addEventListener('mouseleave', () => {
+                cursorOutline.style.width = '40px';
+                cursorOutline.style.height = '40px';
+                cursorOutline.style.backgroundColor = 'transparent';
+            });
+        });
+
+        // FAQ Accordion Logic
+        const faqItems = document.querySelectorAll('.faq-item');
+        faqItems.forEach(item => {
+            const btn = item.querySelector('.faq-question');
+            btn.addEventListener('click', () => {
+                // Close others
+                faqItems.forEach(otherItem => {
+                    if (otherItem !== item) {
+                        otherItem.classList.remove('active');
+                        otherItem.querySelector('.faq-answer').style.maxHeight = null;
+                    }
+                });
+                
+                // Toggle current
+                item.classList.toggle('active');
+                const answer = item.querySelector('.faq-answer');
+                if (item.classList.contains('active')) {
+                    answer.style.maxHeight = answer.scrollHeight + 40 + "px"; // 40 for padding
+                } else {
+                    answer.style.maxHeight = null;
+                }
+            });
+        });
+
+        // Simple Clock for Footer Terminal
+        function updateClock() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('en-US', { hour12: false });
+            document.getElementById('clock').textContent = timeStr;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
 </body>
 </html>
