@@ -12,7 +12,7 @@
 
     <style>
         /* ==========================================
-           1. CORE VARIABLES & BRUTALIST SETUP (THEME 1 AESTHETIC)
+           1. CORE VARIABLES & BRUTALIST SETUP
            ========================================== */
         :root {
             --bg: #050505;
@@ -26,7 +26,7 @@
             --border-light: 1px solid rgba(244, 244, 245, 0.2);
             --border-dashed: 1px dashed rgba(244, 244, 245, 0.4);
             --shadow-brutal: 8px 8px 0 var(--fg);
-            --transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+            --transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
             --header-height: 90px;
         }
 
@@ -90,47 +90,41 @@
         .toast.show { transform: translateX(0); }
 
         /* ==========================================
-           3. DESKTOP HEADER
+           3. DESKTOP HEADER & GLOBAL SPACING
            ========================================== */
         header { position: fixed; top: 0; left: 0; width: 100%; height: var(--header-height); display: flex; justify-content: center; align-items: center; z-index: 90000; background: rgba(5, 5, 5, 0.9); backdrop-filter: blur(5px); border-bottom: var(--border-heavy); transition: var(--transition); }
         .header-inner { display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 1440px; padding: 0 5%;}
         
         .logo a { font-family: var(--font-display); font-size: 1.8rem; font-weight: 800; letter-spacing: -1px; text-transform: uppercase; display: flex; align-items: center; }
         
-        .nav-links { display: flex; gap: 30px; }
+        .nav-links { display: flex; gap: 40px; }
         .nav-links a { font-family: var(--font-mono); font-size: 0.95rem; font-weight: 700; text-transform: uppercase; position: relative; padding: 5px 0; color: var(--fg); }
         .nav-links a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px; background: var(--fg); transform: scaleX(0); transform-origin: right; transition: transform 0.3s cubic-bezier(0.19, 1, 0.22, 1); }
         .nav-links a:hover::after, .nav-links a.active-link::after { transform: scaleX(1); transform-origin: left; }
 
         .header-actions { display: flex; gap: 20px; align-items: center; }
         
-        .nav-overlay-bg { position: fixed; inset: 0; background: rgba(5,5,5,0.95); backdrop-filter: blur(5px); z-index: 89999; opacity: 0; visibility: hidden; transition: var(--transition); }
+        .nav-overlay-bg { position: fixed; inset: 0; background: rgba(5,5,5,0.8); backdrop-filter: blur(3px); z-index: 89999; opacity: 0; visibility: hidden; transition: var(--transition); }
         body.nav-active .nav-overlay-bg { opacity: 1; visibility: visible; }
 
-        /* ==========================================
-           4. GLOBAL COMPONENTS & LAYOUTS
-           ========================================== */
-        .view-section { display: none; min-height: 100vh; padding-top: var(--header-height); opacity: 0; width: 100%; }
-        .view-section.active { display: block; opacity: 1; animation: smoothFadeUp 0.6s cubic-bezier(0.19, 1, 0.22, 1) forwards; }
-        #view-home.active { padding-top: var(--header-height); } 
-        @keyframes smoothFadeUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
-
-        .section-padding { padding: 100px 0; width: 100%; position: relative; border-bottom: var(--border-light); }
-        
-        .section-header { margin-bottom: 60px; display: flex; flex-direction: column; gap: 15px; }
+        /* SPACING MAINTENANCE */
+        .section-padding { padding: 120px 0; width: 100%; position: relative; border-bottom: var(--border-light); }
+        .section-header { margin-bottom: 80px; display: flex; flex-direction: column; gap: 20px; }
         .section-header h2 { font-family: var(--font-display); font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 800; text-transform: uppercase; line-height: 1; letter-spacing: -1px; margin: 0;}
         .section-header h2 span { color: var(--fg); border-bottom: var(--border-heavy); }
-        .section-header p { font-family: var(--font-mono); font-size: 1rem; font-weight: 700; text-transform: uppercase; color: #aaa; }
-        .text-body { font-size: 1.1rem; color: #ccc; margin-bottom: 25px; line-height: 1.7; }
+        .section-header p { font-family: var(--font-mono); font-size: 1.1rem; font-weight: 700; text-transform: uppercase; color: #aaa; }
+        
+        @media (max-width: 768px) {
+            .section-padding { padding: 80px 0; }
+            .section-header { margin-bottom: 50px; }
+            .hero { padding: 6rem 0 3rem !important; }
+        }
+
+        .text-body { font-size: 1.1rem; color: #ccc; margin-bottom: 25px; line-height: 1.8; }
 
         /* Brutalist Buttons & Boxes */
-        .brutal-box {
-            border: var(--border-heavy);
-            padding: 2rem;
-            background: var(--bg);
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            position: relative;
-        }
+        .brutal-box { border: var(--border-heavy); padding: 3rem 2.5rem; background: var(--bg); transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); position: relative; }
+        @media (max-width: 768px) { .brutal-box { padding: 2rem 1.5rem; } }
         .brutal-box:hover { transform: translate(-4px, -4px); box-shadow: var(--shadow-brutal); }
 
         .invert-hover { transition: background 0.3s, color 0.3s; }
@@ -140,7 +134,7 @@
         .magnetic-wrap { display: inline-block; position: relative; }
         .btn-primary, .btn-outline { 
             display: inline-flex; justify-content: center; align-items: center; 
-            padding: 1rem 2rem; font-family: var(--font-mono); font-size: 1rem; font-weight: 800; 
+            padding: 1.2rem 2.5rem; font-family: var(--font-mono); font-size: 1rem; font-weight: 800; 
             text-transform: uppercase; border: var(--border-heavy); transition: var(--transition); cursor: pointer; 
         }
         .btn-primary { background: var(--fg); color: var(--bg); box-shadow: 6px 6px 0 rgba(244,244,245,0.2); }
@@ -150,36 +144,35 @@
         .btn-outline:hover { transform: translate(-4px, -4px); box-shadow: var(--shadow-brutal); background: var(--fg); color: var(--bg); }
 
         /* Forms */
-        .form-group { margin-bottom: 30px; width: 100%; }
-        .form-label { display: block; text-transform: uppercase; font-family: var(--font-mono); font-size: 0.9rem; font-weight: 800; margin-bottom: 10px; color: #888; }
-        .form-input { width: 100%; padding: 18px; background: transparent; border: none; border-bottom: var(--border-heavy); color: var(--fg); font-size: 1.1rem; font-family: var(--font-mono); transition: var(--transition); border-radius: 0; }
+        .form-group { margin-bottom: 35px; width: 100%; }
+        .form-input { width: 100%; padding: 20px; background: transparent; border: none; border-bottom: var(--border-heavy); color: var(--fg); font-size: 1.1rem; font-family: var(--font-mono); transition: var(--transition); border-radius: 0; }
         .form-input:focus { border-color: #fff; background: rgba(255,255,255,0.05); }
 
         /* Grids */
         .grid-2 { display: grid; grid-template-columns: 1fr; gap: 40px; width: 100%; }
-        @media(min-width: 768px) { .grid-2 { grid-template-columns: 1fr 1fr; gap: 50px; } } 
-        .grid-3 { display: grid; grid-template-columns: 1fr; gap: 30px; width: 100%; }
-        @media(min-width: 768px) { .grid-3 { grid-template-columns: repeat(3, 1fr); gap: 2rem; } } 
+        @media(min-width: 768px) { .grid-2 { grid-template-columns: 1fr 1fr; gap: 60px; } } 
+        .grid-3 { display: grid; grid-template-columns: 1fr; gap: 40px; width: 100%; }
+        @media(min-width: 768px) { .grid-3 { grid-template-columns: repeat(3, 1fr); gap: 30px; } } 
         .grid-4 { display: grid; grid-template-columns: 1fr; gap: 20px; width: 100%; }
-        @media(min-width: 768px) { .grid-4 { grid-template-columns: repeat(2, 1fr); gap: 1rem; } }
-        @media(min-width: 1024px) { .grid-4 { grid-template-columns: repeat(4, 1fr); } }
+        @media(min-width: 768px) { .grid-4 { grid-template-columns: repeat(2, 1fr); gap: 20px; } }
+        @media(min-width: 1024px) { .grid-4 { grid-template-columns: repeat(4, 1fr); gap: 30px; } }
 
         /* Accordion / Interactive List */
         .interactive-list { width: 100%; }
         .interactive-item { border-bottom: var(--border-heavy); transition: var(--transition); position: relative;}
-        .interactive-header { width: 100%; text-align: left; padding: 30px 0; font-family: var(--font-mono); font-weight: 800; font-size: 1.2rem; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; color: var(--fg); z-index: 2; position: relative;}
-        .interactive-icon { font-size: 1.5rem; transition: transform 0.4s; }
+        .interactive-header { width: 100%; text-align: left; padding: 35px 0; font-family: var(--font-mono); font-weight: 800; font-size: 1.3rem; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; color: var(--fg); z-index: 2; position: relative;}
+        .interactive-icon { font-size: 1.8rem; transition: transform 0.4s; }
         .interactive-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; color: #aaa; }
         .interactive-item.active .interactive-icon { transform: rotate(45deg); }
-        .interactive-item.active .interactive-content { max-height: 800px; padding-bottom: 30px; }
+        .interactive-item.active .interactive-content { max-height: 800px; padding-bottom: 35px; }
 
         /* --- UI CARDS (Process, Stats, Work) --- */
-        .process-num { font-family: var(--font-display); font-size: 5rem; line-height: 1; margin-bottom: 1rem; border-bottom: var(--border-heavy); padding-bottom: 1rem; transition: var(--transition); }
+        .process-num { font-family: var(--font-display); font-size: 5rem; line-height: 1; margin-bottom: 1.5rem; border-bottom: var(--border-heavy); padding-bottom: 1rem; transition: var(--transition); }
         
         .stat-grid { display: grid; grid-template-columns: 1fr; border: var(--border-heavy); }
         @media(min-width: 768px) { .stat-grid { grid-template-columns: repeat(2, 1fr); } }
         @media(min-width: 1024px) { .stat-grid { grid-template-columns: repeat(4, 1fr); } }
-        .stat-item { padding: 3rem 2rem; border-bottom: var(--border-heavy); text-align: left; }
+        .stat-item { padding: 4rem 2.5rem; border-bottom: var(--border-heavy); text-align: left; }
         @media(min-width: 768px) {
             .stat-item:nth-child(odd) { border-right: var(--border-heavy); }
             .stat-item:nth-last-child(-n+2) { border-bottom: none; }
@@ -188,27 +181,27 @@
             .stat-item { border-right: var(--border-heavy); border-bottom: none; }
             .stat-item:nth-child(4n) { border-right: none; }
         }
-        .stat-number { font-family: var(--font-display); font-size: 4rem; margin-bottom: 1rem; line-height: 1; }
+        .stat-number { font-family: var(--font-display); font-size: 4.5rem; margin-bottom: 1rem; line-height: 1; }
 
         /* --- HERO VIEW --- */
-        .hero { padding: 8rem 0; border-bottom: var(--border-heavy); }
-        .hero-layout { display: grid; grid-template-columns: 1fr; gap: 40px; align-items: end; }
-        @media(min-width: 1024px) { .hero-layout { grid-template-columns: 1.5fr 1fr; gap: 60px; } }
+        .hero { padding: 10rem 0 6rem; border-bottom: var(--border-heavy); }
+        .hero-layout { display: grid; grid-template-columns: 1fr; gap: 60px; align-items: end; }
+        @media(min-width: 1024px) { .hero-layout { grid-template-columns: 1.5fr 1fr; gap: 80px; } }
         
-        .hero-terminal { font-family: var(--font-mono); border: var(--border-light); padding: 1.5rem; display: inline-block; margin-bottom: 3rem; background: rgba(255,255,255,0.02); font-size: 0.9rem; text-transform: uppercase; }
+        .hero-terminal { font-family: var(--font-mono); border: var(--border-light); padding: 1.5rem; display: inline-block; margin-bottom: 3.5rem; background: rgba(255,255,255,0.02); font-size: 0.9rem; text-transform: uppercase; }
         .hero-terminal .status-online { color: #00ff00; }
 
-        .hero h1 { font-family: var(--font-display); font-size: clamp(3rem, 7vw, 7rem); font-weight: 800; line-height: 1; margin-bottom: 2rem; letter-spacing: -0.05em; }
-        .hero p { font-size: 1.2rem; font-weight: 500; max-width: 600px; color: #ccc; margin-bottom: 3rem; border-left: var(--border-heavy); padding-left: 20px; }
+        .hero h1 { font-family: var(--font-display); font-size: clamp(3.5rem, 8vw, 7.5rem); font-weight: 800; line-height: 1; margin-bottom: 2.5rem; letter-spacing: -0.05em; }
+        .hero p { font-size: 1.3rem; font-weight: 500; max-width: 650px; color: #ccc; margin-bottom: 3.5rem; border-left: var(--border-heavy); padding-left: 25px; line-height: 1.6; }
 
-        .hero-img-box { width: 100%; height: 400px; background: repeating-linear-gradient( 45deg, transparent, transparent 10px, var(--fg) 10px, var(--fg) 12px ); border: var(--border-heavy); position: relative; overflow: hidden; }
+        .hero-img-box { width: 100%; height: 500px; background: repeating-linear-gradient( 45deg, transparent, transparent 10px, var(--fg) 10px, var(--fg) 12px ); border: var(--border-heavy); position: relative; overflow: hidden; padding: 0 !important; }
         .hero-img-box img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.5; mix-blend-mode: luminosity; }
         .hero-img-box:hover img { opacity: 1; mix-blend-mode: normal; }
 
         /* --- MARQUEE --- */
-        .marquee-container { background: var(--fg); color: var(--bg); padding: 1rem 0; overflow: hidden; white-space: nowrap; display: flex; border-top: var(--border-heavy); border-bottom: var(--border-heavy); transform: rotate(-1deg) scale(1.02); position: relative; z-index: 10; }
+        .marquee-container { background: var(--fg); color: var(--bg); padding: 1.5rem 0; overflow: hidden; white-space: nowrap; display: flex; border-top: var(--border-heavy); border-bottom: var(--border-heavy); transform: rotate(-1deg) scale(1.02); position: relative; z-index: 10; margin: 40px 0; }
         .marquee-content { display: flex; animation: scrollMarquee 20s linear infinite; }
-        .marquee-content span { font-family: var(--font-display); font-size: 2rem; padding: 0 2rem; text-transform: uppercase; font-weight: 800; }
+        .marquee-content span { font-family: var(--font-display); font-size: 2.5rem; padding: 0 3rem; text-transform: uppercase; font-weight: 800; }
         @keyframes scrollMarquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
         /* --- WORK GRID --- */
@@ -218,80 +211,103 @@
         .work-card:hover::before { background: rgba(0,0,0,0.1); }
         .work-card:hover { transform: translate(-6px, -6px); box-shadow: var(--shadow-brutal); }
         
-        .work-info { padding: 25px; position: relative; z-index: 2; display: flex; flex-direction: column; justify-content: space-between; height: 100%; }
-        .work-client { font-family: var(--font-mono); font-size: 1.5rem; font-weight: 800; text-transform: uppercase; }
-        .work-tags { font-family: var(--font-mono); font-size: 0.85rem; font-weight: 800; padding-top: 15px; border-top: var(--border-light); text-transform: uppercase; color: #ddd; }
+        .work-info { padding: 30px; position: relative; z-index: 2; display: flex; flex-direction: column; justify-content: space-between; height: 100%; }
+        .work-client { font-family: var(--font-mono); font-size: 1.8rem; font-weight: 800; text-transform: uppercase; }
+        .work-tags { font-family: var(--font-mono); font-size: 0.95rem; font-weight: 800; padding-top: 15px; border-top: var(--border-light); text-transform: uppercase; color: #ddd; }
 
         .featured-study { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr; border: var(--border-heavy); background: var(--bg); transition: var(--transition); }
         @media(min-width: 1024px) { .featured-study { grid-template-columns: 1fr 2fr; gap: 0; } }
         .featured-study:hover { transform: translate(-6px, -6px); box-shadow: var(--shadow-brutal); }
-        .fs-content { padding: 40px; display: flex; flex-direction: column; justify-content: center; }
-        .fs-img-wrap { background: #222; border-top: var(--border-heavy); min-height: 400px; position: relative; }
+        .fs-content { padding: 60px 40px; display: flex; flex-direction: column; justify-content: center; }
+        .fs-img-wrap { background: #222; border-top: var(--border-heavy); min-height: 450px; position: relative; }
         @media(min-width: 1024px) { .fs-img-wrap { border-top: none; border-left: var(--border-heavy); } }
         .fs-img { width: 100%; height: 100%; position: absolute; inset: 0; object-fit: cover; }
 
         /* --- PRICING CARDS --- */
-        .tier-card { border: var(--border-heavy); background: var(--bg); padding: 3rem 2rem; display: flex; flex-direction: column; transition: var(--transition); }
+        .tier-card { border: var(--border-heavy); background: var(--bg); padding: 4rem 3rem; display: flex; flex-direction: column; transition: var(--transition); }
         .tier-card.featured { background: var(--fg); color: var(--bg); }
         
-        .tier-name { font-family: var(--font-mono); font-size: 1rem; border: 1px solid var(--fg); display: inline-block; padding: 0.5rem 1rem; margin-bottom: 2rem; width: fit-content; }
+        .tier-name { font-family: var(--font-mono); font-size: 1.1rem; font-weight: 800; border: var(--border-heavy); display: inline-block; padding: 0.8rem 1.5rem; margin-bottom: 2.5rem; width: fit-content; }
         .tier-card.featured .tier-name { border-color: var(--bg); }
 
-        .tier-price { font-family: var(--font-display); font-size: 3.5rem; border-bottom: var(--border-dashed); padding-bottom: 1rem; margin-bottom: 2rem; line-height: 1; }
-        .tier-code { font-family: var(--font-mono); font-size: 0.9rem; color: #888; margin-bottom: 2rem; flex-grow: 1; }
+        .tier-price { font-family: var(--font-display); font-size: 4.5rem; border-bottom: var(--border-dashed); padding-bottom: 1.5rem; margin-bottom: 2.5rem; line-height: 1; }
+        .tier-code { font-family: var(--font-mono); font-size: 1rem; color: #888; margin-bottom: 3rem; flex-grow: 1; line-height: 1.8; }
         .tier-card.featured .tier-code { color: #555; border-color: var(--bg); }
 
         /* --- TERMINAL A LA CARTE --- */
-        .terminal-block { border: var(--border-heavy); padding: 30px; font-family: var(--font-mono); font-size: 0.9rem; width: 100%; }
-        .terminal-row { display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: var(--border-dashed); padding-bottom: 10px; }
+        .terminal-block { border: var(--border-heavy); padding: 40px; font-family: var(--font-mono); font-size: 1rem; width: 100%; }
+        .terminal-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: var(--border-dashed); padding-bottom: 15px; }
         .terminal-row:last-child { margin-bottom: 0; border-bottom: none; padding-bottom: 0; }
-        .t-price { background: var(--fg); color: var(--bg); padding: 0 5px; font-weight: 800; }
+        .t-price { background: var(--fg); color: var(--bg); padding: 4px 10px; font-weight: 800; }
 
         /* --- ABOUT & CONTACT LAYOUTS --- */
-        .split-layout { display: grid; grid-template-columns: 1fr; gap: 40px; }
+        .split-layout { display: grid; grid-template-columns: 1fr; gap: 60px; }
         @media(min-width: 1024px) { .split-layout { grid-template-columns: 1.5fr 1fr; } }
         
         .manifesto-list { list-style: none; border: var(--border-heavy); background: var(--bg); }
-        .manifesto-list li { font-family: var(--font-mono); font-size: 2rem; text-transform: uppercase; font-weight: 800; border-bottom: var(--border-light); padding: 1.5rem; display: flex; justify-content: space-between; transition: var(--transition); }
+        .manifesto-list li { font-family: var(--font-mono); font-size: 2rem; text-transform: uppercase; font-weight: 800; border-bottom: var(--border-light); padding: 2rem; display: flex; justify-content: space-between; transition: var(--transition); }
         .manifesto-list li:last-child { border-bottom: none; }
-        .manifesto-list li:hover { padding-left: 2.5rem; color: #888; background: rgba(255,255,255,0.05); }
+        .manifesto-list li:hover { padding-left: 3rem; color: #888; background: rgba(255,255,255,0.05); }
 
-        .sidebar-panel { display: flex; flex-direction: column; gap: 20px; }
-        .sidebar-block { border: var(--border-heavy); padding: 30px; transition: var(--transition); background: var(--bg); }
+        .sidebar-panel { display: flex; flex-direction: column; gap: 30px; }
+        .sidebar-block { border: var(--border-heavy); padding: 40px; transition: var(--transition); background: var(--bg); }
         .sidebar-block.highlight { background: var(--fg); color: var(--bg); }
 
-        /* --- FOOTER --- */
-        footer { border-top: var(--border-heavy); padding: 80px 0 40px; font-family: var(--font-mono); font-size: 0.85rem; }
-        .footer-grid { display: grid; grid-template-columns: 1fr; gap: 40px; margin-bottom: 60px; border-bottom: var(--border-heavy); padding-bottom: 60px; }
-        @media(min-width: 768px) { .footer-grid { grid-template-columns: 2fr 1fr 1fr 1fr; } }
+        /* --- 5. UPDATED FOOTER ARCHITECTURE --- */
+        footer { border-top: var(--border-heavy); padding: 100px 0 40px; font-family: var(--font-mono); font-size: 0.9rem; text-align: center; }
+        
+        .footer-top-center { display: flex; flex-direction: column; align-items: center; margin-bottom: 80px; }
+        .footer-brand { font-family: var(--font-display); font-size: clamp(3rem, 5vw, 4rem); font-weight: 800; margin-bottom: 20px; text-transform: uppercase; letter-spacing: -1px; }
+        .footer-top-center p { font-family: var(--font-body); font-size: 1.1rem; color: #888; max-width: 500px; margin-bottom: 40px; }
+        .system-status { border: var(--border-heavy); padding: 1.5rem 2rem; text-align: left; width: fit-content; font-weight: 800; background: var(--bg); }
 
-        .footer-brand h3 { font-family: var(--font-display); font-size: 2rem; font-weight: 800; margin-bottom: 20px; text-transform: uppercase; }
-        .footer-links h4 { font-size: 1rem; font-weight: 800; margin-bottom: 20px; text-transform: uppercase; color: #fff; }
-        .footer-links ul li { margin-bottom: 12px; }
-        .footer-links ul li a { color: #888; text-transform: uppercase; }
+        .footer-menus { display: flex; flex-wrap: wrap; justify-content: center; gap: 60px; margin-bottom: 100px; border-bottom: var(--border-heavy); padding-bottom: 80px; }
+        @media(min-width: 768px) { .footer-menus { gap: 100px; } }
+        
+        .footer-links { text-align: left; }
+        .footer-links h4 { font-size: 1.1rem; font-weight: 800; margin-bottom: 30px; text-transform: uppercase; color: #fff; border-bottom: var(--border-heavy); padding-bottom: 10px; display: inline-block;}
+        .footer-links ul li { margin-bottom: 15px; }
+        .footer-links ul li a { color: #888; text-transform: uppercase; font-weight: 600; }
         .footer-links ul li a:hover { color: var(--fg); }
 
-        .footer-bottom { display: flex; flex-direction: column; gap: 15px; color: #666; text-transform: uppercase; }
-        @media(min-width: 768px) { .footer-bottom { flex-direction: row; justify-content: space-between; } }
+        .footer-bottom { display: flex; flex-direction: column; gap: 20px; color: #666; text-transform: uppercase; font-weight: 800; }
+        @media(min-width: 768px) { .footer-bottom { flex-direction: row; justify-content: space-between; align-items: center; } }
 
-        /* --- MOBILE MENU --- */
+        /* --- 6. MOBILE SIDEBAR MENU --- */
         @media (max-width: 1024px) {
-            .header-actions .btn-outline { display: none; }
-            .mobile-toggle { display: block; width: 45px; height: 45px; border: var(--border-heavy); background: var(--bg); position: relative; z-index: 90001; transition: var(--transition); cursor: none; }
-            .mobile-toggle span { position: absolute; left: 8px; height: 3px; background: var(--fg); transition: var(--transition); pointer-events: none; width: 22px; }
-            .mobile-toggle span:nth-child(1) { top: 14px; }
-            .mobile-toggle span:nth-child(2) { top: 24px; }
+            .header-actions .btn-primary { display: none; }
+            .mobile-toggle { display: block; width: 50px; height: 50px; border: var(--border-heavy); background: var(--bg); position: relative; z-index: 90001; transition: var(--transition); cursor: none; }
+            .mobile-toggle span { position: absolute; left: 10px; height: 3px; background: var(--fg); transition: var(--transition); pointer-events: none; width: 24px; }
+            .mobile-toggle span:nth-child(1) { top: 17px; }
+            .mobile-toggle span:nth-child(2) { top: 27px; }
             .mobile-toggle.active { background: var(--fg); }
             .mobile-toggle.active span { background: var(--bg); }
             .mobile-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(4px, 4px); }
             .mobile-toggle.active span:nth-child(2) { transform: rotate(-45deg) translate(3px, -3px); }
 
-            .nav-links { position: fixed; top: 0; left: -100%; width: 100vw; height: 100vh; background: var(--bg); flex-direction: column; padding: 120px 40px 40px; z-index: 90000; transition: left 0.5s cubic-bezier(0.19, 1, 0.22, 1); overflow-y: auto; justify-content: flex-start; }
-            .nav-links.active { left: 0; }
-            .nav-links > a.nav-trigger { font-family: var(--font-display); font-size: 3rem; line-height: 1.1; font-weight: 800; text-transform: uppercase; width: 100%; padding: 10px 0; border-bottom: var(--border-light); }
+            /* Updated Sidebar Style */
+            .nav-links { 
+                position: fixed; top: 0; right: -100%; left: auto; 
+                width: 85vw; max-width: 450px; height: 100vh; 
+                background: var(--bg); border-left: var(--border-heavy);
+                flex-direction: column; padding: 120px 40px 40px; 
+                z-index: 90000; transition: right 0.5s cubic-bezier(0.19, 1, 0.22, 1); 
+                overflow-y: auto; justify-content: flex-start;
+                box-shadow: -15px 0 40px rgba(0,0,0,0.8);
+            }
+            .nav-links.active { right: 0; }
+            
+            .nav-links > a.nav-trigger { 
+                font-family: var(--font-display); font-size: 2.5rem; line-height: 1.2; 
+                font-weight: 800; text-transform: uppercase; width: 100%; 
+                padding: 15px 0; border-bottom: var(--border-light); 
+            }
             .nav-links > a.nav-trigger::after { display: none; } 
             
-            .mobile-menu-footer { display: flex; margin-top: auto; padding-top: 40px; flex-direction: column; font-family: var(--font-mono); width: 100%; }
+            .mobile-menu-footer { display: flex; margin-top: auto; padding-top: 60px; flex-direction: column; font-family: var(--font-mono); width: 100%; }
+            
+            /* Disable canvas cursor on mobile to prevent overflow/lag */
+            #cursor-canvas, .custom-cursor-dot { display: none !important; }
         }
         @media (min-width: 1025px) { .mobile-toggle, .mobile-menu-footer { display: none; } }
     </style>
@@ -320,9 +336,9 @@
                 <a href="#contact" class="nav-trigger scrambler" data-target="view-contact">Contact</a>
 
                 <div class="mobile-menu-footer">
-                    <div style="font-size: 0.8rem; color: #888; margin-bottom: 20px;">TEKNAAR CHOWK, AWARBHATA<br>DANTEWADA, CG</div>
-                    <a href="#contact" class="nav-trigger" data-target="view-contact" style="font-size: 1rem; border-bottom: 1px solid #fff; padding-bottom: 5px; width: fit-content; margin-bottom: 30px;">EMAIL US</a>
-                    <div style="font-size: 0.7rem; color: #555;">©2026 DIGITAL TRADE</div>
+                    <div style="font-size: 0.9rem; color: #888; margin-bottom: 25px; line-height: 1.5; font-weight: 800;">TEKNAAR CHOWK, AWARBHATA<br>DANTEWADA, CG</div>
+                    <a href="#contact" class="nav-trigger" data-target="view-contact" style="font-size: 1.2rem; font-weight: 800; border-bottom: 2px solid #fff; padding-bottom: 5px; width: fit-content; margin-bottom: 40px; color: #fff;">EMAIL US</a>
+                    <div style="font-size: 0.8rem; color: #555; font-weight: 800;">©2026 DIGITAL TRADE</div>
                 </div>
             </nav>
             
@@ -377,21 +393,21 @@
                     <div class="grid-3">
                         <div class="brutal-box invert-hover">
                             <div class="process-num">01</div>
-                            <h3 class="mono-text" style="font-size: 1.2rem; margin-bottom: 1rem;">Discovery</h3>
+                            <h3 class="mono-text" style="font-size: 1.4rem; margin-bottom: 1rem;">Discovery</h3>
                             <p class="text-body">We analyze your market, competitors, and structural requirements to blueprint a strategy.</p>
-                            <div class="mono-text" style="color: #666; margin-top: 2rem;">- LOG.DATA<br>- USER.BEHAVIOR</div>
+                            <div class="mono-text" style="color: #666; margin-top: 2.5rem; font-weight: 800;">- LOG.DATA<br>- USER.BEHAVIOR</div>
                         </div>
                         <div class="brutal-box invert-hover">
                             <div class="process-num">02</div>
-                            <h3 class="mono-text" style="font-size: 1.2rem; margin-bottom: 1rem;">Architecture</h3>
+                            <h3 class="mono-text" style="font-size: 1.4rem; margin-bottom: 1rem;">Architecture</h3>
                             <p class="text-body">Our team develops wireframes, vector logos, and design systems with perfect hierarchy.</p>
-                            <div class="mono-text" style="color: #666; margin-top: 2rem;">- WIREFRAME.GEN<br>- COMPONENT.LIB</div>
+                            <div class="mono-text" style="color: #666; margin-top: 2.5rem; font-weight: 800;">- WIREFRAME.GEN<br>- COMPONENT.LIB</div>
                         </div>
                         <div class="brutal-box invert-hover">
                             <div class="process-num">03</div>
-                            <h3 class="mono-text" style="font-size: 1.2rem; margin-bottom: 1rem;">Deployment</h3>
+                            <h3 class="mono-text" style="font-size: 1.4rem; margin-bottom: 1rem;">Deployment</h3>
                             <p class="text-body">We push code live. Integrating optimized graphics and analytics to track the ecosystem.</p>
-                            <div class="mono-text" style="color: #666; margin-top: 2rem;">- PUSH.PROD<br>- QA.TEST</div>
+                            <div class="mono-text" style="color: #666; margin-top: 2.5rem; font-weight: 800;">- PUSH.PROD<br>- QA.TEST</div>
                         </div>
                     </div>
                 </div>
@@ -403,11 +419,11 @@
                         <h2 class="glitch-text" data-text="CLIENT NETWORK">CLIENT <span>NETWORK</span></h2>
                         <p>Brands running on our framework.</p>
                     </div>
-                    <div class="grid-4" style="margin-bottom: 4rem;">
-                        <div class="brutal-box invert-hover" style="text-align: center;"><h3 class="mono-text scrambler">Virox Apparel</h3></div>
-                        <div class="brutal-box invert-hover" style="text-align: center;"><h3 class="mono-text scrambler">Athrex Energy</h3></div>
-                        <div class="brutal-box invert-hover" style="text-align: center;"><h3 class="mono-text scrambler">Nirvaan Store</h3></div>
-                        <div class="brutal-box invert-hover" style="text-align: center;"><h3 class="mono-text scrambler">Apparel Vault</h3></div>
+                    <div class="grid-4" style="margin-bottom: 5rem;">
+                        <div class="brutal-box invert-hover" style="text-align: center;"><h3 class="mono-text scrambler" style="font-size: 1.1rem;">Virox Apparel</h3></div>
+                        <div class="brutal-box invert-hover" style="text-align: center;"><h3 class="mono-text scrambler" style="font-size: 1.1rem;">Athrex Energy</h3></div>
+                        <div class="brutal-box invert-hover" style="text-align: center;"><h3 class="mono-text scrambler" style="font-size: 1.1rem;">Nirvaan Store</h3></div>
+                        <div class="brutal-box invert-hover" style="text-align: center;"><h3 class="mono-text scrambler" style="font-size: 1.1rem;">Apparel Vault</h3></div>
                     </div>
                     
                     <div class="stat-grid">
@@ -435,14 +451,14 @@
                 <div class="container">
                     <div class="split-layout" style="align-items: center;">
                         <div>
-                            <h2 style="font-family: var(--font-display); font-size: clamp(2.5rem, 4vw, 3.5rem); text-transform: uppercase; margin-bottom: 30px; line-height: 1.1;">Constructing digital dominance.</h2>
-                            <p class="text-body" style="font-weight: 600;">At Digital Trade, we don't just create images; we build structural visual systems. Founded by Indrajeet Pisda and headquartered in Dantewada, our studio bridges the gap between raw creativity and engineered functionality.</p>
-                            <p class="text-body mono-text" style="border-left: var(--border-heavy); padding-left: 15px; margin-top: 2rem;">> Clutter kills conversion. We strip away the unnecessary to deploy high-performance websites.</p>
-                            <div class="magnetic-wrap" style="margin-top: 30px;">
+                            <h2 style="font-family: var(--font-display); font-size: clamp(3rem, 5vw, 4rem); text-transform: uppercase; margin-bottom: 40px; line-height: 1.1; font-weight: 800;">Constructing digital dominance.</h2>
+                            <p class="text-body" style="font-weight: 600; font-size: 1.2rem;">At Digital Trade, we don't just create images; we build structural visual systems. Founded by Indrajeet Pisda and headquartered in Dantewada, our studio bridges the gap between raw creativity and engineered functionality.</p>
+                            <p class="text-body mono-text" style="border-left: var(--border-heavy); padding-left: 20px; margin-top: 3rem; font-weight: 800;">> Clutter kills conversion. We strip away the unnecessary to deploy high-performance websites.</p>
+                            <div class="magnetic-wrap" style="margin-top: 40px;">
                                 <button class="btn-outline nav-trigger magnetic scrambler" data-target="view-about">READ MANIFESTO</button>
                             </div>
                         </div>
-                        <div class="brutal-box" style="padding: 0; height: 100%; min-height: 400px; overflow: hidden;">
+                        <div class="brutal-box" style="padding: 0; height: 100%; min-height: 500px; overflow: hidden;">
                             <img src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=2070&auto=format&fit=crop" style="width: 100%; height: 100%; object-fit: cover;" alt="Studio Workspace">
                         </div>
                     </div>
@@ -460,38 +476,38 @@
                     
                     <div class="grid-3">
                         <div class="brutal-box invert-hover">
-                            <h3 class="mono-text" style="font-size: 1.4rem; border-bottom: var(--border-heavy); padding-bottom: 15px; margin-bottom: 20px;">Web Architecture</h3>
+                            <h3 class="mono-text" style="font-size: 1.5rem; border-bottom: var(--border-heavy); padding-bottom: 20px; margin-bottom: 25px;">Web Architecture</h3>
                             <p class="text-body">High-performance, responsive websites built with clean code and intuitive UX. Custom CMS integration, Shopify and Blogger.</p>
-                            <div class="mono-text" style="margin-top: 2rem; color: #888;">> UI/UX Wireframing<br>> Front-End Dev<br>> Shopify Stores</div>
+                            <div class="mono-text" style="margin-top: 3rem; color: #888; font-weight: 800; line-height: 1.8;">> UI/UX Wireframing<br>> Front-End Dev<br>> Shopify Stores</div>
                         </div>
                         <div class="brutal-box invert-hover">
-                            <h3 class="mono-text" style="font-size: 1.4rem; border-bottom: var(--border-heavy); padding-bottom: 15px; margin-bottom: 20px;">Graphic Systems</h3>
+                            <h3 class="mono-text" style="font-size: 1.5rem; border-bottom: var(--border-heavy); padding-bottom: 20px; margin-bottom: 25px;">Graphic Systems</h3>
                             <p class="text-body">Striking visual assets engineered for digital platforms and physical print media. Banners to DTG T-shirt layouts.</p>
-                            <div class="mono-text" style="margin-top: 2rem; color: #888;">> Apparel Graphics<br>> Marketing Banners<br>> Print Layouts</div>
+                            <div class="mono-text" style="margin-top: 3rem; color: #888; font-weight: 800; line-height: 1.8;">> Apparel Graphics<br>> Marketing Banners<br>> Print Layouts</div>
                         </div>
                         <div class="brutal-box invert-hover">
-                            <h3 class="mono-text" style="font-size: 1.4rem; border-bottom: var(--border-heavy); padding-bottom: 15px; margin-bottom: 20px;">Brand Identity</h3>
+                            <h3 class="mono-text" style="font-size: 1.5rem; border-bottom: var(--border-heavy); padding-bottom: 20px; margin-bottom: 25px;">Brand Identity</h3>
                             <p class="text-body">Comprehensive branding strategies that establish market presence. Logos, typography structures, and guidelines.</p>
-                            <div class="mono-text" style="margin-top: 2rem; color: #888;">> Logo Design<br>> Brand Guidelines<br>> Color Systems</div>
+                            <div class="mono-text" style="margin-top: 3rem; color: #888; font-weight: 800; line-height: 1.8;">> Logo Design<br>> Brand Guidelines<br>> Color Systems</div>
                         </div>
                     </div>
 
-                    <div class="section-header" style="margin-top: 100px;">
+                    <div class="section-header" style="margin-top: 120px;">
                         <h2 class="glitch-text" data-text="OPERATIONAL WORKFLOW">OPERATIONAL <span>WORKFLOW</span></h2>
                         <p>Systematic approach to service delivery.</p>
                     </div>
                     <div class="interactive-list">
                         <div class="interactive-item">
                             <button class="interactive-header">Phase 1: Blueprint <span class="interactive-icon">+</span></button>
-                            <div class="interactive-content"><p class="text-body">We gather your raw data, business goals, and asset constraints. This phase establishes the exact timeline and structural requirements of the deliverables.</p></div>
+                            <div class="interactive-content"><p class="text-body" style="font-size: 1.2rem;">We gather your raw data, business goals, and asset constraints. This phase establishes the exact timeline and structural requirements of the deliverables.</p></div>
                         </div>
                         <div class="interactive-item">
                             <button class="interactive-header">Phase 2: Construction <span class="interactive-icon">+</span></button>
-                            <div class="interactive-content"><p class="text-body">Our architects begin drafting code and vectorizing layouts. You will receive milestone updates and staging links to review the progress in real-time.</p></div>
+                            <div class="interactive-content"><p class="text-body" style="font-size: 1.2rem;">Our architects begin drafting code and vectorizing layouts. You will receive milestone updates and staging links to review the progress in real-time.</p></div>
                         </div>
                         <div class="interactive-item">
                             <button class="interactive-header">Phase 3: Handover <span class="interactive-icon">+</span></button>
-                            <div class="interactive-content"><p class="text-body">Final quality assurance. Once approved, the master files, root access, and operational documentation are transferred to your secure servers.</p></div>
+                            <div class="interactive-content"><p class="text-body" style="font-size: 1.2rem;">Final quality assurance. Once approved, the master files, root access, and operational documentation are transferred to your secure servers.</p></div>
                         </div>
                     </div>
                 </div>
@@ -509,9 +525,9 @@
                     <div class="grid-2">
                         <div class="featured-study brutal-box invert-hover" onclick="navigateTo('view-contact')" style="cursor: pointer; padding: 0; overflow: hidden;">
                             <div class="fs-content">
-                                <span class="mono-text scrambler" style="border: 1px solid var(--fg); padding: 5px 10px; margin-bottom: 20px; width: fit-content;">[ FEATURED_BUILD ]</span>
-                                <h3 class="glitch-text" data-text="VIROX APPAREL" style="font-size: 2.5rem; line-height: 1; margin-bottom: 20px;">Virox Apparel OS</h3>
-                                <p class="text-body">Complete architectural overhaul for an emerging streetwear brand. Custom Shopify theme, vector suite, and print assets.</p>
+                                <span class="mono-text scrambler" style="border: var(--border-heavy); padding: 8px 15px; margin-bottom: 30px; width: fit-content; font-weight: 800;">[ FEATURED_BUILD ]</span>
+                                <h3 class="glitch-text" data-text="VIROX APPAREL" style="font-size: 3rem; line-height: 1; margin-bottom: 25px;">Virox Apparel OS</h3>
+                                <p class="text-body" style="font-size: 1.2rem;">Complete architectural overhaul for an emerging streetwear brand. Custom Shopify theme, vector suite, and print assets.</p>
                             </div>
                             <div class="fs-img-wrap">
                                 <img src="https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=1500&auto=format&fit=crop" class="fs-img" alt="Virox Case Study">
@@ -606,19 +622,19 @@
                         </div>
                     </div>
 
-                    <div class="split-layout" style="margin-top: 100px;">
+                    <div class="split-layout" style="margin-top: 120px;">
                         <div>
-                            <h3 style="font-family: var(--font-display); font-size: 2.5rem; text-transform: uppercase; margin-bottom: 20px;">A La Carte Modules</h3>
-                            <p class="text-body">Need specific structural upgrades without a full retainer? Modular pricing for individual deliverables.</p>
+                            <h3 style="font-family: var(--font-display); font-size: 3rem; text-transform: uppercase; margin-bottom: 25px;">A La Carte Modules</h3>
+                            <p class="text-body" style="font-size: 1.2rem;">Need specific structural upgrades without a full retainer? Modular pricing for individual deliverables.</p>
                             
-                            <div class="brutal-box invert-hover" style="margin-top: 40px;">
-                                <h4 class="mono-text" style="font-size: 1.2rem; margin-bottom: 10px;">Enterprise Retainer</h4>
-                                <p class="text-body" style="font-size: 0.95rem;">For brands requiring constant architectural updates. We integrate directly into your workflow.</p>
+                            <div class="brutal-box invert-hover" style="margin-top: 50px;">
+                                <h4 class="mono-text" style="font-size: 1.4rem; margin-bottom: 15px;">Enterprise Retainer</h4>
+                                <p class="text-body" style="font-size: 1.1rem; margin-bottom: 0;">For brands requiring constant architectural updates. We integrate directly into your workflow.</p>
                             </div>
                         </div>
                         
                         <div class="terminal-block brutal-box">
-                            <div style="border-bottom: var(--border-heavy); padding-bottom: 15px; margin-bottom: 20px; font-weight: 800; text-transform: uppercase; display: flex; justify-content: space-between;">
+                            <div style="border-bottom: var(--border-heavy); padding-bottom: 20px; margin-bottom: 25px; font-weight: 800; text-transform: uppercase; display: flex; justify-content: space-between; font-size: 1.1rem;">
                                 <span>[ MODULE ]</span><span>[ PRICE ]</span>
                             </div>
                             <div class="terminal-row"><span class="scrambler">Video Ad Production</span><span class="t-price">₹2,500</span></div>
@@ -637,34 +653,34 @@
                 <div class="container">
                     <div class="split-layout">
                         <div>
-                            <h2 class="glitch-text" data-text="THE ARCHITECT" style="font-size: clamp(3rem, 6vw, 5rem); text-transform: uppercase; margin-bottom: 30px; line-height: 1;">THE ARCHITECT<span class="blink">_</span></h2>
-                            <div class="mono-text" style="border: 1px solid var(--fg); padding: 1rem; display: inline-block; margin-bottom: 2rem;">
+                            <h2 class="glitch-text" data-text="THE ARCHITECT" style="font-size: clamp(3.5rem, 6vw, 5.5rem); text-transform: uppercase; margin-bottom: 40px; line-height: 1;">THE ARCHITECT<span class="blink">_</span></h2>
+                            <div class="mono-text" style="border: var(--border-heavy); padding: 1.5rem; display: inline-block; margin-bottom: 3rem; font-weight: 800;">
                                 SYS_ADMIN: INDRAJEET_PISDA<br>
                                 LOCATION: DANTEWADA_CG<br>
                                 STATUS: ONLINE
                             </div>
-                            <p class="text-body">We reject the notion that design should be purely aesthetic. True design is an engineered solution to a structural business problem. Whether building a complex Shopify ecosystem or drafting corporate identity, our methodology remains identical: aggressive precision.</p>
+                            <p class="text-body" style="font-size: 1.2rem;">We reject the notion that design should be purely aesthetic. True design is an engineered solution to a structural business problem. Whether building a complex Shopify ecosystem or drafting corporate identity, our methodology remains identical: aggressive precision.</p>
                             
-                            <ul class="manifesto-list" style="margin-top: 3rem;">
-                                <li>METHOD <span class="mono-text" style="font-size: 1rem;">[01]</span></li>
-                                <li>SYSTEM <span class="mono-text" style="font-size: 1rem;">[02]</span></li>
-                                <li>BUILD <span class="mono-text" style="font-size: 1rem;">[03]</span></li>
-                                <li>INDEX <span class="mono-text" style="font-size: 1rem;">[04]</span></li>
+                            <ul class="manifesto-list" style="margin-top: 4rem;">
+                                <li>METHOD <span class="mono-text" style="font-size: 1.1rem;">[01]</span></li>
+                                <li>SYSTEM <span class="mono-text" style="font-size: 1.1rem;">[02]</span></li>
+                                <li>BUILD <span class="mono-text" style="font-size: 1.1rem;">[03]</span></li>
+                                <li>INDEX <span class="mono-text" style="font-size: 1.1rem;">[04]</span></li>
                             </ul>
                         </div>
                         <div class="sidebar-panel">
-                            <div class="sidebar-block invert-hover">
-                                <h4 class="mono-text">FOUNDED</h4>
-                                <p style="font-family: var(--font-display); font-size: 2.5rem;">2025</p>
+                            <div class="sidebar-block invert-hover brutal-box">
+                                <h4 class="mono-text" style="font-size: 1.1rem; margin-bottom: 10px;">FOUNDED</h4>
+                                <p style="font-family: var(--font-display); font-size: 3rem; line-height: 1;">2025</p>
                             </div>
-                            <div class="sidebar-block invert-hover">
-                                <h4 class="mono-text">PRIMARY NODE</h4>
-                                <p style="font-family: var(--font-display); font-size: 1.8rem;">Dantewada, India</p>
+                            <div class="sidebar-block invert-hover brutal-box">
+                                <h4 class="mono-text" style="font-size: 1.1rem; margin-bottom: 10px;">PRIMARY NODE</h4>
+                                <p style="font-family: var(--font-display); font-size: 2.2rem; line-height: 1.1;">Dantewada, India</p>
                             </div>
                             <div class="sidebar-block highlight brutal-box">
-                                <h4 class="mono-text" style="color: var(--bg);">CURRENT STATUS</h4>
-                                <p style="font-family: var(--font-display); font-size: 1.5rem; display: flex; align-items: center; gap: 10px;">
-                                    <span class="blink" style="display:inline-block; width:15px; height:15px; background:var(--bg);"></span> Accepting Projects
+                                <h4 class="mono-text" style="color: var(--bg); font-size: 1.1rem; margin-bottom: 15px;">CURRENT STATUS</h4>
+                                <p style="font-family: var(--font-display); font-size: 1.8rem; display: flex; align-items: center; gap: 15px;">
+                                    <span class="blink" style="display:inline-block; width:18px; height:18px; background:var(--bg);"></span> Accepting Projects
                                 </p>
                             </div>
                         </div>
@@ -681,22 +697,22 @@
                         <p>[FAQ_INDEX_DB]</p>
                     </div>
                     
-                    <div class="interactive-list" style="max-width: 900px;">
+                    <div class="interactive-list" style="max-width: 1000px;">
                         <div class="interactive-item">
                             <button class="interactive-header">STANDARD TURNAROUND TIME? <span class="interactive-icon">+</span></button>
-                            <div class="interactive-content"><p class="text-body">Brand identities and logo systems typically require 1-2 weeks. Full-scale web platforms and e-commerce builds take between 3-6 weeks depending on architectural complexity.</p></div>
+                            <div class="interactive-content"><p class="text-body" style="font-size: 1.2rem;">Brand identities and logo systems typically require 1-2 weeks. Full-scale web platforms and e-commerce builds take between 3-6 weeks depending on architectural complexity.</p></div>
                         </div>
                         <div class="interactive-item">
                             <button class="interactive-header">DO YOU PROVIDE SOURCE FILES? <span class="interactive-icon">+</span></button>
-                            <div class="interactive-content"><p class="text-body">Yes. We don't hold brands hostage. Upon final payment, all intellectual property rights and raw source files (Figma, Illustrator, complete codebases) are securely transferred.</p></div>
+                            <div class="interactive-content"><p class="text-body" style="font-size: 1.2rem;">Yes. We don't hold brands hostage. Upon final payment, all intellectual property rights and raw source files (Figma, Illustrator, complete codebases) are securely transferred.</p></div>
                         </div>
                         <div class="interactive-item">
                             <button class="interactive-header">WHAT PLATFORMS DO YOU BUILD ON? <span class="interactive-icon">+</span></button>
-                            <div class="interactive-content"><p class="text-body">We engineer custom front-end solutions. For e-commerce, we specialize in Shopify. For simpler content sites, we utilize platforms like Blogger based on client budget.</p></div>
+                            <div class="interactive-content"><p class="text-body" style="font-size: 1.2rem;">We engineer custom front-end solutions. For e-commerce, we specialize in Shopify. For simpler content sites, we utilize platforms like Blogger based on client budget.</p></div>
                         </div>
                         <div class="interactive-item">
                             <button class="interactive-header">HOW DOES COMMUNICATION WORK? <span class="interactive-icon">+</span></button>
-                            <div class="interactive-content"><p class="text-body">Direct and efficient. We primarily utilize our secure WhatsApp line for quick updates, and formal email transmissions for asset delivery and milestone approvals.</p></div>
+                            <div class="interactive-content"><p class="text-body" style="font-size: 1.2rem;">Direct and efficient. We primarily utilize our secure WhatsApp line for quick updates, and formal email transmissions for asset delivery and milestone approvals.</p></div>
                         </div>
                     </div>
                 </div>
@@ -720,8 +736,8 @@
                                 <div class="form-group">
                                     <input type="email" id="wa-email" class="form-input" placeholder="[INPUT_FIELD EMAIL: ___________ ]" required>
                                 </div>
-                                <div class="form-group">
-                                    <textarea id="wa-message" class="form-input" style="height: 100px; resize: none;" placeholder="[INPUT_FIELD MESSAGE: _________ ]" required></textarea>
+                                <div class="form-group" style="margin-bottom: 50px;">
+                                    <textarea id="wa-message" class="form-input" style="height: 120px; resize: none;" placeholder="[INPUT_FIELD MESSAGE: _________ ]" required></textarea>
                                 </div>
                                 <button type="submit" class="btn-primary scrambler" style="width: 100%;">TRANSMIT DATA // ↗</button>
                             </form>
@@ -729,19 +745,19 @@
                         
                         <div class="sidebar-panel">
                             <div class="sidebar-block highlight brutal-box">
-                                <h4 class="mono-text" style="color: var(--bg);">TRANSMISSION SLA</h4>
-                                <p style="font-family: var(--font-display); font-size: 1.2rem;">All inquiries receive a structural review within 12 operating hours.</p>
+                                <h4 class="mono-text" style="color: var(--bg); font-size: 1.1rem; margin-bottom: 15px;">TRANSMISSION SLA</h4>
+                                <p style="font-family: var(--font-display); font-size: 1.5rem; line-height: 1.2;">All inquiries receive a structural review within 12 operating hours.</p>
                             </div>
 
-                            <div class="sidebar-block invert-hover">
-                                <h4 class="mono-text">DIRECT COMMS</h4>
-                                <p class="scrambler mono-text" style="font-size: 1.1rem; margin-top: 10px; cursor: pointer;">trade@digital.com</p>
-                                <p class="scrambler mono-text" style="font-size: 1.1rem; margin-top: 10px; cursor: pointer;">+91 7646846030</p>
+                            <div class="sidebar-block invert-hover brutal-box">
+                                <h4 class="mono-text" style="font-size: 1.1rem; margin-bottom: 15px;">DIRECT COMMS</h4>
+                                <p class="scrambler mono-text" style="font-size: 1.3rem; margin-top: 10px; cursor: pointer; font-weight: 800;">trade@digital.com</p>
+                                <p class="scrambler mono-text" style="font-size: 1.3rem; margin-top: 10px; cursor: pointer; font-weight: 800;">+91 7646846030</p>
                             </div>
                             
-                            <div class="sidebar-block invert-hover">
-                                <h4 class="mono-text">HEADQUARTERS</h4>
-                                <p style="font-family: var(--font-display); font-size: 1.2rem; text-transform: uppercase;">Teknaar Chowk, Awarbhata<br>Dantewada, Chhattisgarh</p>
+                            <div class="sidebar-block invert-hover brutal-box">
+                                <h4 class="mono-text" style="font-size: 1.1rem; margin-bottom: 15px;">HEADQUARTERS</h4>
+                                <p style="font-family: var(--font-display); font-size: 1.5rem; text-transform: uppercase; line-height: 1.2;">Teknaar Chowk, Awarbhata<br>Dantewada, Chhattisgarh</p>
                             </div>
                         </div>
                     </div>
@@ -752,18 +768,18 @@
     </main>
 
     <footer class="container">
-        <div class="footer-grid">
-            <div>
-                <h3 class="footer-brand glitch-text" data-text="DIGITAL_TRADE" style="font-family: var(--font-display); font-size: 2rem; margin-bottom: 20px;">DIGITAL<span class="blink">_</span>TRADE</h3>
-                <p style="font-family: var(--font-body); font-size: 0.95rem; color: #888; margin-bottom: 20px;">Minimalist agency engineering future-proof architectures.</p>
-                <div class="mono-text" style="border: 1px solid var(--fg); padding: 1rem; display: inline-block;">
-                    > SYSTEM: ACTIVE<br>> NODE: DANTEWADA
-                </div>
+        <div class="footer-top-center">
+            <h3 class="footer-brand glitch-text" data-text="DIGITAL_TRADE">DIGITAL<span class="blink">_</span>TRADE</h3>
+            <p>A minimalist design and development agency engineering future-proof brand architectures.</p>
+            <div class="mono-text system-status">
+                > SYSTEM: ACTIVE<br>> NODE: DANTEWADA_HQ<br>> UPTIME: 99.9%
             </div>
+        </div>
 
-            <div>
-                <h4 class="footer-links mono-text">DISCIPLINES</h4>
-                <ul class="footer-links">
+        <div class="footer-menus">
+            <div class="footer-links mono-text">
+                <h4>DISCIPLINES</h4>
+                <ul>
                     <li><a href="#services" class="nav-trigger scrambler" data-target="view-services">Web Architecture</a></li>
                     <li><a href="#services" class="nav-trigger scrambler" data-target="view-services">Shopify Dev</a></li>
                     <li><a href="#services" class="nav-trigger scrambler" data-target="view-services">Brand Identity</a></li>
@@ -771,19 +787,19 @@
                 </ul>
             </div>
 
-            <div>
-                <h4 class="footer-links mono-text">RESOURCES</h4>
-                <ul class="footer-links">
+            <div class="footer-links mono-text">
+                <h4>RESOURCES</h4>
+                <ul>
                     <li><a href="#work" class="nav-trigger scrambler" data-target="view-work">The Archive</a></li>
                     <li><a href="#pricing" class="nav-trigger scrambler" data-target="view-pricing">Deployment</a></li>
-                    <li><a href="#faq" class="nav-trigger scrambler" data-target="view-faq">Knowledge</a></li>
-                    <li><a href="#about" class="nav-trigger scrambler" data-target="view-about">Ethos</a></li>
+                    <li><a href="#faq" class="nav-trigger scrambler" data-target="view-faq">Knowledge Base</a></li>
+                    <li><a href="#about" class="nav-trigger scrambler" data-target="view-about">Agency Ethos</a></li>
                 </ul>
             </div>
             
-            <div>
-                <h4 class="footer-links mono-text">SOCIAL</h4>
-                <ul class="footer-links">
+            <div class="footer-links mono-text">
+                <h4>SOCIAL GRID</h4>
+                <ul>
                     <li><a href="#" class="scrambler" target="_blank">Instagram</a></li>
                     <li><a href="#" class="scrambler" target="_blank">Behance</a></li>
                     <li><a href="#" class="scrambler" target="_blank">LinkedIn</a></li>
@@ -793,8 +809,8 @@
         </div>
 
         <div class="footer-bottom mono-text">
-            <p>© 2026 DIGITAL TRADE.</p>
-            <p>ARCHITECT: INDRAJEET PISDA | BUILD 2.1 (BRUTAL)</p>
+            <p>© 2026 DIGITAL TRADE. ALL RIGHTS RESERVED.</p>
+            <p>ARCHITECT: INDRAJEET PISDA | BUILD 2.2 (STRUCTURAL)</p>
         </div>
     </footer>
 
@@ -824,7 +840,7 @@
             });
 
             // --- 1. ADVANCED CANVAS TRAIL CURSOR (Integrated with Brutal Theme) ---
-            if (!isTouchDevice && window.innerWidth > 768) {
+            if (!isTouchDevice && window.innerWidth > 1024) {
                 const canvas = document.getElementById('cursor-canvas');
                 const ctx = canvas.getContext('2d');
                 const dot = document.getElementById('cursor-dot');
@@ -897,8 +913,10 @@
                     });
                 });
             } else {
-                document.getElementById('cursor-canvas').style.display = 'none';
-                document.getElementById('cursor-dot').style.display = 'none';
+                const canvasEl = document.getElementById('cursor-canvas');
+                const dotEl = document.getElementById('cursor-dot');
+                if(canvasEl) canvasEl.style.display = 'none';
+                if(dotEl) dotEl.style.display = 'none';
                 document.body.style.cursor = 'auto';
             }
 
