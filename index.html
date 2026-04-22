@@ -380,7 +380,6 @@
 
     <canvas id="cursor-canvas"></canvas>
     <div class="custom-cursor-dot" id="cursor-dot"></div>
-    
     <div class="toast-container" id="toast-container"></div>
     <div class="nav-overlay-bg" id="nav-overlay-bg"></div>
 
@@ -388,7 +387,7 @@
         <div class="header-top">
             <div class="empty-left desktop-only">
                 <div class="mono-text" style="font-size: 0.75rem; color: #666; border: 1px solid rgba(255,255,255,0.2); padding: 5px 10px;">
-                    <span class="blink" style="color: #00ff00; display: inline-block; margin-right: 5px;">•</span>SYS.OS_v4
+                    <span class="blink" style="color: #00ff00; display: inline-block; margin-right: 5px;">•</span>SYS.OS_v8_SPA
                 </div>
             </div>
             
@@ -402,9 +401,9 @@
             
             <div class="actions-container">
                 <div class="magnetic-wrap desktop-only">
-                    <button class="btn-primary nav-trigger magnetic icon-anim" data-target="view-contact">
+                    <a href="#contact" class="btn-primary nav-trigger magnetic icon-anim" data-target="view-contact" style="text-decoration: none;">
                         <span class="scrambler">START PROJECT</span> <i class="ri-arrow-right-up-line"></i>
-                    </button>
+                    </a>
                 </div>
                 <button class="mobile-toggle magnetic" id="mobile-toggle" aria-label="Toggle Mobile Menu">
                     <span></span><span></span>
@@ -450,9 +449,9 @@
                         <h1 class="glitch-text" data-text="PRECISION ARCHITECTURE">PRECISION<br>ARCHITECTURE</h1>
                         <p>We engineer brand experiences. From pixel-perfect website design to structural graphic identities, we build aesthetics that convert.</p>
                         <div class="magnetic-wrap">
-                            <button class="btn-primary nav-trigger magnetic icon-anim" data-target="view-work">
+                            <a href="#work" class="btn-primary nav-trigger magnetic icon-anim" data-target="view-work" style="text-decoration: none;">
                                 <span class="scrambler">EXPLORE ARCHIVE</span> <i class="ri-arrow-right-line"></i>
-                            </button>
+                            </a>
                         </div>
                     </div>
                     <div class="hero-img-box brutal-box">
@@ -539,9 +538,9 @@
                             <p class="text-body" style="font-weight: 600; font-size: 1.2rem;">At Digital Trade, we don't just create images; we build structural visual systems. Founded by Indrajeet Pisda and headquartered in Dantewada, our studio bridges the gap between raw creativity and engineered functionality.</p>
                             <p class="text-body mono-text" style="border-left: var(--border-heavy); padding-left: 20px; margin-top: 3rem; font-weight: 800;">> Clutter kills conversion. We strip away the unnecessary to deploy high-performance websites.</p>
                             <div class="magnetic-wrap" style="margin-top: 40px;">
-                                <button class="btn-outline nav-trigger magnetic icon-anim" data-target="view-about">
+                                <a href="#about" class="btn-outline nav-trigger magnetic icon-anim" data-target="view-about" style="text-decoration: none;">
                                     <span class="scrambler">READ MANIFESTO</span> <i class="ri-article-line"></i>
-                                </button>
+                                </a>
                             </div>
                         </div>
                         <div class="brutal-box" style="padding: 0; height: 100%; min-height: 500px; overflow: hidden;">
@@ -676,7 +675,7 @@
                                 &nbsp;&nbsp;revisions: 2<br>
                                 }
                             </div>
-                            <button class="btn-outline nav-trigger icon-anim" data-target="view-contact"><span class="scrambler">SELECT TIER</span> <i class="ri-arrow-right-line"></i></button>
+                            <a href="#contact" class="btn-outline nav-trigger icon-anim" data-target="view-contact" style="text-decoration: none;"><span class="scrambler">SELECT TIER</span> <i class="ri-arrow-right-line"></i></a>
                         </div>
                         
                         <div class="tier-card brutal-box featured">
@@ -690,7 +689,7 @@
                                 &nbsp;&nbsp;seo: "Basic implementation"<br>
                                 }
                             </div>
-                            <button class="btn-primary nav-trigger icon-anim" data-target="view-contact" style="background: var(--bg); color: var(--fg);"><span class="scrambler">SELECT TIER</span> <i class="ri-arrow-right-line"></i></button>
+                            <a href="#contact" class="btn-primary nav-trigger icon-anim" data-target="view-contact" style="background: var(--bg); color: var(--fg); text-decoration: none;"><span class="scrambler">SELECT TIER</span> <i class="ri-arrow-right-line"></i></a>
                         </div>
 
                         <div class="tier-card brutal-box invert-hover">
@@ -704,7 +703,7 @@
                                 &nbsp;&nbsp;graphics: "Ongoing"<br>
                                 }
                             </div>
-                            <button class="btn-outline nav-trigger icon-anim" data-target="view-contact"><span class="scrambler">CONSULT SALES</span> <i class="ri-arrow-right-line"></i></button>
+                            <a href="#contact" class="btn-outline nav-trigger icon-anim" data-target="view-contact" style="text-decoration: none;"><span class="scrambler">CONSULT SALES</span> <i class="ri-arrow-right-line"></i></a>
                         </div>
                     </div>
 
@@ -898,7 +897,7 @@
 
         <div class="footer-bottom mono-text">
             <p>© 2026 DIGITAL TRADE. ALL RIGHTS RESERVED.</p>
-            <p>ARCHITECT: INDRAJEET PISDA | BUILD 7.0 (STACKED HEADER)</p>
+            <p>ARCHITECT: INDRAJEET PISDA | BUILD 9.0 (ALL-IN-ONE SPA)</p>
         </div>
     </footer>
 
@@ -907,7 +906,7 @@
             
             const isTouchDevice = (('ontouchstart' in window) || (navigator.maxTouchPoints > 0));
 
-            // --- 1. FIXED SCRAMBLER EFFECT (Protects Icons) ---
+            // --- 1. FIXED SCRAMBLER EFFECT ---
             const chars = '!<>-_\\\\/[]{}—=+*^?#_';
             document.querySelectorAll('.scrambler').forEach(el => {
                 const originalText = el.innerText.trim();
@@ -1043,7 +1042,7 @@
             });
             navOverlayBg.addEventListener('click', closeMobileNav);
 
-            // --- 5. ADVANCED SPA ROUTING ---
+            // --- 5. RESTORED SPA ROUTING ---
             const views = document.querySelectorAll('.view-section');
 
             window.navigateTo = function(targetId) {
@@ -1075,7 +1074,8 @@
 
             document.querySelectorAll('.nav-trigger').forEach(trigger => {
                 trigger.addEventListener('click', function(e) {
-                    if(this.getAttribute('target') === '_blank') return; 
+                    // IF THE LINK HAS NO DATA-TARGET OR IS SET TO _BLANK, IGNORE AND LET IT ACT AS A NORMAL LINK
+                    if(this.getAttribute('target') === '_blank' || !this.getAttribute('data-target')) return; 
                     
                     e.preventDefault();
                     const targetId = this.getAttribute('data-target');
