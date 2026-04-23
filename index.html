@@ -122,17 +122,23 @@
         
         .header-top .social-left { justify-content: flex-start; align-items: center; gap: 20px; }
         .social-left a { font-size: 1.4rem; color: #888; transition: var(--transition); }
-        .social-left a:hover { color: var(--fg); transform: translateY(-3px); text-shadow: 0 0 10px rgba(255,255,255,0.5); }
+        .social-left a:hover { color: var(--fg); transform: translateY(-3px); }
 
         .header-top .logo-container { justify-content: center; }
         .header-top .actions-container { justify-content: flex-end; align-items: center; gap: 20px; }
 
-        /* PURE "DT" LOGO RECREATION */
-        .dt-logo-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1; text-align: center; }
-        .dt-mark { font-family: var(--font-display); font-size: 3.5rem; font-weight: 800; letter-spacing: -3px; margin-bottom: 0; transition: text-shadow 0.3s;}
-        .dt-mark:hover { text-shadow: 0 0 15px rgba(255,255,255,0.5); }
+        /* IMAGE 2 EXACT LOGO */
+        .site-logo-img { 
+            max-height: 60px; 
+            width: auto; 
+            display: block; 
+            object-fit: contain; 
+            transition: transform 0.3s;
+        }
+        .site-logo-img:hover {
+            transform: scale(1.05);
+        }
 
-        /* Bottom Tier: Centered Menu */
         @media (min-width: 1025px) {
             .header-bottom { 
                 width: 100%; max-width: 1440px; margin: 0 auto; padding: 15px 5%; 
@@ -143,11 +149,12 @@
         }
         
         .nav-links { display: flex; gap: clamp(15px, 2.5vw, 50px); justify-content: center; } 
-        .nav-links a { font-family: var(--font-mono); font-size: 0.9rem; font-weight: 700; text-transform: uppercase; position: relative; padding: 5px 0; color: #aaa; transition: color 0.3s, text-shadow 0.3s; }
+        .nav-links a { font-family: var(--font-mono); font-size: 0.9rem; font-weight: 700; text-transform: uppercase; position: relative; padding: 5px 0; color: #aaa; transition: color 0.3s; }
         
-        /* DESKTOP ACTIVE LIGHT EFFECT */
-        .nav-links a:hover, .nav-links a.active-link { color: #fff; text-shadow: 0 0 12px rgba(255,255,255,0.8); }
-        .nav-links a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px; background: #fff; transform: scaleX(0); transform-origin: right; transition: transform 0.3s cubic-bezier(0.19, 1, 0.22, 1); box-shadow: 0 0 8px rgba(255,255,255,0.8); }
+        /* CLEAN WHITISH ACTIVE/HOVER (NO GLOW) */
+        .nav-links a:hover, .nav-links a.active-link { color: #ffffff; }
+        
+        .nav-links a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px; background: #fff; transform: scaleX(0); transform-origin: right; transition: transform 0.3s cubic-bezier(0.19, 1, 0.22, 1); }
         .nav-links a:hover::after, .nav-links a.active-link::after { transform: scaleX(1); transform-origin: left; }
         
         .nav-overlay-bg { position: fixed; inset: 0; background: rgba(5,5,5,0.8); backdrop-filter: blur(3px); z-index: 89999; opacity: 0; visibility: hidden; transition: var(--transition); }
@@ -198,7 +205,7 @@
         @media (max-width: 768px) { .contact-form-box { padding: 3rem 2rem; } }
         .form-group { margin-bottom: 45px; width: 100%; }
         .form-input { width: 100%; padding: 25px 15px; background: transparent; border: none; border-bottom: var(--border-heavy); color: var(--fg); font-size: 1.2rem; font-family: var(--font-mono); transition: var(--transition); border-radius: 0; }
-        .form-input:focus { border-color: #fff; background: rgba(255,255,255,0.05); outline: none; box-shadow: 0 5px 15px rgba(255,255,255,0.1); }
+        .form-input:focus { border-color: #fff; background: rgba(255,255,255,0.05); outline: none; }
 
         .grid-2 { display: grid; grid-template-columns: 1fr; gap: 40px; width: 100%; }
         @media(min-width: 768px) { .grid-2 { grid-template-columns: 1fr 1fr; gap: 60px; } } 
@@ -231,7 +238,7 @@
         @media(min-width: 1024px) { .hero-layout { grid-template-columns: 1.5fr 1fr; gap: 80px; } }
         
         .hero-terminal { font-family: var(--font-mono); border: var(--border-light); padding: 1.5rem; display: inline-block; margin-bottom: 3.5rem; background: rgba(255,255,255,0.02); font-size: 0.9rem; text-transform: uppercase; }
-        .hero-terminal .status-online { color: #00ff00; text-shadow: 0 0 8px #00ff00; }
+        .hero-terminal .status-online { color: #00ff00; }
 
         .hero h1 { font-family: var(--font-display); font-size: clamp(3.5rem, 8vw, 7.5rem); font-weight: 800; line-height: 1; margin-bottom: 2.5rem; letter-spacing: -0.05em; }
         .hero p { font-size: 1.3rem; font-weight: 500; max-width: 650px; color: #ccc; margin-bottom: 3.5rem; border-left: var(--border-heavy); padding-left: 25px; line-height: 1.6; }
@@ -317,15 +324,17 @@
         .footer-links { text-align: left; }
         .footer-links h4 { font-size: 1.1rem; font-weight: 800; margin-bottom: 30px; text-transform: uppercase; color: #fff; border-bottom: var(--border-heavy); padding-bottom: 10px; display: inline-block;}
         .footer-links ul li { margin-bottom: 15px; }
+        
+        /* FOOTER CLEAN WHITISH HOVER */
         .footer-links ul li a { color: #888; text-transform: uppercase; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: var(--transition); }
-        .footer-links ul li a:hover, .footer-links ul li a.active-link { color: #fff; text-shadow: 0 0 8px rgba(255,255,255,0.8); }
+        .footer-links ul li a:hover, .footer-links ul li a.active-link { color: #ffffff; }
         .footer-links ul li a i { font-size: 1.2rem; transition: transform 0.3s; }
-        .footer-links ul li a:hover i { transform: translateX(3px) scale(1.1); color: #fff; text-shadow: 0 0 8px rgba(255,255,255,0.8); }
+        .footer-links ul li a:hover i { transform: translateX(3px) scale(1.1); color: #ffffff; }
 
         .footer-bottom { display: flex; flex-direction: column; gap: 20px; color: #666; text-transform: uppercase; font-weight: 800; }
         @media(min-width: 768px) { .footer-bottom { flex-direction: row; justify-content: space-between; align-items: center; } }
 
-        /* --- FIXED ONE-BY-ONE MOBILE SIDEBAR (WITH LIGHT EFFECT) --- */
+        /* --- FIXED ONE-BY-ONE MOBILE SIDEBAR (WITH CLEAN WHITE ACTIVE) --- */
         @media (max-width: 1024px) {
             .header-top { padding: 15px 5%; border-bottom: none; }
             .header-top .social-left { display: none; } 
@@ -341,7 +350,7 @@
             .mobile-toggle.active span:nth-child(2) { transform: rotate(-45deg) translate(3px, -3px); }
 
             /* Sidebar Configuration */
-            .header-bottom { display: contents; } /* Allows nav-links to escape header flow */
+            .header-bottom { display: contents; } 
             
             .nav-links { 
                 position: fixed; top: 0; right: -100%; left: auto; 
@@ -352,7 +361,6 @@
                 z-index: 90000; transition: right 0.5s cubic-bezier(0.19, 1, 0.22, 1); 
                 justify-content: flex-start; 
                 overflow-y: auto; 
-                box-shadow: -15px 0 40px rgba(0,0,0,0.8);
             }
             .nav-links.active { right: 0; }
             
@@ -370,19 +378,17 @@
             .nav-links-core > a.nav-trigger i { font-size: clamp(1.2rem, 3.5vh, 1.4rem); color: #666; transition: var(--transition); }
             .nav-links-core > a.nav-trigger::after { display: none; } 
 
-            /* MOBILE ACTIVE LINK LIGHT EFFECT */
+            /* CLEAN WHITE ACTIVE/HOVER EFFECT (NO GLOW) */
             .nav-links-core > a.nav-trigger.active-link,
             .nav-links-core > a.nav-trigger:hover {
-                color: #fff !important;
-                text-shadow: 0 0 15px rgba(255, 255, 255, 0.9);
-                border-left: 4px solid #fff; /* glowing structural marker */
+                color: #ffffff !important;
+                border-left: 4px solid #ffffff; 
                 padding-left: 15px;
-                background: rgba(255,255,255,0.05);
+                background: rgba(255,255,255,0.1);
             }
             .nav-links-core > a.nav-trigger.active-link i,
             .nav-links-core > a.nav-trigger:hover i {
-                color: #fff !important;
-                text-shadow: 0 0 15px rgba(255, 255, 255, 0.9);
+                color: #ffffff !important;
             }
             
             .mobile-menu-footer { 
@@ -414,10 +420,8 @@
             </div>
             
             <div class="logo-container">
-                <a href="#home" class="nav-trigger magnetic" data-target="view-home" style="text-decoration: none; color: inherit;">
-                    <div class="dt-logo-wrapper">
-                        <div class="dt-mark">DT</div>
-                    </div>
+                <a href="#home" class="nav-trigger magnetic" data-target="view-home" style="text-decoration: none;">
+                    <img src="68204.png" alt="Digital Trade Logo" class="site-logo-img">
                 </a>
             </div>
             
@@ -1019,7 +1023,7 @@
 
         <div class="footer-bottom mono-text">
             <p>© 2026 DIGITAL TRADE. ALL RIGHTS RESERVED.</p>
-            <p>ARCHITECT: INDRAJEET PISDA | BUILD 12.0 (EXPANDED OS)</p>
+            <p>ARCHITECT: INDRAJEET PISDA | BUILD 13.0 (CLEAN WHITE ACTIVE)</p>
         </div>
     </footer>
 
