@@ -127,17 +127,14 @@
         .header-top .logo-container { justify-content: center; }
         .header-top .actions-container { justify-content: flex-end; align-items: center; gap: 20px; }
 
-        /* IMAGE 2 EXACT LOGO */
-        .site-logo-img { 
-            max-height: 60px; 
-            width: auto; 
-            display: block; 
-            object-fit: contain; 
-            transition: transform 0.3s;
-        }
-        .site-logo-img:hover {
-            transform: scale(1.05);
-        }
+        /* PURE CSS LOGO RECREATION */
+        .dt-logo-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1; text-align: center; }
+        .dt-mark { font-family: var(--font-display); font-size: 2.5rem; font-weight: 800; letter-spacing: -2px; margin-bottom: 5px; color: var(--fg); transition: transform 0.3s;}
+        .dt-logo-wrapper:hover .dt-mark { transform: scale(1.05); }
+        .dt-text { font-family: var(--font-display); font-size: 1.1rem; font-weight: 800; letter-spacing: 4px; color: var(--fg); }
+        .dt-tag-wrapper { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 6px; width: 100%;}
+        .dt-tag-line { height: 1px; background: #666; flex-grow: 1; }
+        .dt-tag { font-family: var(--font-mono); font-size: 0.55rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #aaa;}
 
         @media (min-width: 1025px) {
             .header-bottom { 
@@ -324,9 +321,9 @@
         .footer-links { text-align: left; }
         .footer-links h4 { font-size: 1.1rem; font-weight: 800; margin-bottom: 30px; text-transform: uppercase; color: #fff; border-bottom: var(--border-heavy); padding-bottom: 10px; display: inline-block;}
         .footer-links ul li { margin-bottom: 15px; }
+        .footer-links ul li a { color: #888; text-transform: uppercase; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: var(--transition); }
         
         /* FOOTER CLEAN WHITISH HOVER */
-        .footer-links ul li a { color: #888; text-transform: uppercase; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: var(--transition); }
         .footer-links ul li a:hover, .footer-links ul li a.active-link { color: #ffffff; }
         .footer-links ul li a i { font-size: 1.2rem; transition: transform 0.3s; }
         .footer-links ul li a:hover i { transform: translateX(3px) scale(1.1); color: #ffffff; }
@@ -338,6 +335,10 @@
         @media (max-width: 1024px) {
             .header-top { padding: 15px 5%; border-bottom: none; }
             .header-top .social-left { display: none; } 
+            
+            /* Logo compression for mobile */
+            .dt-text, .dt-tag-wrapper { display: none; }
+            .dt-mark { font-size: 3rem; margin-bottom: 0; }
             
             .desktop-only { display: none !important; }
             .mobile-toggle { display: block; width: 45px; height: 45px; border: var(--border-heavy); background: var(--bg); position: relative; z-index: 90001; transition: var(--transition); cursor: none; }
@@ -420,8 +421,16 @@
             </div>
             
             <div class="logo-container">
-                <a href="#home" class="nav-trigger magnetic" data-target="view-home" style="text-decoration: none;">
-                    <img src="68204.png" alt="Digital Trade Logo" class="site-logo-img">
+                <a href="#home" class="nav-trigger magnetic" data-target="view-home" style="text-decoration: none; color: inherit;">
+                    <div class="dt-logo-wrapper">
+                        <div class="dt-mark">DT</div>
+                        <div class="dt-text">DIGITAL TRADE</div>
+                        <div class="dt-tag-wrapper">
+                            <div class="dt-tag-line"></div>
+                            <div class="dt-tag">DESIGN THAT DRIVES BRANDS</div>
+                            <div class="dt-tag-line"></div>
+                        </div>
+                    </div>
                 </a>
             </div>
             
@@ -1023,7 +1032,7 @@
 
         <div class="footer-bottom mono-text">
             <p>© 2026 DIGITAL TRADE. ALL RIGHTS RESERVED.</p>
-            <p>ARCHITECT: INDRAJEET PISDA | BUILD 13.0 (CLEAN WHITE ACTIVE)</p>
+            <p>ARCHITECT: INDRAJEET PISDA | BUILD 14.0 (CSS LOGO RESTORED)</p>
         </div>
     </footer>
 
