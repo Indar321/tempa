@@ -112,7 +112,6 @@
             display: flex; flex-direction: column;
         }
         
-        /* Top Tier: Socials (Left) - Logo (Center) - CTA (Right) */
         .header-top { 
             display: flex; justify-content: space-between; align-items: center; 
             width: 100%; max-width: 1440px; margin: 0 auto; padding: 15px 5% 10px; 
@@ -123,15 +122,16 @@
         
         .header-top .social-left { justify-content: flex-start; align-items: center; gap: 20px; }
         .social-left a { font-size: 1.4rem; color: #888; transition: var(--transition); }
-        .social-left a:hover { color: var(--fg); transform: translateY(-3px); }
+        .social-left a:hover { color: var(--fg); transform: translateY(-3px); text-shadow: 0 0 10px rgba(255,255,255,0.5); }
 
         .header-top .logo-container { justify-content: center; }
         .header-top .actions-container { justify-content: flex-end; align-items: center; gap: 20px; }
 
         /* PURE "DT" LOGO RECREATION */
         .dt-logo-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1; text-align: center; }
-        .dt-mark { font-family: var(--font-display); font-size: 3.5rem; font-weight: 800; letter-spacing: -3px; margin-bottom: 0;}
-        
+        .dt-mark { font-family: var(--font-display); font-size: 3.5rem; font-weight: 800; letter-spacing: -3px; margin-bottom: 0; transition: text-shadow 0.3s;}
+        .dt-mark:hover { text-shadow: 0 0 15px rgba(255,255,255,0.5); }
+
         /* Bottom Tier: Centered Menu */
         @media (min-width: 1025px) {
             .header-bottom { 
@@ -143,9 +143,11 @@
         }
         
         .nav-links { display: flex; gap: clamp(15px, 2.5vw, 50px); justify-content: center; } 
-        .nav-links a { font-family: var(--font-mono); font-size: 0.9rem; font-weight: 700; text-transform: uppercase; position: relative; padding: 5px 0; color: #aaa; transition: color 0.3s; }
-        .nav-links a:hover, .nav-links a.active-link { color: var(--fg); }
-        .nav-links a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px; background: var(--fg); transform: scaleX(0); transform-origin: right; transition: transform 0.3s cubic-bezier(0.19, 1, 0.22, 1); }
+        .nav-links a { font-family: var(--font-mono); font-size: 0.9rem; font-weight: 700; text-transform: uppercase; position: relative; padding: 5px 0; color: #aaa; transition: color 0.3s, text-shadow 0.3s; }
+        
+        /* DESKTOP ACTIVE LIGHT EFFECT */
+        .nav-links a:hover, .nav-links a.active-link { color: #fff; text-shadow: 0 0 12px rgba(255,255,255,0.8); }
+        .nav-links a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px; background: #fff; transform: scaleX(0); transform-origin: right; transition: transform 0.3s cubic-bezier(0.19, 1, 0.22, 1); box-shadow: 0 0 8px rgba(255,255,255,0.8); }
         .nav-links a:hover::after, .nav-links a.active-link::after { transform: scaleX(1); transform-origin: left; }
         
         .nav-overlay-bg { position: fixed; inset: 0; background: rgba(5,5,5,0.8); backdrop-filter: blur(3px); z-index: 89999; opacity: 0; visibility: hidden; transition: var(--transition); }
@@ -196,7 +198,7 @@
         @media (max-width: 768px) { .contact-form-box { padding: 3rem 2rem; } }
         .form-group { margin-bottom: 45px; width: 100%; }
         .form-input { width: 100%; padding: 25px 15px; background: transparent; border: none; border-bottom: var(--border-heavy); color: var(--fg); font-size: 1.2rem; font-family: var(--font-mono); transition: var(--transition); border-radius: 0; }
-        .form-input:focus { border-color: #fff; background: rgba(255,255,255,0.05); outline: none; }
+        .form-input:focus { border-color: #fff; background: rgba(255,255,255,0.05); outline: none; box-shadow: 0 5px 15px rgba(255,255,255,0.1); }
 
         .grid-2 { display: grid; grid-template-columns: 1fr; gap: 40px; width: 100%; }
         @media(min-width: 768px) { .grid-2 { grid-template-columns: 1fr 1fr; gap: 60px; } } 
@@ -229,7 +231,7 @@
         @media(min-width: 1024px) { .hero-layout { grid-template-columns: 1.5fr 1fr; gap: 80px; } }
         
         .hero-terminal { font-family: var(--font-mono); border: var(--border-light); padding: 1.5rem; display: inline-block; margin-bottom: 3.5rem; background: rgba(255,255,255,0.02); font-size: 0.9rem; text-transform: uppercase; }
-        .hero-terminal .status-online { color: #00ff00; }
+        .hero-terminal .status-online { color: #00ff00; text-shadow: 0 0 8px #00ff00; }
 
         .hero h1 { font-family: var(--font-display); font-size: clamp(3.5rem, 8vw, 7.5rem); font-weight: 800; line-height: 1; margin-bottom: 2.5rem; letter-spacing: -0.05em; }
         .hero p { font-size: 1.3rem; font-weight: 500; max-width: 650px; color: #ccc; margin-bottom: 3.5rem; border-left: var(--border-heavy); padding-left: 25px; line-height: 1.6; }
@@ -293,6 +295,14 @@
         .sidebar-block { border: var(--border-heavy); padding: 50px 40px; transition: var(--transition); background: var(--bg); }
         .sidebar-block.highlight { background: var(--fg); color: var(--bg); }
 
+        /* --- POLICY SECTIONS STYLING --- */
+        .policy-container { max-width: 900px; margin: 0 auto; padding-bottom: 100px;}
+        .policy-block { margin-bottom: 40px; }
+        .policy-block h3 { font-family: var(--font-mono); font-size: 1.5rem; text-transform: uppercase; border-bottom: 2px dashed var(--fg); padding-bottom: 10px; margin-bottom: 20px;}
+        .policy-block p { color: #ccc; margin-bottom: 15px; line-height: 1.8; }
+        .policy-block ul { list-style: disc; margin-left: 20px; color: #ccc; margin-bottom: 15px; }
+        .policy-block li { margin-bottom: 10px; }
+
         /* --- FOOTER ARCHITECTURE --- */
         footer { border-top: var(--border-heavy); padding: 100px 0 40px; font-family: var(--font-mono); font-size: 0.9rem; text-align: center; }
         
@@ -307,15 +317,15 @@
         .footer-links { text-align: left; }
         .footer-links h4 { font-size: 1.1rem; font-weight: 800; margin-bottom: 30px; text-transform: uppercase; color: #fff; border-bottom: var(--border-heavy); padding-bottom: 10px; display: inline-block;}
         .footer-links ul li { margin-bottom: 15px; }
-        .footer-links ul li a { color: #888; text-transform: uppercase; font-weight: 600; display: flex; align-items: center; gap: 8px; }
-        .footer-links ul li a:hover { color: var(--fg); }
+        .footer-links ul li a { color: #888; text-transform: uppercase; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: var(--transition); }
+        .footer-links ul li a:hover, .footer-links ul li a.active-link { color: #fff; text-shadow: 0 0 8px rgba(255,255,255,0.8); }
         .footer-links ul li a i { font-size: 1.2rem; transition: transform 0.3s; }
-        .footer-links ul li a:hover i { transform: translateX(3px) scale(1.1); }
+        .footer-links ul li a:hover i { transform: translateX(3px) scale(1.1); color: #fff; text-shadow: 0 0 8px rgba(255,255,255,0.8); }
 
         .footer-bottom { display: flex; flex-direction: column; gap: 20px; color: #666; text-transform: uppercase; font-weight: 800; }
         @media(min-width: 768px) { .footer-bottom { flex-direction: row; justify-content: space-between; align-items: center; } }
 
-        /* --- FIXED ONE-BY-ONE MOBILE SIDEBAR --- */
+        /* --- FIXED ONE-BY-ONE MOBILE SIDEBAR (WITH LIGHT EFFECT) --- */
         @media (max-width: 1024px) {
             .header-top { padding: 15px 5%; border-bottom: none; }
             .header-top .social-left { display: none; } 
@@ -348,14 +358,32 @@
             
             /* Tighter gap for one-by-one list */
             .nav-links-core { display: flex; flex-direction: column; gap: 15px; margin-bottom: auto; }
+            
             .nav-links-core > a.nav-trigger { 
                 font-family: var(--font-display); font-size: clamp(1.4rem, 3.5vh, 1.6rem); line-height: 1; 
                 font-weight: 800; text-transform: uppercase; width: 100%; 
-                padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.1); 
+                padding: 8px 10px; border-bottom: 1px solid rgba(255,255,255,0.1); 
                 display: flex; align-items: center; gap: 15px; color: #888;
+                transition: var(--transition);
+                border-left: 0px solid transparent;
             }
-            .nav-links-core > a.nav-trigger i { font-size: clamp(1.2rem, 3.5vh, 1.4rem); color: #666; }
+            .nav-links-core > a.nav-trigger i { font-size: clamp(1.2rem, 3.5vh, 1.4rem); color: #666; transition: var(--transition); }
             .nav-links-core > a.nav-trigger::after { display: none; } 
+
+            /* MOBILE ACTIVE LINK LIGHT EFFECT */
+            .nav-links-core > a.nav-trigger.active-link,
+            .nav-links-core > a.nav-trigger:hover {
+                color: #fff !important;
+                text-shadow: 0 0 15px rgba(255, 255, 255, 0.9);
+                border-left: 4px solid #fff; /* glowing structural marker */
+                padding-left: 15px;
+                background: rgba(255,255,255,0.05);
+            }
+            .nav-links-core > a.nav-trigger.active-link i,
+            .nav-links-core > a.nav-trigger:hover i {
+                color: #fff !important;
+                text-shadow: 0 0 15px rgba(255, 255, 255, 0.9);
+            }
             
             .mobile-menu-footer { 
                 display: flex; flex-direction: column; font-family: var(--font-mono); 
@@ -846,6 +874,106 @@
             </div>
         </section>
 
+        <section id="view-privacy" class="view-section">
+            <div class="section-padding">
+                <div class="container">
+                    <div class="section-header">
+                        <h2 class="glitch-text" data-text="PRIVACY POLICY">PRIVACY <span>POLICY</span></h2>
+                        <p>DATA COLLECTION AND USAGE PROTOCOLS.</p>
+                    </div>
+                    <div class="policy-container">
+                        <div class="policy-block">
+                            <h3>01. Information Collection</h3>
+                            <p>Digital Trade collects only the data necessary to fulfill project requirements and communicate effectively. This includes transmission details (name, email, phone) provided via our contact protocols.</p>
+                        </div>
+                        <div class="policy-block">
+                            <h3>02. Data Utilization</h3>
+                            <p>All transmitted data is utilized strictly for project development, structural analysis, and client communication. We do not sell, rent, or lease your data to third-party nodes.</p>
+                        </div>
+                        <div class="policy-block">
+                            <h3>03. Security Protocols</h3>
+                            <p>We employ industry-standard security measures to protect your digital assets and personal information during the architecture and deployment phases.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-terms" class="view-section">
+            <div class="section-padding">
+                <div class="container">
+                    <div class="section-header">
+                        <h2 class="glitch-text" data-text="TERMS OF SERVICE">TERMS OF <span>SERVICE</span></h2>
+                        <p>STRUCTURAL AGREEMENTS AND OBLIGATIONS.</p>
+                    </div>
+                    <div class="policy-container">
+                        <div class="policy-block">
+                            <h3>01. Project Scope</h3>
+                            <p>All projects commence only after a formal agreement on the structural scope, timeline, and financial parameters. Any feature creep beyond the agreed scope will require secondary authorization and budgeting.</p>
+                        </div>
+                        <div class="policy-block">
+                            <h3>02. Intellectual Property</h3>
+                            <p>Upon final deployment and clearing of all financial invoices, full intellectual property rights of the custom designs and codebases are transferred to the client.</p>
+                        </div>
+                        <div class="policy-block">
+                            <h3>03. Client Responsibilities</h3>
+                            <p>Clients are required to provide necessary raw data, brand assets, and feedback within agreed timeframes to ensure project SLA metrics are met.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-refund" class="view-section">
+            <div class="section-padding">
+                <div class="container">
+                    <div class="section-header">
+                        <h2 class="glitch-text" data-text="REFUND POLICY">REFUND <span>POLICY</span></h2>
+                        <p>FINANCIAL RECOVERY PROTOCOLS.</p>
+                    </div>
+                    <div class="policy-container">
+                        <div class="policy-block">
+                            <h3>01. Initial Deposits</h3>
+                            <p>All structural builds require a non-refundable upfront deposit to secure bandwidth on our servers and initiate the discovery phase.</p>
+                        </div>
+                        <div class="policy-block">
+                            <h3>02. Mid-Project Cancellations</h3>
+                            <p>If a project is terminated by the client before handover, billing will be calculated based on the architectural milestones completed up to the point of termination.</p>
+                        </div>
+                        <div class="policy-block">
+                            <h3>03. Post-Deployment</h3>
+                            <p>Due to the digital and intellectual nature of our deliverables, we cannot issue refunds once source files have been transferred or code has been pushed live to production servers.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-cookies" class="view-section">
+            <div class="section-padding">
+                <div class="container">
+                    <div class="section-header">
+                        <h2 class="glitch-text" data-text="COOKIE POLICY">COOKIE <span>POLICY</span></h2>
+                        <p>LOCAL STORAGE AND TRACKING.</p>
+                    </div>
+                    <div class="policy-container">
+                        <div class="policy-block">
+                            <h3>01. Essential Cookies</h3>
+                            <p>Our system OS requires certain essential cookies to function, particularly for maintaining SPA state, routing, and user interface preferences during your session.</p>
+                        </div>
+                        <div class="policy-block">
+                            <h3>02. Analytics</h3>
+                            <p>We may deploy non-invasive analytic trackers to monitor system performance, traffic flow, and engagement metrics to continually improve our structural designs.</p>
+                        </div>
+                        <div class="policy-block">
+                            <h3>03. User Control</h3>
+                            <p>You may configure your local browser to reject all non-essential cookies; however, doing so may disrupt the optimal performance of the Digital Trade environment.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <footer class="container">
@@ -861,10 +989,10 @@
             <div class="footer-links mono-text">
                 <h4>LEGAL & POLICIES</h4>
                 <ul>
-                    <li><a href="#" class="icon-anim" target="_blank"><i class="ri-file-paper-line"></i> <span class="scrambler">Privacy Policy</span></a></li>
-                    <li><a href="#" class="icon-anim" target="_blank"><i class="ri-scales-3-line"></i> <span class="scrambler">Terms of Service</span></a></li>
-                    <li><a href="#" class="icon-anim" target="_blank"><i class="ri-exchange-dollar-line"></i> <span class="scrambler">Refund Policy</span></a></li>
-                    <li><a href="#" class="icon-anim" target="_blank"><i class="ri-shield-keyhole-line"></i> <span class="scrambler">Cookie Policy</span></a></li>
+                    <li><a href="#privacy" class="nav-trigger icon-anim" data-target="view-privacy"><i class="ri-file-paper-line"></i> <span class="scrambler">Privacy Policy</span></a></li>
+                    <li><a href="#terms" class="nav-trigger icon-anim" data-target="view-terms"><i class="ri-scales-3-line"></i> <span class="scrambler">Terms of Service</span></a></li>
+                    <li><a href="#refund" class="nav-trigger icon-anim" data-target="view-refund"><i class="ri-exchange-dollar-line"></i> <span class="scrambler">Refund Policy</span></a></li>
+                    <li><a href="#cookies" class="nav-trigger icon-anim" data-target="view-cookies"><i class="ri-shield-keyhole-line"></i> <span class="scrambler">Cookie Policy</span></a></li>
                 </ul>
             </div>
 
@@ -891,7 +1019,7 @@
 
         <div class="footer-bottom mono-text">
             <p>© 2026 DIGITAL TRADE. ALL RIGHTS RESERVED.</p>
-            <p>ARCHITECT: INDRAJEET PISDA | BUILD 11.0 (REPAIRED MOBILE)</p>
+            <p>ARCHITECT: INDRAJEET PISDA | BUILD 12.0 (EXPANDED OS)</p>
         </div>
     </footer>
 
@@ -1057,9 +1185,10 @@
                     void targetView.offsetWidth; 
                     targetView.style.animation = 'smoothFadeUp 0.4s cubic-bezier(0.19, 1, 0.22, 1) forwards';
 
-                    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active-link'));
-                    const activeLink = document.querySelector(`.nav-links a[data-target="${targetId}"]`);
-                    if(activeLink) activeLink.classList.add('active-link');
+                    // Manage active links globally (Header, Mobile Sidebar, Footer)
+                    document.querySelectorAll('.nav-trigger').forEach(a => a.classList.remove('active-link'));
+                    const activeLinks = document.querySelectorAll(`.nav-trigger[data-target="${targetId}"]`);
+                    activeLinks.forEach(link => link.classList.add('active-link'));
 
                     window.scrollTo(0, 0);
                     closeMobileNav();
