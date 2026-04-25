@@ -112,14 +112,14 @@
             position: fixed; top: 0; left: 0; width: 100%; 
             z-index: 90000; background: rgba(5, 5, 5, 0.98); backdrop-filter: blur(5px); 
             border-bottom: var(--border-heavy); 
-            /* Added transform to transition for smart hide */
-            transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1), background-color 0.4s; 
+            /* Changed to TOP transition to prevent containing-block coordinate shift on Mobile Sidebar */
+            transition: top 0.4s cubic-bezier(0.19, 1, 0.22, 1), background-color 0.4s; 
             display: flex; flex-direction: column;
         }
         
-        /* Auto-Hide Class applied via JS */
+        /* Auto-Hide Class */
         header.header-hidden {
-            transform: translateY(-100%);
+            top: -200px;
         }
         
         .header-top { 
@@ -265,7 +265,7 @@
         .work-card:hover { transform: translate(-6px, -6px); box-shadow: var(--shadow-brutal); }
         
         .work-info { padding: 30px; position: relative; z-index: 2; display: flex; flex-direction: column; justify-content: space-between; height: 100%; }
-        .work-client { font-family: var(--font-display); font-size: 1.8rem; font-weight: 800; text-transform: uppercase; }
+        .work-client { font-family: var(--font-mono); font-size: 1.8rem; font-weight: 800; text-transform: uppercase; }
         .work-tags { font-family: var(--font-mono); font-size: 0.95rem; font-weight: 800; padding-top: 15px; border-top: var(--border-light); text-transform: uppercase; color: #ddd; }
 
         .featured-study { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr; border: var(--border-heavy); background: var(--bg); transition: var(--transition); }
@@ -336,7 +336,7 @@
         .footer-bottom { display: flex; flex-direction: column; gap: 20px; color: #666; text-transform: uppercase; font-weight: 800; }
         @media(min-width: 768px) { .footer-bottom { flex-direction: row; justify-content: space-between; align-items: center; } }
 
-        /* --- FIXED ONE-BY-ONE MOBILE SIDEBAR --- */
+        /* --- ONE-BY-ONE COMPRESSED MOBILE SIDEBAR --- */
         @media (max-width: 1024px) {
             .header-top { padding: 15px 5%; border-bottom: none; }
             .header-top .social-left { display: none; } 
@@ -356,9 +356,10 @@
 
             .header-bottom { display: contents; } 
             
+            /* SIZED WITH 100DVH FOR PERFECT VIEWPORT COVERAGE */
             .nav-links { 
-                position: fixed; top: 0; right: -100%; left: auto; 
-                width: 85vw; max-width: 400px; height: 100vh; 
+                position: fixed; top: 0; right: -100%; bottom: 0; left: auto; 
+                width: 85vw; max-width: 400px; height: 100vh; height: 100dvh;
                 background: var(--bg); border-left: var(--border-heavy);
                 display: flex; flex-direction: column; 
                 padding: 100px 30px 30px; 
@@ -1033,7 +1034,7 @@
 
         <div class="footer-bottom mono-text">
             <p>© 2026 DIGITAL TRADE. ALL RIGHTS RESERVED.</p>
-            <p>ARCHITECT: INDRAJEET PISDA | BUILD 16.0 (SMART HEADER)</p>
+            <p>ARCHITECT: INDRAJEET PISDA | BUILD 17.0 (FINAL SYSTEM)</p>
         </div>
     </footer>
 
@@ -1047,8 +1048,9 @@
             const header = document.getElementById('header');
             
             window.addEventListener('scroll', () => {
+                if (document.body.classList.contains('nav-active')) return;
+                
                 let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                // Only hide if we scroll down past 100px
                 if (scrollTop > lastScrollTop && scrollTop > 100) {
                     header.classList.add('header-hidden');
                 } else {
@@ -1214,7 +1216,7 @@
                     void targetView.offsetWidth; 
                     targetView.style.animation = 'smoothFadeUp 0.4s cubic-bezier(0.19, 1, 0.22, 1) forwards';
 
-                    // Manage active links globally
+                    // Manage active links globally (Header, Mobile Sidebar, Footer)
                     document.querySelectorAll('.nav-trigger').forEach(a => a.classList.remove('active-link'));
                     const activeLinks = document.querySelectorAll(`.nav-trigger[data-target="${targetId}"]`);
                     activeLinks.forEach(link => link.classList.add('active-link'));
