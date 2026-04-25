@@ -8,7 +8,7 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
     
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
 
@@ -22,10 +22,10 @@
             --accent: #ff3333;
             --muted-bg: rgba(244, 244, 245, 0.05);
             
-            /* NEW TYPOGRAPHY ENGINE */
-            --font-display: 'Bebas Neue', sans-serif;
+            /* RESTORED TYPOGRAPHY ENGINE */
+            --font-display: 'Space Grotesk', sans-serif;
             --font-body: 'Inter', sans-serif;
-            --font-mono: 'Space Mono', monospace;
+            --font-mono: 'JetBrains Mono', monospace;
             
             --border-heavy: 3px solid var(--fg);
             --border-light: 1px solid rgba(244, 244, 245, 0.2);
@@ -83,8 +83,7 @@
         .custom-cursor-dot { position: fixed; width: 8px; height: 8px; background: var(--fg); border-radius: 50%; transform: translate(-50%, -50%); pointer-events: none; z-index: 999999; mix-blend-mode: difference; transition: width 0.2s, height 0.2s, border-radius 0.2s, background-color 0.2s; }
         .custom-cursor-dot.active { width: 60px; height: 60px; border-radius: 0; background: rgba(244, 244, 245, 0.1); border: 1px solid var(--fg); }
 
-        /* Adjusted glitch text for Bebas Neue */
-        .glitch-text { position: relative; display: inline-block; font-weight: 400; font-family: var(--font-display); text-transform: uppercase; letter-spacing: 1px;}
+        .glitch-text { position: relative; display: inline-block; font-weight: 800; font-family: var(--font-display); text-transform: uppercase; letter-spacing: -1px;}
         .glitch-text::before, .glitch-text::after { content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); opacity: 0; pointer-events: none; }
         .glitch-text:hover::before { left: 3px; text-shadow: -2px 0 var(--fg); background: var(--bg); animation: glitch-anim 0.2s infinite linear alternate-reverse; opacity: 1; z-index: 1; }
         .glitch-text:hover::after { left: -3px; text-shadow: 2px 0 var(--fg); background: var(--bg); animation: glitch-anim2 0.3s infinite linear alternate-reverse; opacity: 1; z-index: 1; }
@@ -107,13 +106,20 @@
         .toast.show { transform: translateX(0); }
 
         /* ==========================================
-           3. DESKTOP HEADER (2-TIER STACKED)
+           3. DESKTOP HEADER (SMART HIDE)
            ========================================== */
         header { 
             position: fixed; top: 0; left: 0; width: 100%; 
             z-index: 90000; background: rgba(5, 5, 5, 0.98); backdrop-filter: blur(5px); 
-            border-bottom: var(--border-heavy); transition: var(--transition); 
+            border-bottom: var(--border-heavy); 
+            /* Added transform to transition for smart hide */
+            transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1), background-color 0.4s; 
             display: flex; flex-direction: column;
+        }
+        
+        /* Auto-Hide Class applied via JS */
+        header.header-hidden {
+            transform: translateY(-100%);
         }
         
         .header-top { 
@@ -131,9 +137,9 @@
         .header-top .logo-container { justify-content: center; }
         .header-top .actions-container { justify-content: flex-end; align-items: center; gap: 20px; }
 
-        /* CSS LOGO UPDATED FOR BEBAS NEUE */
+        /* PURE CSS LOGO RESTORED */
         .dt-logo-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1; text-align: center; }
-        .dt-mark { font-family: var(--font-display); font-size: 4rem; font-weight: 400; letter-spacing: 2px; margin-bottom: 0; color: var(--fg); transition: transform 0.3s;}
+        .dt-mark { font-family: var(--font-display); font-size: 2.8rem; font-weight: 800; letter-spacing: -2px; margin-bottom: 5px; color: var(--fg); transition: transform 0.3s;}
         .dt-logo-wrapper:hover .dt-mark { transform: scale(1.05); }
         .dt-text { font-family: var(--font-mono); font-size: 0.8rem; font-weight: 800; letter-spacing: 4px; color: var(--fg); margin-top: -5px; }
         .dt-tag-wrapper { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 6px; width: 100%;}
@@ -167,7 +173,7 @@
 
         .section-padding { padding: 120px 0; width: 100%; position: relative; border-bottom: var(--border-light); }
         .section-header { margin-bottom: 80px; display: flex; flex-direction: column; gap: 20px; }
-        .section-header h2 { font-family: var(--font-display); font-size: clamp(3rem, 7vw, 5.5rem); font-weight: 400; text-transform: uppercase; line-height: 1; letter-spacing: 1px; margin: 0;}
+        .section-header h2 { font-family: var(--font-display); font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 800; text-transform: uppercase; line-height: 1; letter-spacing: -1px; margin: 0;}
         .section-header h2 span { color: var(--fg); border-bottom: var(--border-heavy); }
         .section-header p { font-family: var(--font-mono); font-size: 1.1rem; font-weight: 700; text-transform: uppercase; color: #aaa; }
         
@@ -221,15 +227,14 @@
         .interactive-item.active .interactive-icon { transform: rotate(45deg); }
         .interactive-item.active .interactive-content { max-height: 800px; padding-bottom: 35px; }
 
-        /* INCREASED SIZE FOR DISPLAY FONT */
-        .process-num { font-family: var(--font-display); font-size: 6rem; line-height: 1; margin-bottom: 1.5rem; border-bottom: var(--border-heavy); padding-bottom: 1rem; transition: var(--transition); letter-spacing: 2px;}
+        .process-num { font-family: var(--font-display); font-size: 5rem; line-height: 1; margin-bottom: 1.5rem; border-bottom: var(--border-heavy); padding-bottom: 1rem; transition: var(--transition); }
         .stat-grid { display: grid; grid-template-columns: 1fr; border: var(--border-heavy); }
         @media(min-width: 768px) { .stat-grid { grid-template-columns: repeat(2, 1fr); } }
         @media(min-width: 1024px) { .stat-grid { grid-template-columns: repeat(4, 1fr); } }
         .stat-item { padding: 4rem 2.5rem; border-bottom: var(--border-heavy); text-align: left; }
         @media(min-width: 768px) { .stat-item:nth-child(odd) { border-right: var(--border-heavy); } .stat-item:nth-last-child(-n+2) { border-bottom: none; } }
         @media(min-width: 1024px) { .stat-item { border-right: var(--border-heavy); border-bottom: none; } .stat-item:nth-child(4n) { border-right: none; } }
-        .stat-number { font-family: var(--font-display); font-size: 5.5rem; margin-bottom: 1rem; line-height: 1; letter-spacing: 2px;}
+        .stat-number { font-family: var(--font-display); font-size: 4.5rem; margin-bottom: 1rem; line-height: 1; }
 
         /* --- HERO VIEW --- */
         .hero { padding: 10rem 0 6rem; border-bottom: var(--border-heavy); }
@@ -239,7 +244,7 @@
         .hero-terminal { font-family: var(--font-mono); border: var(--border-light); padding: 1.5rem; display: inline-block; margin-bottom: 3.5rem; background: rgba(255,255,255,0.02); font-size: 0.9rem; text-transform: uppercase; }
         .hero-terminal .status-online { color: #00ff00; }
 
-        .hero h1 { font-family: var(--font-display); font-size: clamp(4rem, 10vw, 9rem); font-weight: 400; line-height: 0.9; margin-bottom: 2.5rem; letter-spacing: 2px; }
+        .hero h1 { font-family: var(--font-display); font-size: clamp(3.5rem, 8vw, 7.5rem); font-weight: 800; line-height: 1; margin-bottom: 2.5rem; letter-spacing: -0.05em; }
         .hero p { font-size: 1.3rem; font-weight: 500; max-width: 650px; color: #ccc; margin-bottom: 3.5rem; border-left: var(--border-heavy); padding-left: 25px; line-height: 1.6; }
 
         .hero-img-box { width: 100%; height: 500px; background: repeating-linear-gradient( 45deg, transparent, transparent 10px, var(--fg) 10px, var(--fg) 12px ); border: var(--border-heavy); position: relative; overflow: hidden; padding: 0 !important; }
@@ -249,7 +254,7 @@
         /* --- MARQUEE --- */
         .marquee-container { background: var(--fg); color: var(--bg); padding: 1.5rem 0; overflow: hidden; white-space: nowrap; display: flex; border-top: var(--border-heavy); border-bottom: var(--border-heavy); transform: rotate(-1deg) scale(1.02); position: relative; z-index: 10; margin: 40px 0; }
         .marquee-content { display: flex; animation: scrollMarquee 20s linear infinite; }
-        .marquee-content span { font-family: var(--font-display); font-size: 3rem; padding: 0 3rem; text-transform: uppercase; font-weight: 400; letter-spacing: 2px;}
+        .marquee-content span { font-family: var(--font-display); font-size: 2.5rem; padding: 0 3rem; text-transform: uppercase; font-weight: 800; }
         @keyframes scrollMarquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
         /* --- WORK GRID --- */
@@ -260,7 +265,7 @@
         .work-card:hover { transform: translate(-6px, -6px); box-shadow: var(--shadow-brutal); }
         
         .work-info { padding: 30px; position: relative; z-index: 2; display: flex; flex-direction: column; justify-content: space-between; height: 100%; }
-        .work-client { font-family: var(--font-display); font-size: 2.5rem; font-weight: 400; text-transform: uppercase; letter-spacing: 1px;}
+        .work-client { font-family: var(--font-display); font-size: 1.8rem; font-weight: 800; text-transform: uppercase; }
         .work-tags { font-family: var(--font-mono); font-size: 0.95rem; font-weight: 800; padding-top: 15px; border-top: var(--border-light); text-transform: uppercase; color: #ddd; }
 
         .featured-study { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr; border: var(--border-heavy); background: var(--bg); transition: var(--transition); }
@@ -278,7 +283,7 @@
         .tier-name { font-family: var(--font-mono); font-size: 1.1rem; font-weight: 800; border: var(--border-heavy); display: inline-block; padding: 0.8rem 1.5rem; margin-bottom: 2.5rem; width: fit-content; }
         .tier-card.featured .tier-name { border-color: var(--bg); }
 
-        .tier-price { font-family: var(--font-display); font-size: 5.5rem; border-bottom: var(--border-dashed); padding-bottom: 1.5rem; margin-bottom: 2.5rem; line-height: 1; letter-spacing: 2px;}
+        .tier-price { font-family: var(--font-display); font-size: 4.5rem; border-bottom: var(--border-dashed); padding-bottom: 1.5rem; margin-bottom: 2.5rem; line-height: 1; }
         .tier-code { font-family: var(--font-mono); font-size: 1rem; color: #888; margin-bottom: 3rem; flex-grow: 1; line-height: 1.8; }
         .tier-card.featured .tier-code { color: #555; border-color: var(--bg); }
 
@@ -313,7 +318,7 @@
         footer { border-top: var(--border-heavy); padding: 100px 0 40px; font-family: var(--font-mono); font-size: 0.9rem; text-align: center; }
         
         .footer-top-center { display: flex; flex-direction: column; align-items: center; margin-bottom: 80px; }
-        .footer-brand { font-family: var(--font-display); font-size: clamp(4rem, 6vw, 5rem); font-weight: 400; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px; }
+        .footer-brand { font-family: var(--font-display); font-size: clamp(3rem, 5vw, 4rem); font-weight: 800; margin-bottom: 20px; text-transform: uppercase; letter-spacing: -1px; }
         .footer-top-center p { font-family: var(--font-body); font-size: 1.1rem; color: #888; max-width: 500px; margin-bottom: 40px; }
         .system-status { border: var(--border-heavy); padding: 1.5rem 2rem; text-align: left; width: fit-content; font-weight: 800; background: var(--bg); }
 
@@ -335,6 +340,9 @@
         @media (max-width: 1024px) {
             .header-top { padding: 15px 5%; border-bottom: none; }
             .header-top .social-left { display: none; } 
+            
+            .dt-text, .dt-tag-wrapper { display: none; }
+            .dt-mark { font-size: 3rem; margin-bottom: 0; }
             
             .desktop-only { display: none !important; }
             .mobile-toggle { display: block; width: 45px; height: 45px; border: var(--border-heavy); background: var(--bg); position: relative; z-index: 90001; transition: var(--transition); cursor: none; }
@@ -363,15 +371,14 @@
             .nav-links-core { display: flex; flex-direction: column; gap: 15px; margin-bottom: auto; }
             
             .nav-links-core > a.nav-trigger { 
-                font-family: var(--font-display); font-size: clamp(2rem, 4vh, 2.5rem); line-height: 1; 
-                font-weight: 400; text-transform: uppercase; width: 100%; 
+                font-family: var(--font-display); font-size: clamp(1.4rem, 3.5vh, 1.6rem); line-height: 1; 
+                font-weight: 800; text-transform: uppercase; width: 100%; 
                 padding: 8px 10px; border-bottom: 1px solid rgba(255,255,255,0.1); 
                 display: flex; align-items: center; gap: 15px; color: #888;
                 transition: var(--transition);
                 border-left: 0px solid transparent;
-                letter-spacing: 1px;
             }
-            .nav-links-core > a.nav-trigger i { font-size: clamp(1.5rem, 4vh, 1.8rem); color: #666; transition: var(--transition); }
+            .nav-links-core > a.nav-trigger i { font-size: clamp(1.2rem, 3.5vh, 1.4rem); color: #666; transition: var(--transition); }
             .nav-links-core > a.nav-trigger::after { display: none; } 
 
             .nav-links-core > a.nav-trigger.active-link,
@@ -466,6 +473,7 @@
     <main id="main-content">
         
         <section id="view-home" class="view-section active">
+            
             <section class="hero container" style="border-bottom: none;">
                 <div class="hero-layout">
                     <div>
@@ -562,7 +570,7 @@
                 <div class="container">
                     <div class="split-layout" style="align-items: center;">
                         <div>
-                            <h2 style="font-family: var(--font-display); font-size: clamp(3rem, 5vw, 4.5rem); text-transform: uppercase; margin-bottom: 40px; line-height: 1; letter-spacing: 1px;">Constructing digital dominance.</h2>
+                            <h2 style="font-family: var(--font-display); font-size: clamp(3rem, 5vw, 4rem); text-transform: uppercase; margin-bottom: 40px; line-height: 1.1; font-weight: 800;">Constructing digital dominance.</h2>
                             <p class="text-body" style="font-weight: 600; font-size: 1.2rem;">At Digital Trade, we don't just create images; we build structural visual systems. Founded by Indrajeet Pisda and headquartered in Dantewada, our studio bridges the gap between raw creativity and engineered functionality.</p>
                             <p class="text-body mono-text" style="border-left: var(--border-heavy); padding-left: 20px; margin-top: 3rem; font-weight: 800;">> Clutter kills conversion. We strip away the unnecessary to deploy high-performance websites.</p>
                             <div class="magnetic-wrap" style="margin-top: 40px;">
@@ -639,7 +647,7 @@
                         <div class="featured-study brutal-box invert-hover" onclick="navigateTo('view-contact')" style="cursor: pointer; padding: 0; overflow: hidden;">
                             <div class="fs-content">
                                 <span class="mono-text" style="border: var(--border-heavy); padding: 8px 15px; margin-bottom: 30px; width: fit-content; font-weight: 800;"><span class="scrambler">[ FEATURED_BUILD ]</span></span>
-                                <h3 class="glitch-text" data-text="VIROX APPAREL" style="font-size: 3.5rem; line-height: 1; margin-bottom: 25px;">Virox Apparel OS</h3>
+                                <h3 class="glitch-text" data-text="VIROX APPAREL" style="font-size: 3rem; line-height: 1; margin-bottom: 25px;">Virox Apparel OS</h3>
                                 <p class="text-body" style="font-size: 1.2rem;">Complete architectural overhaul for an emerging streetwear brand. Custom Shopify theme, vector suite, and print assets.</p>
                             </div>
                             <div class="fs-img-wrap">
@@ -766,7 +774,7 @@
                 <div class="container">
                     <div class="split-layout">
                         <div>
-                            <h2 class="glitch-text" data-text="THE ARCHITECT" style="font-size: clamp(3.5rem, 6vw, 6.5rem); text-transform: uppercase; margin-bottom: 40px; line-height: 1; letter-spacing: 2px;">THE ARCHITECT<span class="blink">_</span></h2>
+                            <h2 class="glitch-text" data-text="THE ARCHITECT" style="font-size: clamp(3.5rem, 6vw, 5.5rem); text-transform: uppercase; margin-bottom: 40px; line-height: 1;">THE ARCHITECT<span class="blink">_</span></h2>
                             <div class="mono-text" style="border: var(--border-heavy); padding: 1.5rem; display: inline-block; margin-bottom: 3rem; font-weight: 800;">
                                 SYS_ADMIN: INDRAJEET_PISDA<br>
                                 LOCATION: DANTEWADA_CG<br>
@@ -784,15 +792,15 @@
                         <div class="sidebar-panel">
                             <div class="sidebar-block invert-hover brutal-box">
                                 <h4 class="mono-text" style="font-size: 1.1rem; margin-bottom: 10px;">FOUNDED</h4>
-                                <p style="font-family: var(--font-display); font-size: 4rem; line-height: 1;">2025</p>
+                                <p style="font-family: var(--font-display); font-size: 3rem; line-height: 1;">2025</p>
                             </div>
                             <div class="sidebar-block invert-hover brutal-box">
                                 <h4 class="mono-text" style="font-size: 1.1rem; margin-bottom: 10px;">PRIMARY NODE</h4>
-                                <p style="font-family: var(--font-display); font-size: 3rem; line-height: 1.1;">Dantewada, India</p>
+                                <p style="font-family: var(--font-display); font-size: 2.2rem; line-height: 1.1;">Dantewada, India</p>
                             </div>
                             <div class="sidebar-block highlight brutal-box">
                                 <h4 class="mono-text" style="color: var(--bg); font-size: 1.1rem; margin-bottom: 15px;">CURRENT STATUS</h4>
-                                <p style="font-family: var(--font-display); font-size: 2.5rem; display: flex; align-items: center; gap: 15px;">
+                                <p style="font-family: var(--font-display); font-size: 1.8rem; display: flex; align-items: center; gap: 15px;">
                                     <span class="blink" style="display:inline-block; width:18px; height:18px; background:var(--bg);"></span> Accepting Projects
                                 </p>
                             </div>
@@ -861,7 +869,7 @@
                         <div class="sidebar-panel">
                             <div class="sidebar-block highlight brutal-box" style="padding: 50px 40px;">
                                 <h4 class="mono-text icon-anim" style="color: var(--bg); font-size: 1.2rem; margin-bottom: 20px;"><i class="ri-time-line"></i> <span class="scrambler">TRANSMISSION SLA</span></h4>
-                                <p style="font-family: var(--font-display); font-size: 2.2rem; line-height: 1.2;">All inquiries receive a structural review within 12 operating hours.</p>
+                                <p style="font-family: var(--font-display); font-size: 1.8rem; line-height: 1.2;">All inquiries receive a structural review within 12 operating hours.</p>
                             </div>
 
                             <div class="sidebar-block invert-hover brutal-box" style="padding: 50px 40px;">
@@ -872,7 +880,7 @@
                             
                             <div class="sidebar-block invert-hover brutal-box" style="padding: 50px 40px;">
                                 <h4 class="mono-text icon-anim" style="font-size: 1.2rem; margin-bottom: 20px;"><i class="ri-map-pin-line"></i> <span class="scrambler">HEADQUARTERS</span></h4>
-                                <p style="font-family: var(--font-display); font-size: 2.2rem; text-transform: uppercase; line-height: 1.2;">Teknaar Chowk, Awarbhata<br>Dantewada, Chhattisgarh</p>
+                                <p style="font-family: var(--font-display); font-size: 1.8rem; text-transform: uppercase; line-height: 1.2;">Teknaar Chowk, Awarbhata<br>Dantewada, Chhattisgarh</p>
                             </div>
                         </div>
                     </div>
@@ -984,7 +992,7 @@
 
     <footer class="container">
         <div class="footer-top-center">
-            <h3 class="footer-brand glitch-text" data-text="DIGITAL_TRADE" style="font-family: var(--font-display);">DIGITAL<span class="blink">_</span>TRADE</h3>
+            <h3 class="footer-brand glitch-text" data-text="DIGITAL_TRADE">DIGITAL<span class="blink">_</span>TRADE</h3>
             <p>A minimalist design and development agency engineering future-proof brand architectures.</p>
             <div class="mono-text system-status">
                 > SYSTEM: ACTIVE<br>> NODE: DANTEWADA_HQ<br>> UPTIME: 99.9%
@@ -1025,7 +1033,7 @@
 
         <div class="footer-bottom mono-text">
             <p>© 2026 DIGITAL TRADE. ALL RIGHTS RESERVED.</p>
-            <p>ARCHITECT: INDRAJEET PISDA | BUILD 15.0 (INDUSTRIAL TYPE)</p>
+            <p>ARCHITECT: INDRAJEET PISDA | BUILD 16.0 (SMART HEADER)</p>
         </div>
     </footer>
 
@@ -1034,7 +1042,22 @@
             
             const isTouchDevice = (('ontouchstart' in window) || (navigator.maxTouchPoints > 0));
 
-            // --- 1. FIXED SCRAMBLER EFFECT ---
+            // --- 1. SMART HEADER (AUTO-HIDE ON SCROLL) ---
+            let lastScrollTop = 0;
+            const header = document.getElementById('header');
+            
+            window.addEventListener('scroll', () => {
+                let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                // Only hide if we scroll down past 100px
+                if (scrollTop > lastScrollTop && scrollTop > 100) {
+                    header.classList.add('header-hidden');
+                } else {
+                    header.classList.remove('header-hidden');
+                }
+                lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; 
+            });
+
+            // --- 2. FIXED SCRAMBLER EFFECT ---
             const chars = '!<>-_\\\\/[]{}—=+*^?#_';
             document.querySelectorAll('.scrambler').forEach(el => {
                 const originalText = el.innerText.trim();
@@ -1057,7 +1080,7 @@
                 });
             });
 
-            // --- 2. ADVANCED CANVAS TRAIL CURSOR ---
+            // --- 3. ADVANCED CANVAS TRAIL CURSOR ---
             if (!isTouchDevice && window.innerWidth > 1024) {
                 const canvas = document.getElementById('cursor-canvas');
                 const ctx = canvas.getContext('2d');
@@ -1138,7 +1161,7 @@
                 document.body.style.cursor = 'auto';
             }
 
-            // --- 3. TOAST NOTIFICATIONS ---
+            // --- 4. TOAST NOTIFICATIONS ---
             window.showToast = function(msg) {
                 const container = document.getElementById('toast-container');
                 const toast = document.createElement('div');
@@ -1150,7 +1173,7 @@
                 setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 500); }, 3000);
             };
 
-            // --- 4. HEADER & MOBILE NAV ---
+            // --- 5. HEADER & MOBILE NAV ---
             const mobileToggle = document.getElementById('mobile-toggle');
             const navLinks = document.getElementById('nav-links');
             const navOverlayBg = document.getElementById('nav-overlay-bg');
@@ -1170,7 +1193,7 @@
             });
             navOverlayBg.addEventListener('click', closeMobileNav);
 
-            // --- 5. ADVANCED SPA ROUTING ---
+            // --- 6. ADVANCED SPA ROUTING ---
             const views = document.querySelectorAll('.view-section');
 
             window.navigateTo = function(targetId) {
@@ -1218,7 +1241,7 @@
                 if(document.getElementById(target)) navigateTo(target);
             }
 
-            // --- 6. ACCORDION / INTERACTIVE LIST ---
+            // --- 7. ACCORDION / INTERACTIVE LIST ---
             document.querySelectorAll('.interactive-header').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const item = btn.parentElement;
@@ -1228,7 +1251,7 @@
                 });
             });
 
-            // --- 7. WHATSAPP FORM LOGIC ---
+            // --- 8. WHATSAPP FORM LOGIC ---
             const waForm = document.getElementById('whatsapp-form');
             if (waForm) {
                 waForm.addEventListener('submit', function(event) {
