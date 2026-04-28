@@ -48,6 +48,15 @@ a{text-decoration:none;color:inherit}
 button,input,textarea{font-family:inherit;cursor:none;outline:none;border:none}
 
 /* ══════════════════════════════════════════
+   UTILITIES & CUSTOM MODS
+══════════════════════════════════════════ */
+.text-hidden { display: none !important; }
+
+@media (max-width: 960px) {
+  .mobile-hide-start { display: none !important; }
+}
+
+/* ══════════════════════════════════════════
    CANVAS PARTICLES (background)
 ══════════════════════════════════════════ */
 #particle-canvas{
@@ -320,7 +329,79 @@ nav.dark-bg .nav-avail-dot{background:var(--lime)}
 .pill.lime:hover{color:var(--ink)}
 
 /* ══════════════════════════════════════════
-   PRICING / TIERS (Custom mapping from old design)
+   SHOWREEL
+══════════════════════════════════════════ */
+#reel{
+  position:relative;height:80vh;overflow:hidden;
+  background:var(--ink);cursor:none;
+}
+.reel-img{position:absolute;inset:0;transition:transform 6s ease}
+.reel-img video{filter:brightness(.45);transition:filter .6s}
+#reel:hover .reel-img video{filter:brightness(.3)}
+#reel:hover .reel-img{transform:scale(1.03)}
+.reel-center{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;
+}
+.play-ring{
+  width:96px;height:96px;border-radius:50%;
+  border:1px solid rgba(255,255,255,.25);
+  display:flex;align-items:center;justify-content:center;
+  font-size:26px;color:var(--white);background:rgba(255,255,255,.07);
+  transition:transform .5s var(--expo),background .3s,border-color .3s;
+  cursor:none;
+}
+#reel:hover .play-ring{transform:scale(1.14);background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.55)}
+.play-label{
+  font-family:var(--fm);font-size:9px;letter-spacing:.24em;text-transform:uppercase;
+  color:rgba(255,255,255,.4);
+}
+.reel-hl{
+  position:absolute;bottom:48px;left:48px;z-index:2;
+  font-family:var(--fh);font-size:clamp(48px,7vw,100px);
+  letter-spacing:.04em;color:var(--white);line-height:.92;
+}
+.reel-yr{
+  position:absolute;top:80px;right:48px;
+  font-family:var(--fm);font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+  color:rgba(255,255,255,.3);
+}
+
+/* REEL MODAL */
+#rmodal{
+  position:fixed;inset:0;z-index:9000;
+  background:rgba(0,0,0,.92);backdrop-filter:blur(12px);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;visibility:hidden;transition:opacity .5s,visibility .5s;
+}
+#rmodal.on{opacity:1;visibility:visible}
+.rmodal-box{
+  width:min(880px,92vw);aspect-ratio:16/9;
+  background:#0a0a0a;position:relative;
+  transform:scale(.86) translateY(24px);transition:transform .65s var(--expo);
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+}
+#rmodal.on .rmodal-box{transform:scale(1) translateY(0)}
+.rmodal-inner{
+  display:flex;flex-direction:column;align-items:center;gap:20px;
+  font-family:var(--fm);font-size:11px;letter-spacing:.14em;color:rgba(255,255,255,.3);
+}
+.rmodal-play-big{
+  font-family:var(--fh);font-size:80px;letter-spacing:.06em;
+  color:rgba(255,255,255,.06);
+}
+#rmodal-x{
+  position:absolute;top:20px;right:20px;
+  width:40px;height:40px;border-radius:50%;
+  border:1px solid rgba(255,255,255,.15);background:transparent;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;color:rgba(255,255,255,.5);
+  cursor:none;transition:background .3s,color .3s;
+}
+#rmodal-x:hover{background:rgba(255,255,255,.1);color:var(--white)}
+
+/* ══════════════════════════════════════════
+   PRICING / TIERS
 ══════════════════════════════════════════ */
 #pricing { padding: 120px 48px; background: var(--paper); border-top: 1px solid rgba(0,0,0,.07); }
 .price-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: rgba(0,0,0,.08); border: 1px solid rgba(0,0,0,.08); margin-top: 64px; }
@@ -758,12 +839,12 @@ body.dark #theme-btn{border-color:rgba(255,255,255,.15);color:var(--ink)}
 
 <div id="mnav">
   <ul class="mnav-links">
-    <li><a href="#cases"><span>The Archive</span><span class="n">01</span></a></li>
-    <li><a href="#services"><span>Infrastructure</span><span class="n">02</span></a></li>
-    <li><a href="#pricing"><span>Deployment Tiers</span><span class="n">03</span></a></li>
-    <li><a href="#about"><span>Our Ethos</span><span class="n">04</span></a></li>
-    <li><a href="#faq"><span>Knowledge Base</span><span class="n">05</span></a></li>
-    <li><a href="#cta"><span>Contact</span><span class="n">06</span></a></li>
+    <li><a href="archive.html"><span>The Archive</span><span class="n">01</span></a></li>
+    <li><a href="infrastructure.html"><span>Infrastructure</span><span class="n">02</span></a></li>
+    <li><a href="deployment.html"><span>Deployment Tiers</span><span class="n">03</span></a></li>
+    <li><a href="ethos.html"><span>Our Ethos</span><span class="n">04</span></a></li>
+    <li><a href="knowledge-base.html"><span>Knowledge Base</span><span class="n">05</span></a></li>
+    <li><a href="contact.html"><span>Contact</span><span class="n">06</span></a></li>
   </ul>
   <div class="mnav-foot">
     <div class="mnav-soc">
@@ -805,6 +886,30 @@ body.dark #theme-btn{border-color:rgba(255,255,255,.15);color:var(--ink)}
   </div>
 </section>
 
+<div id="reel">
+  <div class="reel-img">
+    <video autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover;">
+      <source src="https://cdn.coverr.co/videos/coverr-abstract-neon-waves-2641/1080p.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="reel-center">
+    <div class="play-ring" id="play-ring">▶</div>
+    <div class="play-label">System Architecture</div>
+  </div>
+  <div class="reel-hl">Core<br/>Systems</div>
+  <div class="reel-yr">© 2026</div>
+</div>
+
+<div id="rmodal">
+  <div class="rmodal-box">
+    <div class="rmodal-inner">
+      <div class="rmodal-play-big">▶ PLAY</div>
+      <span>DIGITAL TRADE Architecture Overview</span>
+    </div>
+    <button class="modal-close-btn" id="rmodal-x">✕</button>
+  </div>
+</div>
+
 <div class="mq">
   <div class="mq-track">
     <span class="mq-item">WEB DESIGN<span class="mq-sep">✦</span></span><span class="mq-item">GRAPHIC SYSTEMS<span class="mq-sep">✦</span></span><span class="mq-item">E-COMMERCE ARCHITECTURE<span class="mq-sep">✦</span></span><span class="mq-item">BRAND IDENTITY<span class="mq-sep">✦</span></span><span class="mq-item">UI/UX LAYOUTS<span class="mq-sep">✦</span></span>
@@ -830,9 +935,10 @@ body.dark #theme-btn{border-color:rgba(255,255,255,.15);color:var(--ink)}
         <p>At DIGITAL TRADE, we don't just create images; we build <strong>structural visual systems</strong>. Founded by Indrajeet Pisda and headquartered in Dantewada, our studio bridges the gap between raw creativity and engineered functionality.</p>
         <p>We reject the notion that design should be purely aesthetic. True design is an <strong>engineered solution to a structural business problem</strong>. Whether building a complex Shopify ecosystem or drafting corporate identity, our methodology remains identical: aggressive precision.</p>
         <p><strong>Clutter kills conversion.</strong> We strip away the unnecessary to deploy high-performance websites and graphics that actually drive your brand forward.</p>
+        <span class="text-hidden">SEO Keywords: Digital Trade, Indrajeet Pisda, UI/UX Design Dantewada, Branding Agency Chhattisgarh, Web Development.</span>
       </div>
       <div style="margin-top:48px">
-        <button class="pill inv" onclick="document.getElementById('cmodal').classList.add('on');document.body.style.overflow='hidden'">
+        <button class="pill inv mobile-hide-start" onclick="document.getElementById('cmodal').classList.add('on');document.body.style.overflow='hidden'">
           <div class="bg"></div><s_>Read Manifesto</s_><s_>→</s_>
         </button>
       </div>
@@ -1077,19 +1183,19 @@ body.dark #theme-btn{border-color:rgba(255,255,255,.15);color:var(--ink)}
     <div>
       <div class="ft-col-h">Legal & Policies</div>
       <ul class="ft-list">
-        <li><a href="#privacy">Privacy Policy</a></li>
-        <li><a href="#terms">Terms of Service</a></li>
-        <li><a href="#refund">Refund Policy</a></li>
-        <li><a href="#cookies">Cookie Policy</a></li>
+        <li><a href="privacy.html">Privacy Policy</a></li>
+        <li><a href="terms.html">Terms of Service</a></li>
+        <li><a href="refund.html">Refund Policy</a></li>
+        <li><a href="cookies.html">Cookie Policy</a></li>
       </ul>
     </div>
     <div>
       <div class="ft-col-h">Resources</div>
       <ul class="ft-list">
-        <li><a href="#cases">The Archive</a></li>
-        <li><a href="#pricing">Deployment</a></li>
-        <li><a href="#faq">Knowledge Base</a></li>
-        <li><a href="#about">Agency Ethos</a></li>
+        <li><a href="archive.html">The Archive</a></li>
+        <li><a href="deployment.html">Deployment</a></li>
+        <li><a href="faq.html">Knowledge Base</a></li>
+        <li><a href="ethos.html">Agency Ethos</a></li>
       </ul>
     </div>
     <div>
@@ -1101,7 +1207,7 @@ body.dark #theme-btn{border-color:rgba(255,255,255,.15);color:var(--ink)}
         <li><a href="https://drive.google.com/drive/folders/174L5uJtrfoIHunC644RHR-4dUVua4Xy4?usp=sharing" target="_blank">Logo Vault</a></li>
       </ul>
       <div style="margin-top:28px">
-        <button class="pill" style="font-size:12px" onclick="document.getElementById('cmodal').classList.add('on');document.body.style.overflow='hidden'">
+        <button class="pill mobile-hide-start" style="font-size:12px" onclick="document.getElementById('cmodal').classList.add('on');document.body.style.overflow='hidden'">
           <div class="bg"></div><s_>Start a Project</s_><s_>→</s_>
         </button>
       </div>
@@ -1173,7 +1279,7 @@ if (waForm) {
         
         const whatsappNumber = "917646846030";
         const whatsappText = `*NEW PROJECT TRANSMISSION*%0A%0A*Name:* ${name}%0A*Email:* ${email}%0A%0A*Project Parameters:*%0A${message}`;
-        const whatsappURL = `https://wa.me/${whatsappNumber}?text=${whatsappText}`;
+        const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappText)}`;
 
         window.open(whatsappURL, '_blank');
         
