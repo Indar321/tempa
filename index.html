@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aayu Water Solution | Pure Water. Trusted Service.</title>
+<title>Aayu Water Solution | Industrialized & Digital Water Systems</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;500;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Open+Sans:wght@300;400;500;600&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
   :root {
     --blue: #0099CC;
@@ -13,539 +13,292 @@
     --bg: #0A0A0A;
     --bg2: #111111;
     --fg: #F5F5F0;
-    --muted: #555;
+    --muted: #666666;
     --border: #1E1E1E;
-    --accent: #0099CC;
+    --grid-color: rgba(30, 30, 30, 0.4);
+    
+    --font-head: 'Bebas Neue', sans-serif;
+    --font-body: 'Open Sans', sans-serif;
+    --font-mono: 'Space Mono', monospace;
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+  
   html { scroll-behavior: smooth; font-size: 16px; }
 
   body {
     background: var(--bg);
     color: var(--fg);
-    font-family: 'Barlow', sans-serif;
+    font-family: var(--font-body);
     font-weight: 300;
     overflow-x: hidden;
     cursor: none;
+    /* Industrial background grid lines alignment */
+    background-image: linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
+                      linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
+    background-size: 80px 80px;
   }
 
-  /* NEW WATER DROP CURSOR */
+  /* LIQUID WATER DROP CURSOR */
   .cursor {
     position: fixed; top: 0; left: 0; z-index: 9999;
-    width: 16px; height: 16px;
+    width: 14px; height: 14px;
     background: var(--blue-light);
-    /* Creates a teardrop shape */
     border-radius: 0 50% 50% 50%;
     pointer-events: none;
     transform: rotate(45deg);
-    margin-left: -8px; margin-top: -8px;
+    margin-left: -7px; margin-top: -7px;
     box-shadow: 0 0 15px rgba(51, 187, 238, 0.6);
     transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1), 
                 height 0.3s cubic-bezier(0.25, 1, 0.5, 1), 
                 margin 0.3s cubic-bezier(0.25, 1, 0.5, 1),
                 background 0.3s, border-radius 0.3s;
   }
-  
   .cursor-ring {
     position: fixed; top: 0; left: 0; z-index: 9998;
-    width: 40px; height: 40px;
-    border: 1.5px solid rgba(51, 187, 238, 0.4);
-    background: rgba(0, 153, 204, 0.05);
+    width: 36px; height: 36px;
+    border: 1px solid rgba(51, 187, 238, 0.4);
+    background: rgba(0, 153, 204, 0.03);
     border-radius: 50%;
     pointer-events: none;
-    margin-left: -20px; margin-top: -20px;
-    backdrop-filter: blur(2px);
+    margin-left: -18px; margin-top: -18px;
+    backdrop-filter: blur(1px);
     transition: width 0.4s cubic-bezier(0.25, 1, 0.5, 1), 
                 height 0.4s cubic-bezier(0.25, 1, 0.5, 1), 
                 margin 0.4s cubic-bezier(0.25, 1, 0.5, 1),
                 border-color 0.3s, background 0.3s;
   }
-
   body:hover .cursor, body:hover .cursor-ring { opacity: 1; }
 
-  /* NAV */
+  /* SYSTEM FIXED HEADER */
   nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
     display: flex; align-items: center; justify-content: space-between;
-    padding: 24px 48px;
+    padding: 32px 48px;
     border-bottom: 1px solid transparent;
-    transition: border-color 0.4s, background 0.4s;
+    transition: border-color 0.4s, background 0.4s, padding 0.4s;
   }
   nav.scrolled {
     border-color: var(--border);
-    background: rgba(10,10,10,0.95);
-    backdrop-filter: blur(12px);
+    background: rgba(10,10,10,0.92);
+    backdrop-filter: blur(16px);
+    padding: 20px 48px;
   }
   .nav-logo {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 22px;
-    letter-spacing: 4px;
-    color: var(--fg);
-    text-decoration: none;
+    font-family: var(--font-head); font-size: 28px;
+    letter-spacing: 3px; color: var(--fg); text-decoration: none;
   }
   .nav-logo span { color: var(--blue); }
-  .nav-links { display: flex; gap: 40px; align-items: center; }
-  .nav-links a {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 12px; letter-spacing: 3px;
-    text-transform: uppercase; color: var(--muted);
-    text-decoration: none; transition: color 0.2s;
+  
+  .menu-btn {
+    font-family: var(--font-mono); font-size: 12px; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--fg);
+    background: transparent; border: 1px solid var(--border);
+    padding: 12px 24px; cursor: none;
+    display: flex; align-items: center; gap: 16px; transition: border-color 0.3s;
   }
-  .nav-links a:hover { color: var(--fg); }
-  .nav-cta {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 12px; letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--fg) !important;
-    border: 1px solid var(--border);
-    padding: 10px 20px;
-    transition: border-color 0.2s, background 0.2s !important;
-  }
-  .nav-cta:hover { border-color: var(--blue) !important; background: rgba(0,153,204,0.08) !important; color: var(--blue) !important; }
+  .menu-btn:hover { border-color: var(--blue); }
+  .menu-btn .burger-icon { display: flex; flex-direction: column; gap: 6px; }
+  .menu-btn .burger-line { width: 18px; height: 1px; background: var(--fg); transition: width 0.3s; }
+  .menu-btn:hover .burger-line:nth-child(2) { width: 10px; }
 
-  /* HERO */
+  /* ENERBLOCK-STYLE FULLSCREEN GRID OVERLAY MENU */
+  .menu-overlay {
+    position: fixed; inset: 0; z-index: 1000;
+    background: rgba(10, 10, 10, 0.98);
+    backdrop-filter: blur(30px);
+    display: flex; align-items: center; padding: 0 10%;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+  .menu-overlay.active { opacity: 1; pointer-events: all; }
+  
+  .menu-close {
+    position: absolute; top: 32px; right: 48px;
+    font-family: var(--font-mono); font-size: 12px; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--muted);
+    cursor: none; border: 1px solid var(--border); background: transparent;
+    padding: 12px 24px; transition: border-color 0.3s, color 0.3s;
+  }
+  .menu-close:hover { border-color: var(--blue); color: var(--fg); }
+  
+  .menu-container {
+    display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 120px;
+    width: 100%; max-width: 1200px; margin: 0 auto;
+  }
+  .menu-column-main { display: flex; flex-direction: column; gap: 20px; }
+  .menu-column-main .menu-label { font-family: var(--font-mono); font-size: 11px; color: var(--blue); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 10px;}
+  .menu-column-main a {
+    font-family: var(--font-head); font-size: clamp(44px, 5.5vw, 76px); line-height: 1;
+    color: var(--muted); text-decoration: none; text-transform: uppercase; letter-spacing: 1px;
+    transition: color 0.3s, transform 0.3s, padding-left 0.3s;
+  }
+  .menu-column-main a:hover { color: var(--fg); padding-left: 16px; }
+  
+  .menu-column-pillars { display: flex; flex-direction: column; gap: 32px; justify-content: center; border-left: 1px solid var(--border); padding-left: 64px; }
+  .menu-column-pillars .menu-label { font-family: var(--font-mono); font-size: 11px; color: var(--muted); letter-spacing: 3px; text-transform: uppercase; }
+  .menu-pillar-links { display: flex; flex-direction: column; gap: 20px; }
+  .menu-pillar-links a {
+    font-family: var(--font-body); font-size: 18px; font-weight: 400; color: rgba(245,245,240,0.6);
+    text-decoration: none; transition: color 0.3s;
+  }
+  .menu-pillar-links a:hover { color: var(--blue-light); }
+
+  /* SYSTEM HERO MATRIX */
   .hero {
     position: relative; min-height: 100vh;
     display: flex; flex-direction: column; justify-content: flex-end;
-    padding: 0 48px 80px;
-    overflow: hidden;
+    padding: 0 48px 100px; overflow: hidden;
+    border-bottom: 1px solid var(--border);
   }
   .hero-bg {
     position: absolute; inset: 0;
-    /* Updated to a stunning free ocean/water source image */
     background: url('https://images.unsplash.com/photo-1500375592092-40eb2168fd21?q=80&w=1800&auto=format&fit=crop') center/cover no-repeat;
-    filter: brightness(0.35);
+    filter: brightness(0.25) contrast(1.05);
   }
   .hero-bg::after {
     content:''; position: absolute; inset: 0;
-    background: linear-gradient(to top, rgba(10,10,10,1) 0%, rgba(10,10,10,0.5) 60%, transparent 100%);
+    background: linear-gradient(to top, rgba(10,10,10,1) 0%, rgba(10,10,10,0.3) 70%, transparent 100%);
   }
-  .hero-tag {
-    position: relative; z-index: 2;
-    display: flex; align-items: center; gap: 16px; margin-bottom: 32px;
+  .hero-meta-panel {
+    position: relative; z-index: 2; display: flex; align-items: center; gap: 24px; margin-bottom: 32px;
   }
-  .hero-tag-label {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 11px; letter-spacing: 4px;
-    text-transform: uppercase; color: var(--blue);
-  }
-  .hero-tag-line { flex: 1; height: 1px; background: var(--border); max-width: 120px; }
-  .hero-tag-year {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 11px; letter-spacing: 3px; color: var(--muted);
-  }
+  .hero-meta-tag { font-family: var(--font-mono); font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: var(--blue); }
+  .hero-meta-line { flex: 1; height: 1px; background: var(--border); max-width: 200px; }
+  .hero-meta-sys { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+  
   .hero-title {
-    position: relative; z-index: 2;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(72px, 11vw, 160px);
-    line-height: 0.9; letter-spacing: 2px;
-    margin-bottom: 40px;
+    position: relative; z-index: 2; font-family: var(--font-head);
+    font-size: clamp(64px, 10vw, 140px); line-height: 0.95; letter-spacing: 1px; margin-bottom: 48px;
   }
-  .hero-title .line2 { display: block; color: var(--blue); }
-  .hero-sub {
-    position: relative; z-index: 2;
-    display: flex; justify-content: space-between; align-items: flex-end;
-    gap: 40px;
-  }
-  .hero-desc {
-    font-size: 16px; line-height: 1.7; color: rgba(245,245,240,0.7);
-    max-width: 440px; font-weight: 300;
-  }
-  .hero-stats {
-    display: flex; gap: 48px; flex-shrink: 0;
-  }
-  .hero-stat { text-align: right; }
-  .hero-stat-num {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 48px; letter-spacing: 2px; line-height: 1;
-    color: var(--blue);
-  }
-  .hero-stat-label {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
-    color: var(--muted); margin-top: 4px;
-  }
-  .scroll-indicator {
-    position: absolute; right: 48px; bottom: 80px; z-index: 2;
-    display: flex; flex-direction: column; align-items: center; gap: 12px;
-  }
-  .scroll-indicator span {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
-    color: var(--muted); writing-mode: vertical-rl;
-  }
-  .scroll-line {
-    width: 1px; height: 60px;
-    background: linear-gradient(to bottom, var(--blue), transparent);
-    animation: scrollPulse 2s ease-in-out infinite;
-  }
-  @keyframes scrollPulse { 0%,100%{opacity:0.3} 50%{opacity:1} }
+  .hero-title span.accent-line { display: block; color: var(--blue); }
+  
+  .hero-footer-grid { position: relative; z-index: 2; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 80px; align-items: flex-end; }
+  .hero-description { font-size: 16px; line-height: 1.7; color: rgba(245,245,240,0.65); max-width: 520px; }
+  .hero-metrics-row { display: flex; gap: 64px; justify-content: flex-end; }
+  .hero-metric-item { text-align: right; }
+  .hero-metric-num { font-family: var(--font-head); font-size: 56px; line-height: 1; color: var(--fg); }
+  .hero-metric-label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-top: 6px; }
 
-  /* SECTION COMMON */
-  section { padding: 120px 48px; }
-  .section-tag {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
-    color: var(--blue); margin-bottom: 24px;
-    display: flex; align-items: center; gap: 12px;
-  }
-  .section-tag::before { content:''; display:block; width:32px; height:1px; background:var(--blue); }
-  .section-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(40px, 5vw, 72px);
-    line-height: 1; letter-spacing: 1px; margin-bottom: 32px;
-  }
-  .section-body {
-    font-size: 16px; line-height: 1.8; color: rgba(245,245,240,0.55);
-    max-width: 560px; font-weight: 300;
-  }
+  /* STRUCTURAL ARCHITECTURE OF SECTIONS */
+  section { padding: 140px 48px; border-bottom: 1px solid var(--border); position: relative; }
+  .section-sys-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 64px; }
+  .section-blueprint-tag { font-family: var(--font-mono); font-size: 11px; color: var(--blue); letter-spacing: 4px; text-transform: uppercase; }
+  .section-blueprint-num { font-family: var(--font-mono); font-size: 11px; color: var(--muted); }
+  
+  .section-layout-split { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; }
+  .section-main-title { font-family: var(--font-head); font-size: clamp(44px, 5vw, 68px); line-height: 1.05; text-transform: uppercase; letter-spacing: 1px; }
+  
+  /* METHOD / APPROACH INTERIOR */
+  .method-steps-vertical { display: flex; flex-direction: column; margin-top: 48px; }
+  .method-step-row { display: grid; grid-template-columns: 80px 1.5fr 2fr; padding: 40px 0; border-top: 1px solid var(--border); }
+  .method-step-row:last-child { border-bottom: 1px solid var(--border); }
+  .m-step-index { font-family: var(--font-mono); font-size: 13px; color: var(--blue); }
+  .m-step-title { font-family: var(--font-head); font-size: 28px; text-transform: uppercase; letter-spacing: 1px; }
+  .m-step-desc { font-size: 14px; line-height: 1.7; color: var(--muted); }
 
-  /* MARQUEE */
-  .marquee-wrap {
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    padding: 20px 0; overflow: hidden;
-    background: var(--bg2);
-  }
-  .marquee-track {
-    display: flex; gap: 0; width: max-content;
-    animation: marquee 20s linear infinite;
-  }
-  .marquee-item {
-    display: flex; align-items: center; gap: 32px;
-    padding: 0 40px;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 13px; letter-spacing: 4px; text-transform: uppercase;
-    color: var(--muted);
-    white-space: nowrap;
-  }
-  .marquee-dot { width: 5px; height: 5px; background: var(--blue); border-radius: 50%; flex-shrink: 0; }
-  @keyframes marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+  /* SOLUTIONS INDUSTRIALIZED GRID */
+  .solutions-structural-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); margin-top: 64px; }
+  .solution-matrix-cell { background: var(--bg); padding: 48px; position: relative; overflow: hidden; transition: background 0.3s; }
+  .solution-matrix-cell:hover { background: var(--bg2); }
+  .solution-matrix-cell::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: var(--blue); transform: scaleX(0); transform-origin: left; transition: transform 0.4s ease; }
+  .solution-matrix-cell:hover::before { transform: scaleX(1); }
+  .s-cell-num { font-family: var(--font-mono); font-size: 12px; color: var(--blue); display: block; margin-bottom: 40px; }
+  .s-cell-title { font-family: var(--font-head); font-size: 30px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 16px; }
+  .s-cell-desc { font-size: 14px; color: rgba(245,245,240,0.5); line-height: 1.7; }
 
-  /* ABOUT */
-  .about-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
-    margin-top: 80px;
-  }
-  .about-img-wrap { position: relative; }
-  .about-img {
-    width: 100%; aspect-ratio: 3/4; object-fit: cover;
-    filter: grayscale(15%) contrast(1.1);
-  }
-  .about-img-label {
-    position: absolute; bottom: -1px; left: 0; right: 0;
-    padding: 16px 20px;
-    background: rgba(10,10,10,0.9);
-    border-top: 1px solid var(--border);
-    display: flex; justify-content: space-between; align-items: center;
-  }
-  .about-img-label span {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted);
-  }
-  .about-img-label b { color: var(--blue); font-weight: 500; }
-  .about-content { padding-left: 40px; }
-  .about-rating {
-    display: flex; align-items: center; gap: 12px; margin-bottom: 40px;
-  }
-  .stars { color: var(--blue); font-size: 20px; letter-spacing: 2px; }
-  .rating-text {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 13px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted);
-  }
-  .about-features {
-    margin-top: 48px;
-    display: flex; flex-direction: column; gap: 0;
-  }
-  .about-feat {
-    display: flex; align-items: flex-start; gap: 20px;
-    padding: 24px 0; border-bottom: 1px solid var(--border);
-  }
-  .about-feat:first-child { border-top: 1px solid var(--border); }
-  .feat-num {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 12px; letter-spacing: 2px; color: var(--blue);
-    min-width: 32px; margin-top: 2px;
-  }
-  .feat-text h4 {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 16px; font-weight: 600; letter-spacing: 1px;
-    text-transform: uppercase; margin-bottom: 4px;
-  }
-  .feat-text p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+  /* COMPANY / LABELED IMAGE FRAMEWORK */
+  .company-grid-visual { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 80px; align-items: center; }
+  .blueprint-image-container { position: relative; border: 1px solid var(--border); padding: 16px; background: rgba(20,20,20,0.5); }
+  .blueprint-raw-img { width: 100%; aspect-ratio: 4/3; object-fit: cover; filter: grayscale(100%) contrast(1.15); opacity: 0.85; transition: opacity 0.4s; }
+  .blueprint-image-container:hover .blueprint-raw-img { opacity: 1; }
+  .blueprint-img-metadata { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 11px; color: var(--muted); margin-top: 16px; text-transform: uppercase; }
+  .blueprint-img-metadata span strong { color: var(--blue); font-weight: 400; }
 
-  /* SERVICES */
-  .services { background: var(--bg2); }
-  .services-intro {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 80px; margin-bottom: 80px;
-  }
-  .services-right { display: flex; align-items: flex-end; }
-  .services-right p { font-size: 16px; line-height: 1.8; color: rgba(245,245,240,0.5); }
-  .services-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
-    background: var(--border);
-  }
-  .service-card {
-    background: var(--bg2);
-    padding: 40px; position: relative;
-    transition: background 0.3s;
-    overflow: hidden;
-  }
-  .service-card::before {
-    content:''; position: absolute; top: 0; left: 0; right: 0;
-    height: 2px; background: var(--blue);
-    transform: scaleX(0); transform-origin: left;
-    transition: transform 0.4s ease;
-  }
-  .service-card:hover::before { transform: scaleX(1); }
-  .service-card:hover { background: #141414; }
-  .svc-num {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 12px; letter-spacing: 3px; color: var(--blue);
-    margin-bottom: 40px; display: block;
-  }
-  .svc-icon {
-    font-size: 32px; margin-bottom: 20px; display: block;
-    filter: grayscale(1) brightness(2);
-    transition: filter 0.3s;
-  }
-  .service-card:hover .svc-icon { filter: none; }
-  .svc-name {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 20px; font-weight: 600; letter-spacing: 1px;
-    text-transform: uppercase; margin-bottom: 12px;
-  }
-  .svc-desc { font-size: 13px; color: var(--muted); line-height: 1.7; }
-  .svc-arrow {
-    position: absolute; bottom: 32px; right: 32px;
-    font-size: 18px; color: var(--muted);
-    transition: color 0.3s, transform 0.3s;
-  }
-  .service-card:hover .svc-arrow { color: var(--blue); transform: translate(4px,-4px); }
+  /* PROJECTS ARCHIVE SYSTEM */
+  .catalog-strip-list { display: flex; flex-direction: column; margin-top: 64px; border-top: 1px solid var(--border); }
+  .catalog-item-row { display: grid; grid-template-columns: 120px 2fr 1.5fr 1fr; align-items: center; padding: 40px 24px; border-bottom: 1px solid var(--border); transition: background 0.3s; }
+  .catalog-item-row:hover { background: rgba(0, 153, 204, 0.02); }
+  .cat-id { font-family: var(--font-mono); font-size: 13px; color: var(--muted); }
+  .cat-name { font-family: var(--font-head); font-size: 32px; letter-spacing: 1px; text-transform: uppercase; color: var(--fg); transition: color 0.2s; }
+  .catalog-item-row:hover .cat-name { color: var(--blue-light); }
+  .cat-spec { font-family: var(--font-body); font-size: 15px; color: var(--muted); }
+  .cat-tag { font-family: var(--font-mono); font-size: 11px; color: var(--blue); text-transform: uppercase; text-align: right; }
 
-  /* PRODUCTS */
-  .products-list { margin-top: 80px; }
-  .product-row {
-    display: grid; grid-template-columns: 80px 1fr auto;
-    align-items: center; gap: 40px;
-    padding: 40px 0; border-bottom: 1px solid var(--border);
-    transition: padding 0.3s;
-    cursor: default;
-  }
-  .product-row:first-child { border-top: 1px solid var(--border); }
-  .product-row:hover { padding-left: 16px; }
-  .prod-num {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 13px; letter-spacing: 2px; color: var(--muted);
-  }
-  .prod-info h3 {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 24px; font-weight: 600; letter-spacing: 1px;
-    text-transform: uppercase; margin-bottom: 6px;
-    transition: color 0.2s;
-  }
-  .product-row:hover .prod-info h3 { color: var(--blue); }
-  .prod-info p { font-size: 14px; color: var(--muted); }
-  .prod-tag {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
-    padding: 6px 16px; border: 1px solid var(--border);
-    color: var(--muted); transition: border-color 0.2s, color 0.2s;
-    white-space: nowrap;
-  }
-  .product-row:hover .prod-tag { border-color: var(--blue); color: var(--blue); }
+  /* STRATEGIC PILLARS MATRIX (DIGITALIZATION / SUSTAINABILITY / CERTIFICATION) */
+  .pillars-layout-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-top: 64px; }
+  .pillar-structural-box { border: 1px solid var(--border); background: var(--bg2); padding: 48px; display: flex; flex-direction: column; justify-content: space-between; min-height: 380px; }
+  .p-box-header h3 { font-family: var(--font-head); font-size: 36px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; color: var(--fg); }
+  .p-box-header p { font-size: 14px; color: rgba(245,245,240,0.55); line-height: 1.7; }
+  .p-box-metric { border-top: 1px solid var(--border); padding-top: 24px; margin-top: 32px; }
+  .p-box-metric-val { font-family: var(--font-head); font-size: 40px; color: var(--blue); line-height: 1; }
+  .p-box-metric-lbl { font-family: var(--font-mono); font-size: 11px; color: var(--muted); text-transform: uppercase; margin-top: 6px; }
 
-  /* BRANDS */
-  .brands { background: var(--bg2); }
-  .brands-title {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
-    color: var(--muted); text-align: center; margin-bottom: 48px;
-  }
-  .brands-grid {
-    display: grid; grid-template-columns: repeat(5, 1fr);
-    gap: 1px; background: var(--border);
-  }
-  .brand-cell {
-    background: var(--bg2);
-    padding: 40px 32px;
-    display: flex; align-items: center; justify-content: center;
-    transition: background 0.2s;
-  }
-  .brand-cell:hover { background: #141414; }
-  .brand-name {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 22px; letter-spacing: 3px;
-    color: var(--muted); transition: color 0.2s;
-  }
-  .brand-cell:hover .brand-name { color: var(--fg); }
+  /* FAQS SUPPORT SYSTEM */
+  .faq-accordion-block { display: flex; flex-direction: column; margin-top: 48px; }
+  .faq-node { border-bottom: 1px solid var(--border); padding: 32px 0; }
+  .faq-node-query { font-family: var(--font-head); font-size: 24px; letter-spacing: 1px; text-transform: uppercase; color: var(--fg); margin-bottom: 12px; }
+  .faq-node-response { font-size: 15px; color: var(--muted); line-height: 1.7; max-width: 850px; }
 
-  /* PROCESS */
-  .process-steps {
-    display: grid; grid-template-columns: repeat(4, 1fr);
-    gap: 0; margin-top: 80px;
-    border-top: 1px solid var(--border);
-    border-left: 1px solid var(--border);
+  /* INDUSTRIAL CONTACT CONSOLE */
+  .console-form-container { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 80px; margin-top: 64px; }
+  .console-info-pane { display: flex; flex-direction: column; gap: 48px; }
+  .pane-block h4 { font-family: var(--font-mono); font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--blue); margin-bottom: 12px; }
+  .pane-block p, .pane-block a { font-size: 22px; color: var(--fg); text-decoration: none; font-family: var(--font-head); letter-spacing: 1px; text-transform: uppercase; }
+  .pane-block a:hover { color: var(--blue-light); }
+  .pane-block .pane-subtext { font-family: var(--font-body); font-size: 13px; color: var(--muted); text-transform: none; letter-spacing: 0; margin-top: 6px; }
+  
+  .console-inputs-pane { display: flex; flex-direction: column; gap: 32px; }
+  .console-input-group { display: flex; flex-direction: column; gap: 8px; }
+  .console-input-group label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+  .console-inputs-pane input, .console-inputs-pane textarea, .console-inputs-pane select {
+    background: transparent; border: none; border-bottom: 1px solid var(--border); color: var(--fg); font-family: var(--font-body); font-size: 16px;
+    padding: 16px 0; outline: none; transition: border-color 0.3s; appearance: none;
   }
-  .process-step {
-    padding: 48px 36px;
-    border-right: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    position: relative; transition: background 0.2s;
-  }
-  .process-step:hover { background: var(--bg2); }
-  .step-num {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 72px; color: var(--border); line-height: 1;
-    margin-bottom: 24px; transition: color 0.2s;
-  }
-  .process-step:hover .step-num { color: var(--blue); opacity: 0.3; }
-  .step-title {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 18px; font-weight: 600; letter-spacing: 1px;
-    text-transform: uppercase; margin-bottom: 12px;
-  }
-  .step-desc { font-size: 13px; color: var(--muted); line-height: 1.7; }
+  .console-inputs-pane input:focus, .console-inputs-pane textarea:focus { border-color: var(--blue); }
+  .console-inputs-pane textarea { resize: none; min-height: 120px; }
+  .console-inputs-pane select option { background: var(--bg2); color: var(--fg); }
 
-  /* FULL BANNER */
-  .banner {
-    position: relative; min-height: 60vh;
-    display: flex; align-items: center; justify-content: center;
-    text-align: center; overflow: hidden;
+  /* SYSTEM BUTTONS */
+  .btn-system-primary {
+    display: inline-flex; align-items: center; justify-content: center; gap: 16px;
+    font-family: var(--font-mono); font-size: 12px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--bg); background: var(--blue); padding: 18px 36px; text-decoration: none;
+    font-weight: 700; border: none; transition: background 0.2s; cursor: none;
   }
-  .banner-bg {
-    position: absolute; inset: 0;
-    /* Updated to a stunning free water splash source image */
-    background: url('https://images.unsplash.com/photo-1519882189396-71f4fcd31718?q=80&w=1800&auto=format&fit=crop') center/cover no-repeat;
-    filter: brightness(0.2);
-  }
-  .banner-content { position: relative; z-index: 2; padding: 80px 48px; }
-  .banner-content .section-title { font-size: clamp(48px, 7vw, 100px); margin-bottom: 24px; }
-  .banner-content p { font-size: 18px; color: rgba(245,245,240,0.6); margin-bottom: 48px; }
-  .btn-primary {
-    display: inline-flex; align-items: center; gap: 12px;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 13px; letter-spacing: 3px; text-transform: uppercase;
-    color: var(--bg); background: var(--blue);
-    padding: 16px 32px; text-decoration: none;
-    transition: background 0.2s;
-  }
-  .btn-primary:hover { background: var(--blue-light); }
-  .btn-outline {
-    display: inline-flex; align-items: center; gap: 12px;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 13px; letter-spacing: 3px; text-transform: uppercase;
-    color: var(--fg); border: 1px solid var(--border);
-    padding: 16px 32px; text-decoration: none;
-    transition: border-color 0.2s, color 0.2s;
-    margin-left: 16px;
-  }
-  .btn-outline:hover { border-color: var(--blue); color: var(--blue); }
+  .btn-system-primary:hover { background: var(--blue-light); }
+  .btn-system-primary span { font-size: 14px; }
 
-  /* CONTACT */
-  .contact-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 80px; margin-top: 80px;
-  }
-  .contact-info { display: flex; flex-direction: column; gap: 40px; }
-  .contact-block h4 {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
-    color: var(--blue); margin-bottom: 12px;
-  }
-  .contact-block p, .contact-block a {
-    font-size: 20px; color: var(--fg); text-decoration: none;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 500; letter-spacing: 1px;
-    transition: color 0.2s;
-  }
-  .contact-block a:hover { color: var(--blue); }
-  .contact-block .sub { font-size: 13px; color: var(--muted); font-family: 'Barlow', sans-serif; font-weight: 300; margin-top: 4px; }
-  .contact-form { display: flex; flex-direction: column; gap: 24px; }
-  .form-group { display: flex; flex-direction: column; gap: 8px; }
-  .form-group label {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted);
-  }
-  .form-group input, .form-group textarea, .form-group select {
-    background: transparent; border: none; border-bottom: 1px solid var(--border);
-    color: var(--fg); font-family: 'Barlow', sans-serif; font-size: 16px;
-    padding: 12px 0; outline: none; transition: border-color 0.2s;
-    appearance: none;
-  }
-  .form-group input:focus, .form-group textarea:focus { border-color: var(--blue); }
-  .form-group textarea { resize: none; min-height: 100px; }
-  .form-group select option { background: var(--bg2); }
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  /* SYSTEM FOOTER MATRIX */
+  footer { padding: 100px 48px 40px; background: rgba(5,5,5,0.4); }
+  .footer-structural-top { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 60px; margin-bottom: 80px; }
+  .footer-col-brand .nav-logo { font-size: 32px; display: block; margin-bottom: 20px; }
+  .footer-col-brand p { font-size: 14px; color: var(--muted); line-height: 1.6; max-width: 280px; }
+  .footer-structural-top h5 { font-family: var(--font-mono); font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin-bottom: 28px; }
+  .footer-structural-top a { display: block; font-family: var(--font-body); font-size: 14px; color: rgba(245,245,240,0.6); text-decoration: none; margin-bottom: 14px; transition: color 0.2s; }
+  .footer-structural-top a:hover { color: var(--blue); }
+  
+  .footer-structural-bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 40px; border-top: 1px solid var(--border); font-family: var(--font-mono); font-size: 11px; color: var(--muted); }
+  .footer-structural-bottom span.highlight { color: var(--blue); }
 
-  /* FOOTER */
-  footer {
-    padding: 80px 48px 40px;
-    border-top: 1px solid var(--border);
-  }
-  .footer-top {
-    display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr;
-    gap: 60px; margin-bottom: 80px;
-  }
-  .footer-brand .nav-logo { font-size: 28px; display: block; margin-bottom: 16px; }
-  .footer-brand p { font-size: 13px; color: var(--muted); line-height: 1.7; max-width: 260px; }
-  .footer-col h5 {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
-    color: var(--muted); margin-bottom: 24px;
-  }
-  .footer-col a {
-    display: block; font-family: 'Barlow Condensed', sans-serif;
-    font-size: 15px; letter-spacing: 1px; color: var(--fg);
-    text-decoration: none; margin-bottom: 12px; transition: color 0.2s;
-  }
-  .footer-col a:hover { color: var(--blue); }
-  .footer-bottom {
-    display: flex; justify-content: space-between; align-items: center;
-    padding-top: 40px; border-top: 1px solid var(--border);
-  }
-  .footer-bottom p {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted);
-  }
-  .footer-bottom p span { color: var(--blue); }
-
-  /* RATING BADGE */
-  .rating-badge {
-    position: fixed; bottom: 32px; left: 32px; z-index: 50;
-    background: var(--bg2); border: 1px solid var(--border);
-    padding: 16px 20px; display: flex; align-items: center; gap: 12px;
-    animation: fadeUp 1s 2s ease both;
-  }
-  @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:none} }
-  .badge-stars { font-size: 16px; letter-spacing: 2px; }
-  .badge-text { font-family: 'Barlow Condensed', sans-serif; }
-  .badge-text .num { font-size: 22px; font-weight: 700; color: var(--blue); }
-  .badge-text .label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); display: block; }
-
-  /* ANIMATIONS */
-  .reveal {
-    opacity: 0; transform: translateY(32px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
-  }
+  /* REVEAL ANIMATIONS SETUP */
+  .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1); }
   .reveal.visible { opacity: 1; transform: none; }
 
-  @media (max-width: 900px) {
-    nav { padding: 20px 24px; }
-    .nav-links { display: none; }
-    section { padding: 80px 24px; }
-    .hero { padding: 0 24px 60px; }
-    .hero-sub { flex-direction: column; align-items: flex-start; }
-    .hero-stats { gap: 32px; }
-    .about-grid, .services-intro, .contact-grid { grid-template-columns: 1fr; gap: 40px; }
-    .about-content { padding-left: 0; }
-    .services-grid { grid-template-columns: 1fr; }
-    .brands-grid { grid-template-columns: repeat(3, 1fr); }
-    .process-steps { grid-template-columns: 1fr 1fr; }
-    .footer-top { grid-template-columns: 1fr 1fr; gap: 40px; }
-    .products-list .product-row { grid-template-columns: 48px 1fr; }
-    .prod-tag { display: none; }
+  @media (max-width: 1024px) {
+    nav { padding: 24px; }
+    section { padding: 100px 24px; }
+    .hero { padding: 0 24px 80px; }
+    .hero-footer-grid { grid-template-columns: 1fr; gap: 40px; }
+    .hero-metrics-row { justify-content: flex-start; }
+    .section-layout-split, .company-grid-visual, .pillars-layout-grid, .console-form-container, .footer-structural-top { grid-template-columns: 1fr; gap: 40px; }
+    .solutions-structural-grid { grid-template-columns: 1fr; }
+    .method-step-row { grid-template-columns: 40px 1fr; gap: 16px; }
+    .method-step-row .m-step-desc { grid-column: 2; }
+    .catalog-item-row { grid-template-columns: 60px 1fr; gap: 12px; padding: 24px 12px; }
+    .cat-spec, .cat-tag { display: none; }
+    .menu-container { grid-template-columns: 1fr; gap: 60px; }
+    .menu-column-pillars { border-left: none; padding-left: 0; }
   }
 </style>
 </head>
@@ -554,466 +307,436 @@
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
 
-<div class="rating-badge">
-  <div class="badge-stars">★★★★★</div>
-  <div class="badge-text">
-    <span class="num">5.0</span>
-    <span class="label">Avg. Rating</span>
+<div class="menu-overlay" id="menuOverlay">
+  <button class="menu-close" id="menuClose">Close ✕</button>
+  <div class="menu-container">
+    <div class="menu-column-main">
+      <div class="menu-label">Navigation Model</div>
+      <a href="#home">Approach</a>
+      <a href="#solutions">Solutions</a>
+      <a href="#company">Company</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="menu-column-pillars">
+      <div class="menu-label">Strategic Pillars</div>
+      <div class="menu-pillar-links">
+        <a href="#pillars">Digitalization</a>
+        <a href="#pillars">Sustainability</a>
+        <a href="#pillars">Certification</a>
+        <a href="#faqs">System FAQs</a>
+      </div>
+    </div>
   </div>
 </div>
 
 <nav id="nav">
-  <a href="#" class="nav-logo">AAYU<span>.</span></a>
-  <div class="nav-links">
-    <a href="#about">About</a>
-    <a href="#services">Services</a>
-    <a href="#products">Products</a>
-    <a href="#process">Process</a>
-    <a href="#contact" class="nav-cta">Contact</a>
-  </div>
+  <a href="#home" class="nav-logo">AAYU<span>.</span></a>
+  <button class="menu-btn" id="menuOpen">
+    <div class="burger-icon">
+      <div class="burger-line"></div>
+      <div class="burger-line"></div>
+    </div>
+    Menu
+  </button>
 </nav>
 
 <section class="hero" id="home">
   <div class="hero-bg"></div>
-  <div class="hero-tag">
-    <span class="hero-tag-label">Water Purifier Specialists</span>
-    <div class="hero-tag-line"></div>
-    <span class="hero-tag-year">Est. Mumbai</span>
+  <div class="hero-meta-panel">
+    <span class="hero-meta-tag">Next-Gen Water Engineering</span>
+    <div class="hero-meta-line"></div>
+    <span class="hero-meta-sys">SYSTEM EST. 2025</span>
   </div>
-  <h1 class="hero-title">
-    Pure Water.<br>
-    <span class="line2">Trusted Service.</span>
+  <h1 class="hero-title reveal">
+    The future of water care is<br>
+    <span class="accent-line">Industrialized and Digital.</span>
   </h1>
-  <div class="hero-sub">
-    <p class="hero-desc">Aayu Water Solution delivers premium water purifier installation, maintenance, and repair services — ensuring every drop you drink is clean, safe, and pure.</p>
-    <div class="hero-stats">
-      <div class="hero-stat">
-        <div class="hero-stat-num">5.0</div>
-        <div class="hero-stat-label">Rating</div>
+  <div class="hero-footer-grid reveal">
+    <p class="hero-description">The industrialized and high-fidelity purification system that brings certainty to regional water parameters, ensuring clean, compliant, and measurable output results.</p>
+    <div class="hero-metrics-row">
+      <div class="hero-metric-item">
+        <div class="hero-metric-num" data-target="5.0">0.0</div>
+        <div class="hero-metric-label">System Rating</div>
       </div>
-      <div class="hero-stat">
-        <div class="hero-stat-num">500+</div>
-        <div class="hero-stat-label">Clients Served</div>
-      </div>
-      <div class="hero-stat">
-        <div class="hero-stat-num">10+</div>
-        <div class="hero-stat-label">Years Exp.</div>
-      </div>
-    </div>
-  </div>
-  <div class="scroll-indicator">
-    <div class="scroll-line"></div>
-    <span>Scroll</span>
-  </div>
-</section>
-
-<div class="marquee-wrap">
-  <div class="marquee-track">
-    <div class="marquee-item"><span class="marquee-dot"></span> RO Purifiers</div>
-    <div class="marquee-item"><span class="marquee-dot"></span> UV Systems</div>
-    <div class="marquee-item"><span class="marquee-dot"></span> UF Technology</div>
-    <div class="marquee-item"><span class="marquee-dot"></span> AMC Plans</div>
-    <div class="marquee-item"><span class="marquee-dot"></span> Same-Day Repair</div>
-    <div class="marquee-item"><span class="marquee-dot"></span> Filter Replacement</div>
-    <div class="marquee-item"><span class="marquee-dot"></span> Water Testing</div>
-    <div class="marquee-item"><span class="marquee-dot"></span> Kent · Aquaguard · Pureit</div>
-    <div class="marquee-item"><span class="marquee-dot"></span> RO Purifiers</div>
-    <div class="marquee-item"><span class="marquee-dot"></span> UV Systems</div>
-    <div class="marquee-item"><span class="marquee-dot"></span> UF Technology</div>
-    <div class="marquee-item"><span class="marquee-dot"></span> AMC Plans</div>
-    <div class="marquee-item"><span class="marquee-dot"></span> Same-Day Repair</div>
-    <div class="marquee-item"><span class="marquee-dot"></span> Filter Replacement</div>
-    <div class="marquee-item"><span class="marquee-dot"></span> Water Testing</div>
-    <div class="marquee-item"><span class="marquee-dot"></span> Kent · Aquaguard · Pureit</div>
-  </div>
-</div>
-
-<section id="about">
-  <div class="section-tag reveal">About</div>
-  <h2 class="section-title reveal">Clean water.<br>Every home.</h2>
-  <div class="about-grid">
-    <div class="about-img-wrap reveal">
-      <img class="about-img" src="https://images.unsplash.com/photo-1564416972044-63345d1945a6?q=80&w=800&auto=format&fit=crop" alt="Pure glass of water">
-      <div class="about-img-label">
-        <span>Owner</span>
-        <b>Rajesh Rawte</b>
-        <span>+91 98938 88224</span>
-      </div>
-    </div>
-    <div class="about-content reveal">
-      <div class="section-tag">Who We Are</div>
-      <h3 class="section-title" style="font-size: clamp(32px, 3.5vw, 52px);">Aayu Water Solution</h3>
-      <p class="section-body">We specialize in the complete ecosystem of clean water — from installation and maintenance of RO systems to emergency repair services across all major brands. Our mission is simple: no home should drink impure water.</p>
-      <div class="about-rating">
-        <span class="stars">★★★★★</span>
-        <span class="rating-text">5.0 Average Rating &nbsp;·&nbsp; 100% Satisfaction</span>
-      </div>
-      <div class="about-features">
-        <div class="about-feat">
-          <span class="feat-num">01</span>
-          <div class="feat-text">
-            <h4>Expert Technicians</h4>
-            <p>Trained professionals handling all major brands and models with precision.</p>
-          </div>
-        </div>
-        <div class="about-feat">
-          <span class="feat-num">02</span>
-          <div class="feat-text">
-            <h4>Genuine Parts</h4>
-            <p>Only certified components used for long-lasting, safe filtration results.</p>
-          </div>
-        </div>
-        <div class="about-feat">
-          <span class="feat-num">03</span>
-          <div class="feat-text">
-            <h4>Quick Response</h4>
-            <p>Same-day service available — we know clean water cannot wait.</p>
-          </div>
-        </div>
+      <div class="hero-metric-item">
+        <div class="hero-metric-num" data-target="500">0+</div>
+        <div class="hero-metric-label">Systems Placed</div>
       </div>
     </div>
   </div>
 </section>
 
-<section id="services" class="services">
-  <div class="services-intro">
-    <div>
-      <div class="section-tag reveal">Services</div>
-      <h2 class="section-title reveal">Comprehensive<br>Water Care</h2>
+<section id="approach">
+  <div class="section-sys-header reveal">
+    <span class="section-blueprint-tag">Methodology</span>
+    <span class="section-blueprint-num">[ SYS.MTH.01 ]</span>
+  </div>
+  <div class="section-layout-split">
+    <div class="reveal">
+      <h2 class="section-main-title">A certified model<br>to scale certainty.</h2>
     </div>
-    <div class="services-right reveal">
-      <p>From installation to annual maintenance contracts, we cover every aspect of your water purifier's lifecycle — ensuring consistent, pure output year after year.</p>
+    <div class="reveal">
+      <p class="section-body">Water processing is often subject to uncalibrated variances, component degradation, and low traceability. Our workflow standardizes installation and lifecycle management through real-time data tracing.</p>
     </div>
   </div>
-  <div class="services-grid reveal">
-    <div class="service-card">
-      <span class="svc-num">01</span>
-      <span class="svc-icon">💧</span>
-      <div class="svc-name">RO Installation</div>
-      <p class="svc-desc">Professional setup of Reverse Osmosis systems for homes and offices, calibrated to your local water TDS levels.</p>
-      <span class="svc-arrow">↗</span>
+  
+  <div class="method-steps-vertical reveal">
+    <div class="method-step-row">
+      <div class="m-step-index">01/</div>
+      <div class="m-step-title">TDS Matrix Definition</div>
+      <div class="m-step-desc">We extract local raw metrics from your supply lines to engineer custom molecular filtration scaling before placing hardware.</div>
     </div>
-    <div class="service-card">
-      <span class="svc-num">02</span>
-      <span class="svc-icon">🔧</span>
-      <div class="svc-name">Repair & Servicing</div>
-      <p class="svc-desc">Fast diagnosis and repair for leakages, motor issues, membrane failures, and electrical faults across all brands.</p>
-      <span class="svc-arrow">↗</span>
+    <div class="method-step-row">
+      <div class="m-step-index">02/</div>
+      <div class="m-step-title">Industrial Component Alignment</div>
+      <div class="m-step-desc">Integration of high-pressure pumps and certified multi-tier filtration beds into a continuous, non-deviating matrix framework.</div>
     </div>
-    <div class="service-card">
-      <span class="svc-num">03</span>
-      <span class="svc-icon">🔄</span>
-      <div class="svc-name">Filter Replacement</div>
-      <p class="svc-desc">Timely replacement of sediment, carbon, and RO membranes to maintain peak filtration efficiency.</p>
-      <span class="svc-arrow">↗</span>
-    </div>
-    <div class="service-card">
-      <span class="svc-num">04</span>
-      <span class="svc-icon">📋</span>
-      <div class="svc-name">AMC Plans</div>
-      <p class="svc-desc">Annual Maintenance Contracts with scheduled visits, priority service, and discounted spare parts.</p>
-      <span class="svc-arrow">↗</span>
-    </div>
-    <div class="service-card">
-      <span class="svc-num">05</span>
-      <span class="svc-icon">🧪</span>
-      <div class="svc-name">Water Quality Testing</div>
-      <p class="svc-desc">TDS measurement and quality analysis to recommend the right purification technology for your water source.</p>
-      <span class="svc-arrow">↗</span>
-    </div>
-    <div class="service-card">
-      <span class="svc-num">06</span>
-      <span class="svc-icon">🏭</span>
-      <div class="svc-name">Commercial Systems</div>
-      <p class="svc-desc">High-capacity water purification solutions for offices, restaurants, clinics, and commercial establishments.</p>
-      <span class="svc-arrow">↗</span>
+    <div class="method-step-row">
+      <div class="m-step-index">03/</div>
+      <div class="m-step-title">Traceable Verification</div>
+      <div class="m-step-desc">Post-installation execution requires verified digital testing parameters, securing long-term filtration compliance.</div>
     </div>
   </div>
 </section>
 
-<section id="products">
-  <div class="section-tag reveal">Products</div>
-  <h2 class="section-title reveal">Purifiers We<br>Service &amp; Sell</h2>
-  <p class="section-body reveal">We support all major brands — from premium to budget-friendly — with genuine parts and expert hands.</p>
-  <div class="products-list reveal">
-    <div class="product-row">
-      <span class="prod-num">P.01</span>
-      <div class="prod-info">
-        <h3>Kent RO Systems</h3>
-        <p>Multi-stage purification with TDS controller — ideal for hard water areas</p>
-      </div>
-      <span class="prod-tag">RO + UV + UF</span>
+<section id="solutions">
+  <div class="section-sys-header reveal">
+    <span class="section-blueprint-tag">Solutions Architecture</span>
+    <span class="section-blueprint-num">[ SYS.SOL.02 ]</span>
+  </div>
+  <div class="reveal">
+    <h2 class="section-main-title">Validated hardware<br>built to perform.</h2>
+  </div>
+  <div class="solutions-structural-grid reveal">
+    <div class="solution-matrix-cell">
+      <span class="s-cell-num">01. ENER-RO PANEL</span>
+      <h3 class="s-cell-title">RO Systems</h3>
+      <p class="s-cell-desc">High-fidelity Multi-stage Reverse Osmosis units equipped with dynamic TDS controllers optimized for critical industrial environments.</p>
     </div>
-    <div class="product-row">
-      <span class="prod-num">P.02</span>
-      <div class="prod-info">
-        <h3>Aquaguard Series</h3>
-        <p>Eureka Forbes smart purifiers with auto-clean and mineral guard technology</p>
-      </div>
-      <span class="prod-tag">Smart Purifier</span>
+    <div class="solution-matrix-cell">
+      <span class="s-cell-num">02. APPLIED SERVICE</span>
+      <h3 class="s-cell-title">Precision Repair</h3>
+      <p class="s-cell-desc">Calibrated system diagnostic mechanisms resolving pressure deviations, micro-leakages, and membrane structural integrity.</p>
     </div>
-    <div class="product-row">
-      <span class="prod-num">P.03</span>
-      <div class="prod-info">
-        <h3>Pureit by HUL</h3>
-        <p>Advanced RO+UV+MF purifiers with purity indicator for safe daily use</p>
-      </div>
-      <span class="prod-tag">RO + UV + MF</span>
+    <div class="solution-matrix-cell">
+      <span class="s-cell-num">03. SMART REPLACEMENT</span>
+      <h3 class="s-cell-title">Filter Interventions</h3>
+      <p class="s-cell-desc">Systematic carbon block, micron-sediment block, and high-flux active membrane renewal execution ensuring flawless operation.</p>
     </div>
-    <div class="product-row">
-      <span class="prod-num">P.04</span>
-      <div class="prod-info">
-        <h3>Livpure Systems</h3>
-        <p>Budget-friendly with 7-stage purification and digital display for TDS monitoring</p>
-      </div>
-      <span class="prod-tag">7-Stage RO</span>
+    <div class="solution-matrix-cell">
+      <span class="s-cell-num">04. FIXED AMC MATRIX</span>
+      <h3 class="s-cell-title">Lifecycle Contracts</h3>
+      <p class="s-cell-desc">Structured Annual Maintenance Contracts introducing scheduled hardware validation cycles, priority diagnostic dispatch, and zero hidden overheads.</p>
     </div>
-    <div class="product-row">
-      <span class="prod-num">P.05</span>
-      <div class="prod-info">
-        <h3>Blue Star &amp; Havells</h3>
-        <p>Premium countertop and wall-mounted RO purifiers for modern homes</p>
-      </div>
-      <span class="prod-tag">Premium Range</span>
+    <div class="solution-matrix-cell">
+      <span class="s-cell-num">05. CHEMICAL LOGIC</span>
+      <h3 class="s-cell-title">Water Quality Profiling</h3>
+      <p class="s-cell-desc">Laboratory grade quantitative analysis tracking organic loading, dynamic scale levels, and heavy metallic concentrations.</p>
+    </div>
+    <div class="solution-matrix-cell">
+      <span class="s-cell-num">06. 2D HIGH VOLUME</span>
+      <h3 class="s-cell-title">Commercial Solutions</h3>
+      <p class="s-cell-desc">High-throughput structural processing configurations engineered specifically for dynamic commercial zones and corporate facilities.</p>
     </div>
   </div>
 </section>
 
-<section class="brands">
-  <p class="brands-title reveal">Brands We Service</p>
-  <div class="brands-grid reveal">
-    <div class="brand-cell"><span class="brand-name">KENT</span></div>
-    <div class="brand-cell"><span class="brand-name">AQUAGUARD</span></div>
-    <div class="brand-cell"><span class="brand-name">PUREIT</span></div>
-    <div class="brand-cell"><span class="brand-name">LIVPURE</span></div>
-    <div class="brand-cell"><span class="brand-name">BLUE STAR</span></div>
+<section id="company">
+  <div class="section-sys-header reveal">
+    <span class="section-blueprint-tag">Enterprise Profile</span>
+    <span class="section-blueprint-num">[ SYS.EMP.03 ]</span>
   </div>
-</section>
-
-<section id="process">
-  <div class="section-tag reveal">How It Works</div>
-  <h2 class="section-title reveal">Simple. Fast.<br>Reliable.</h2>
-  <div class="process-steps reveal">
-    <div class="process-step">
-      <div class="step-num">01</div>
-      <div class="step-title">Book a Visit</div>
-      <p class="step-desc">Call or WhatsApp Rajesh directly. We'll schedule a convenient time — often same day.</p>
+  <div class="company-grid-visual">
+    <div class="blueprint-image-container reveal">
+      <img class="blueprint-raw-img" src="https://images.unsplash.com/photo-1564416972044-63345d1945a6?q=80&w=800&auto=format&fit=crop" alt="Pure engineered water flow">
+      <div class="blueprint-img-metadata">
+        <span>Operational Tech / <strong>Rajesh Rawte</strong></span>
+        <span>ID / +91 98938 88224</span>
+      </div>
     </div>
-    <div class="process-step">
-      <div class="step-num">02</div>
-      <div class="step-title">Diagnose</div>
-      <p class="step-desc">Our technician runs a full system check including TDS testing and water quality analysis.</p>
-    </div>
-    <div class="process-step">
-      <div class="step-num">03</div>
-      <div class="step-title">Service &amp; Repair</div>
-      <p class="step-desc">We fix or install using genuine parts. No unnecessary upselling — just what your system needs.</p>
-    </div>
-    <div class="process-step">
-      <div class="step-num">04</div>
-      <div class="step-title">Verify &amp; Guarantee</div>
-      <p class="step-desc">Post-service quality check and output verification. We don't leave until the water is pure.</p>
+    <div class="reveal">
+      <h2 class="section-main-title" style="margin-bottom: 24px;">Eliminating industrial data gaps.</h2>
+      <p class="section-body">Aayu Water Solution is a performance-backed system integrator in Raipur, Chhattisgarh. We eliminate information loss and traditional structural vulnerabilities in fluid purification. We align asset procurement, mechanical assembly, and deployment validation into a singular unified execution model.</p>
     </div>
   </div>
 </section>
 
-<div class="banner">
-  <div class="banner-bg"></div>
-  <div class="banner-content reveal">
-    <div class="section-tag" style="justify-content: center;">Ready to Get Started?</div>
-    <h2 class="section-title">Don't Compromise<br>On Pure Water</h2>
-    <p>Book a service visit today. Fast, transparent, and guaranteed quality.</p>
-    <a href="tel:+919893888224" class="btn-primary">↗ Call Now</a>
-    <a href="https://wa.me/919893888224" class="btn-outline">WhatsApp</a>
+<section id="projects">
+  <div class="section-sys-header reveal">
+    <span class="section-blueprint-tag">Project Registry</span>
+    <span class="section-blueprint-num">[ SYS.REG.04 ]</span>
   </div>
-</div>
+  <div class="reveal">
+    <h2 class="section-main-title">Replicating standards<br>with absolute trace control.</h2>
+  </div>
+  <div class="catalog-strip-list reveal">
+    <div class="catalog-item-row">
+      <div class="cat-id">#P-102</div>
+      <div class="cat-name">Corporate Hub System</div>
+      <div class="cat-spec">Commercial Multi-Tier Setup</div>
+      <div class="cat-tag">500 LPH Capacity</div>
+    </div>
+    <div class="catalog-item-row">
+      <div class="cat-id">#P-158</div>
+      <div class="cat-name">Under-Sink Matrix Node</div>
+      <div class="cat-spec">Residential High TDS Profile</div>
+      <div class="cat-tag">Zero-Leak Footprint</div>
+    </div>
+    <div class="catalog-item-row">
+      <div class="cat-id">#P-204</div>
+      <div class="cat-name">Clinical Processing Unit</div>
+      <div class="cat-spec">Medical Grade Purification</div>
+      <div class="cat-tag">UF + UV Active Core</div>
+    </div>
+  </div>
+</section>
+
+<section id="pillars" class="sustainability">
+  <div class="section-sys-header reveal">
+    <span class="section-blueprint-tag">Strategic Core</span>
+    <span class="section-blueprint-num">[ SYS.PIL.05 ]</span>
+  </div>
+  <div class="reveal">
+    <h2 class="section-main-title">System guarantees embedded<br>within the methodology.</h2>
+  </div>
+  <div class="pillars-layout-grid reveal">
+    <div class="pillar-structural-box">
+      <div class="p-box-header">
+        <h3>Digitalization</h3>
+        <p>Continuous flow alignment. We map design inputs with component selection to avoid uncalibrated parameter errors, building dynamic real-time tracing into high-volume networks.</p>
+      </div>
+      <div class="p-box-metric">
+        <div class="p-box-metric-val">100%</div>
+        <div class="p-box-metric-lbl">Data Log Traceability</div>
+      </div>
+    </div>
+    <div class="pillar-structural-box">
+      <div class="p-box-header">
+        <h3>Sustainability</h3>
+        <p>Embedded efficiency matrices. Reclaiming wastewater paths and integrating advanced power conservation nodes to lower overall carbon index thresholds.</p>
+      </div>
+      <div class="p-box-metric">
+        <div class="p-box-metric-val">-40%</div>
+        <div class="p-box-metric-lbl">Effluent Fluid Runoff</div>
+      </div>
+    </div>
+    <div class="pillar-structural-box">
+      <div class="p-box-header">
+        <h3>Certification</h3>
+        <p>Fully compliant material allocation. Standardized parameters conforming directly with local regulatory codes to eliminate structural risk profiles.</p>
+      </div>
+      <div class="p-box-metric">
+        <div class="p-box-metric-val">ISI/ISO</div>
+        <div class="p-box-metric-lbl">Component Baseline</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faqs">
+  <div class="section-sys-header reveal">
+    <span class="section-blueprint-tag">Knowledge Validation</span>
+    <span class="section-blueprint-num">[ SYS.FAQ.06 ]</span>
+  </div>
+  <div class="reveal">
+    <h2 class="section-main-title">Technical Support Matrices</h2>
+  </div>
+  <div class="faq-accordion-block reveal">
+    <div class="faq-node">
+      <h4 class="faq-node-query">What dictates dynamic filter lifecycle metrics?</h4>
+      <p class="faq-node-response">Component longevity depends entirely on inlet water chemical data profiles and throughput pressures. Sediment and active carbon blocks maintain structural limits for 6 to 8 months, while the high-rejection RO membrane safely functions for 18 to 24 months.</p>
+    </div>
+    <div class="faq-node">
+      <h4 class="faq-node-query">Are replacement components compatible with multi-brand systems?</h4>
+      <p class="faq-node-use-case faq-node-response">Yes. Our replacement profiles utilize generalized geometric baselines conforming directly to Kent, Aquaguard, Pureit, Livpure, and Blue Star system metrics without structural modifications or leakage vulnerabilities.</p>
+    </div>
+    <div class="faq-node">
+      <h4 class="faq-node-query">How does the Annual Maintenance Contract framework function?</h4>
+      <p class="faq-node-response">The standard lifecycle contract coordinates routine scheduled engineering validation visits throughout a 365-day phase, eliminating uncalibrated component failure risks and breakdown costs completely.</p>
+    </div>
+  </div>
+</section>
 
 <section id="contact">
-  <div class="section-tag reveal">Contact</div>
-  <h2 class="section-title reveal">Get in Touch</h2>
-  <div class="contact-grid">
-    <div class="contact-info reveal">
-      <div class="contact-block">
-        <h4>Owner</h4>
+  <div class="section-sys-header reveal">
+    <span class="section-blueprint-tag">System Interface</span>
+    <span class="section-blueprint-num">[ SYS.CON.07 ]</span>
+  </div>
+  <div class="reveal">
+    <h2 class="section-main-title">Initialize a Project System</h2>
+  </div>
+  <div class="console-form-container reveal">
+    <div class="console-info-pane">
+      <div class="pane-block">
+        <h4>Operations Command</h4>
         <p>Rajesh Rawte</p>
-        <p class="sub">Founder & Chief Technician</p>
+        <div class="pane-subtext">Founder & Technical Specialist</div>
       </div>
-      <div class="contact-block">
-        <h4>Phone / WhatsApp</h4>
+      <div class="pane-block">
+        <h4>Communication Terminal</h4>
         <a href="tel:+919893888224">+91 98938 88224</a>
-        <p class="sub">Available Mon–Sat, 9am–7pm</p>
+        <div class="pane-subtext">Voice Link / Secure WhatsApp Protocol</div>
       </div>
-      <div class="contact-block">
-        <h4>Business</h4>
-        <p>Aayu Water Solution</p>
-        <p class="sub">Water Purifier Sales & Repair</p>
-      </div>
-      <div class="contact-block">
-        <h4>Rating</h4>
-        <p style="color: var(--blue);">★★★★★ 5.0</p>
-        <p class="sub">100% customer satisfaction</p>
+      <div class="pane-block">
+        <h4>Geographic Matrix Coordinate</h4>
+        <p>Vikash Vihaar, Raipura</p>
+        <div class="pane-subtext">Near Mahadev Ghat Mandir, Raipur, CG - 492013</div>
       </div>
     </div>
-    <div class="contact-form reveal">
-      <div class="form-row">
-        <div class="form-group">
-          <label>Your Name</label>
+    
+    <div class="console-inputs-pane">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px;">
+        <div class="console-input-group">
+          <label>Operator / Name</label>
           <input type="text" placeholder="Full Name">
         </div>
-        <div class="form-group">
-          <label>Phone Number</label>
+        <div class="console-input-group">
+          <label>Data Destination / Phone</label>
           <input type="tel" placeholder="+91 00000 00000">
         </div>
       </div>
-      <div class="form-group">
-        <label>Service Required</label>
+      <div class="console-input-group">
+        <label>System Parameter Target</label>
         <select>
-          <option value="">Select a service</option>
-          <option>RO Installation</option>
-          <option>Repair & Servicing</option>
-          <option>Filter Replacement</option>
-          <option>AMC Plan</option>
-          <option>Water Quality Testing</option>
-          <option>Other</option>
+          <option>Industrial Volume Configuration</option>
+          <option>Standard Core Matrix Installation</option>
+          <option>System Diagnostic / Maintenance</option>
         </select>
       </div>
-      <div class="form-group">
-        <label>Message</label>
-        <textarea placeholder="Describe your issue or query..."></textarea>
+      <div class="console-input-group">
+        <label>Project Log Brief</label>
+        <textarea placeholder="Describe technical requirements, baseline chemical parameters, or component anomalies..."></textarea>
       </div>
-      <a href="tel:+919893888224" class="btn-primary" style="align-self: flex-start;">↗ Send Request</a>
+      <button class="btn-system-primary" style="align-self: flex-start;">
+        Initialize System Integration <span>→</span>
+      </button>
     </div>
   </div>
 </section>
 
 <footer>
-  <div class="footer-top">
-    <div class="footer-brand">
-      <a href="#" class="nav-logo">AAYU<span>.</span></a>
-      <p>Pure water solutions for homes and businesses. Professional installation, repair, and AMC services across all major brands.</p>
+  <div class="footer-structural-top">
+    <div class="footer-col-brand">
+      <a href="#home" class="nav-logo">AAYU<span>.</span></a>
+      <p>The transformation of fluid refinement through an industrialized, scalable, digital approach that guarantees structural results.</p>
     </div>
-    <div class="footer-col">
-      <h5>Services</h5>
-      <a href="#services">RO Installation</a>
-      <a href="#services">Repair & Service</a>
-      <a href="#services">Filter Replacement</a>
-      <a href="#services">AMC Plans</a>
+    <div>
+      <h5>Enterprise Nodes</h5>
+      <a href="#approach">Approach</a>
+      <a href="#solutions">Solutions</a>
+      <a href="#company">Company Profile</a>
+      <a href="#projects">Project Registry</a>
     </div>
-    <div class="footer-col">
-      <h5>Products</h5>
-      <a href="#products">Kent Systems</a>
-      <a href="#products">Aquaguard</a>
-      <a href="#products">Pureit</a>
-      <a href="#products">Livpure</a>
+    <div>
+      <h5>Pillars</h5>
+      <a href="#pillars">Digitalization Flow</a>
+      <a href="#pillars">Fluid Sustainability</a>
+      <a href="#pillars">Asset Certification</a>
+      <a href="#faqs">System Support FAQs</a>
     </div>
-    <div class="footer-col">
-      <h5>Contact</h5>
+    <div>
+      <h5>Operational Link</h5>
       <a href="tel:+919893888224">+91 98938 88224</a>
-      <a href="https://wa.me/919893888224">WhatsApp</a>
-      <a href="#about">About Us</a>
+      <a href="mailto:systems@aayuwater.com">systems@aayuwater.com</a>
+      <p style="color: var(--muted); font-size: 13px; margin-top: 16px;">Raipur, Chhattisgarh</p>
     </div>
   </div>
-  <div class="footer-bottom">
-    <p>©2025 <span>AAYU WATER SOLUTION</span></p>
-    <p>Rajesh Rawte &nbsp;·&nbsp; +91 98938 88224</p>
-    <p>Water Purifier <span>Sales & Repair</span></p>
+  <div class="footer-structural-bottom">
+    <p>©2026 <span class="highlight">AAYU WATER SYSTEM INTEGRATION</span></p>
+    <p>MANAGING PROCESS END-TO-END</p>
   </div>
 </footer>
 
 <script>
-// Water Cursor Logic
+// Liquid Teardrop Cursor Execution Logic
 const cursor = document.getElementById('cursor');
 const ring = document.getElementById('cursorRing');
 let mx = 0, my = 0, rx = 0, ry = 0;
 
 document.addEventListener('mousemove', e => { 
-  mx = e.clientX; 
-  my = e.clientY; 
-  cursor.style.left = mx + 'px'; 
-  cursor.style.top = my + 'px'; 
+  mx = e.clientX; my = e.clientY; 
+  cursor.style.left = mx + 'px'; cursor.style.top = my + 'px'; 
 });
 
 function animRing() { 
-  rx += (mx - rx) * 0.15; 
-  ry += (my - ry) * 0.15; 
-  ring.style.left = rx + 'px'; 
-  ring.style.top = ry + 'px'; 
+  rx += (mx - rx) * 0.16; ry += (my - ry) * 0.16; 
+  ring.style.left = rx + 'px'; ring.style.top = ry + 'px'; 
   requestAnimationFrame(animRing); 
 }
 animRing();
 
-// Morphing Effect on Interactive Elements
-document.querySelectorAll('a, button, .service-card, .product-row').forEach(el => {
+// Advanced Morphing Matrix for Cursor Interactions
+document.querySelectorAll('a, button, .solution-matrix-cell, .catalog-item-row, input, select, textarea').forEach(el => {
   el.addEventListener('mouseenter', () => { 
-    // Morph drop into a larger bubble
-    cursor.style.borderRadius = '50%';
-    cursor.style.background = 'rgba(0, 153, 204, 0.1)';
-    cursor.style.width = '60px'; 
-    cursor.style.height = '60px'; 
-    cursor.style.marginLeft = '-30px'; 
-    cursor.style.marginTop = '-30px'; 
-    cursor.style.boxShadow = 'inset 0 0 10px rgba(51, 187, 238, 0.4)';
-    
-    ring.style.width = '80px'; 
-    ring.style.height = '80px'; 
-    ring.style.marginLeft = '-40px'; 
-    ring.style.marginTop = '-40px';
+    cursor.style.borderRadius = '50%'; cursor.style.background = 'rgba(0, 153, 204, 0.08)';
+    cursor.style.width = '64px'; cursor.style.height = '64px'; 
+    cursor.style.marginLeft = '-32px'; cursor.style.marginTop = '-32px'; 
+    cursor.style.boxShadow = 'inset 0 0 12px rgba(51, 187, 238, 0.5)';
+    ring.style.width = '84px'; ring.style.height = '84px'; 
+    ring.style.marginLeft = '-42px'; ring.style.marginTop = '-42px';
     ring.style.borderColor = 'transparent';
   });
-  
   el.addEventListener('mouseleave', () => { 
-    // Return to original teardrop
-    cursor.style.borderRadius = '0 50% 50% 50%';
-    cursor.style.background = 'var(--blue-light)';
-    cursor.style.width = '16px'; 
-    cursor.style.height = '16px'; 
-    cursor.style.marginLeft = '-8px'; 
-    cursor.style.marginTop = '-8px'; 
+    cursor.style.borderRadius = '0 50% 50% 50%'; cursor.style.background = 'var(--blue-light)';
+    cursor.style.width = '14px'; cursor.style.height = '14px'; 
+    cursor.style.marginLeft = '-7px'; cursor.style.marginTop = '-7px'; 
     cursor.style.boxShadow = '0 0 15px rgba(51, 187, 238, 0.6)';
-    
-    ring.style.width = '40px'; 
-    ring.style.height = '40px'; 
-    ring.style.marginLeft = '-20px'; 
-    ring.style.marginTop = '-20px';
+    ring.style.width = '36px'; ring.style.height = '36px'; 
+    ring.style.marginLeft = '-18px'; ring.style.marginTop = '-18px';
     ring.style.borderColor = 'rgba(51, 187, 238, 0.4)';
   });
 });
 
-// Nav scroll
+// Fullscreen Slide Overlay Controls
+const menuOpen = document.getElementById('menuOpen');
+const menuClose = document.getElementById('menuClose');
+const menuOverlay = document.getElementById('menuOverlay');
+const menuLinks = document.querySelectorAll('.menu-container a');
+
+menuOpen.addEventListener('click', () => menuOverlay.classList.add('active'));
+menuClose.addEventListener('click', () => menuOverlay.classList.remove('active'));
+menuLinks.forEach(link => link.addEventListener('click', () => menuOverlay.classList.remove('active')));
+
+// Scrolled Navigation Boundary Tracking
 const nav = document.getElementById('nav');
 window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 60); });
 
-// Reveal
+// Component Fluid Entrance Execution (Scroll Reveal)
 const reveals = document.querySelectorAll('.reveal');
 const obs = new IntersectionObserver((entries) => {
   entries.forEach((e, i) => {
     if (e.isIntersecting) {
-      e.target.style.transitionDelay = (i % 4 * 0.1) + 's';
+      e.target.style.transitionDelay = (i % 3 * 0.08) + 's';
       e.target.classList.add('visible');
     }
   });
-}, { threshold: 0.1 });
+}, { threshold: 0.08 });
 reveals.forEach(r => obs.observe(r));
 
-// Counter animation
+// Micro-Counter Interpolation Engine
 function animCount(el, target) {
-  let start = 0; const dur = 2000; const step = 16;
-  const inc = target / (dur/step);
-  const t = setInterval(() => {
-    start += inc;
-    if (start >= target) { el.textContent = target % 1 !== 0 ? target.toFixed(1) : target+'+'; clearInterval(t); }
-    else el.textContent = target % 1 !== 0 ? start.toFixed(1) : Math.floor(start)+'+';
-  }, step);
+  let start = 0; const duration = 1800; const stepTime = 16;
+  const increment = target / (duration / stepTime);
+  const timer = setInterval(() => {
+    start += increment;
+    if (start >= target) { 
+      el.textContent = target % 1 !== 0 ? target.toFixed(1) : target + '+'; 
+      clearInterval(timer); 
+    } else {
+      el.textContent = target % 1 !== 0 ? start.toFixed(1) : Math.floor(start) + '+';
+    }
+  }, stepTime);
 }
-const statNums = document.querySelectorAll('.hero-stat-num');
+
+const statNums = document.querySelectorAll('.hero-metric-num');
 const statsObs = new IntersectionObserver(entries => {
   if (entries[0].isIntersecting) {
-    animCount(statNums[0], 5.0);
-    animCount(statNums[1], 500);
-    animCount(statNums[2], 10);
+    animCount(statNums[0], parseFloat(statNums[0].getAttribute('data-target')));
+    animCount(statNums[1], parseFloat(statNums[1].getAttribute('data-target')));
     statsObs.disconnect();
   }
-}, { threshold: 0.5 });
+}, { threshold: 0.2 });
 statsObs.observe(statNums[0]);
 </script>
 </body>
