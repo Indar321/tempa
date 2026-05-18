@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aayu Water Solution | Advanced Digital Purification</title>
+<title>Aayu Water Solution | Premium Purification</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Open+Sans:wght@300;400;500;600&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Open+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  /* LIGHT THEME VARIABLES */
+  /* PREMIUM LIGHT & WATER THEME */
   :root {
-    --blue: #0055CC;        /* Deeper, more authoritative blue for light mode */
-    --blue-light: #0077FF;
-    --bg: #FFFFFF;          /* Pure white background */
-    --bg2: #F4F4F6;         /* Soft technical grey for secondary sections */
-    --fg: #0A0A0A;          /* Near black text */
-    --muted: #555555;       /* Medium grey for secondary text */
-    --border: #E0E0E0;      /* Light border lines */
-    --grid-color: rgba(0, 0, 0, 0.03); /* Subtle dark grid on white */
+    --blue: #0066FF;        
+    --blue-light: #4D94FF;
+    --blue-pale: #E5F0FF;
+    --bg: #FFFFFF;          
+    --bg-alt: #F8F9FA;         
+    --fg: #111111;          
+    --muted: #666666;       
+    --border: #EAEAEA;      
     
     --font-head: 'Bebas Neue', sans-serif;
     --font-body: 'Open Sans', sans-serif;
@@ -24,8 +24,7 @@
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  
-  html { scroll-behavior: smooth; font-size: 16px; }
+  html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; }
 
   body {
     background: var(--bg);
@@ -33,312 +32,263 @@
     font-family: var(--font-body);
     font-weight: 400;
     overflow-x: hidden;
-    cursor: none;
-    background-image: linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
-                      linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
-    background-size: 80px 80px;
+    cursor: none; /* Custom cursor for desktop */
   }
 
-  /* ADVANCED LIQUID CURSOR (HIDDEN ON TOUCH DEVICES) */
+  /* -------------------------------------- */
+  /* CUSTOM CURSOR (HIDDEN ON MOBILE/TOUCH) */
+  /* -------------------------------------- */
   @media (pointer: fine) {
     .cursor {
       position: fixed; top: 0; left: 0; z-index: 9999;
-      width: 12px; height: 12px;
-      background: var(--blue);
-      border-radius: 0 50% 50% 50%;
-      pointer-events: none;
-      transform: rotate(45deg);
-      margin-left: -6px; margin-top: -6px;
-      box-shadow: 0 4px 10px rgba(0, 85, 204, 0.4);
-      transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1), 
-                  height 0.3s cubic-bezier(0.25, 1, 0.5, 1), 
-                  margin 0.3s cubic-bezier(0.25, 1, 0.5, 1),
-                  background 0.3s, border-radius 0.3s;
+      width: 12px; height: 12px; background: var(--blue);
+      border-radius: 0 50% 50% 50%; pointer-events: none;
+      transform: rotate(45deg) translate(-50%, -50%);
+      box-shadow: 0 4px 10px rgba(0, 102, 255, 0.4);
+      transition: width 0.3s ease, height 0.3s ease, background 0.3s ease, border-radius 0.3s ease;
     }
     .cursor-ring {
       position: fixed; top: 0; left: 0; z-index: 9998;
-      width: 40px; height: 40px;
-      border: 1px solid rgba(0, 85, 204, 0.3);
-      background: rgba(0, 85, 204, 0.05);
-      border-radius: 50%;
-      pointer-events: none;
-      margin-left: -20px; margin-top: -20px;
+      width: 40px; height: 40px; border: 1.5px solid rgba(0, 102, 255, 0.3);
+      background: rgba(0, 102, 255, 0.05); border-radius: 50%;
+      pointer-events: none; transform: translate(-50%, -50%);
       backdrop-filter: blur(2px);
-      transition: width 0.4s cubic-bezier(0.25, 1, 0.5, 1), 
-                  height 0.4s cubic-bezier(0.25, 1, 0.5, 1), 
-                  margin 0.4s cubic-bezier(0.25, 1, 0.5, 1),
-                  border-color 0.3s, background 0.3s, border-radius 0.3s;
+      transition: width 0.4s ease, height 0.4s ease, border-color 0.3s ease, background 0.3s ease;
     }
     body:hover .cursor, body:hover .cursor-ring { opacity: 1; }
   }
-  @media (pointer: coarse) {
+  
+  /* Disable on Touch Devices (Mobile/Tablet) */
+  @media (pointer: coarse), (hover: none) {
     body { cursor: auto; }
     .cursor, .cursor-ring { display: none !important; }
-    a, button { cursor: pointer; }
+    a, button, input, select, textarea { cursor: pointer; }
   }
 
-  /* HEADER & NAVIGATION */
+  /* -------------------------------------- */
+  /* NAVIGATION & GLASSMORPHIC MENU         */
+  /* -------------------------------------- */
   nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
     display: flex; align-items: center; justify-content: space-between;
-    padding: 32px 48px;
+    padding: 32px 48px; transition: all 0.4s ease;
     border-bottom: 1px solid transparent;
-    transition: border-color 0.4s, background 0.4s, padding 0.4s;
   }
   nav.scrolled {
-    border-color: var(--border);
-    background: rgba(255,255,255,0.95);
-    backdrop-filter: blur(20px);
-    padding: 20px 48px;
+    background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(16px);
+    padding: 20px 48px; border-bottom: 1px solid var(--border);
   }
-  .nav-logo {
-    font-family: var(--font-head); font-size: 32px;
-    letter-spacing: 3px; color: var(--fg); text-decoration: none;
-  }
+  .nav-logo { font-family: var(--font-head); font-size: 32px; letter-spacing: 2px; color: var(--fg); text-decoration: none; }
   .nav-logo span { color: var(--blue); }
   
   .menu-btn {
-    font-family: var(--font-mono); font-size: 12px; letter-spacing: 2px;
-    text-transform: uppercase; color: var(--fg);
-    background: transparent; border: 1px solid var(--border);
-    padding: 12px 24px; display: flex; align-items: center; gap: 16px; 
-    transition: border-color 0.3s, background 0.3s, color 0.3s;
+    font-family: var(--font-mono); font-size: 13px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--fg); background: transparent; border: none;
+    display: flex; align-items: center; gap: 16px; transition: color 0.3s;
   }
   @media (pointer: fine) { .menu-btn { cursor: none; } }
-  .menu-btn:hover { border-color: var(--fg); background: var(--fg); color: var(--bg); }
-  .menu-btn .burger-icon { display: flex; flex-direction: column; gap: 6px; }
-  .menu-btn .burger-line { width: 18px; height: 1.5px; background: currentColor; transition: width 0.3s; }
-  .menu-btn:hover .burger-line:nth-child(2) { width: 10px; }
+  .menu-btn:hover { color: var(--blue); }
+  .menu-btn .burger-line { width: 24px; height: 2px; background: currentColor; margin: 4px 0; transition: width 0.3s; }
+  .menu-btn:hover .burger-line:nth-child(2) { width: 16px; }
 
-  /* HIGH-CONTRAST DARK MENU OVERLAY */
+  /* Smooth Glass Overlay */
   .menu-overlay {
     position: fixed; inset: 0; z-index: 1000;
-    background: rgba(10, 10, 10, 0.98);
-    backdrop-filter: blur(30px);
-    display: flex; align-items: center; padding: 0 10%;
-    opacity: 0; pointer-events: none;
-    transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+    background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(24px);
+    display: flex; flex-direction: column; justify-content: center; padding: 0 10%;
+    opacity: 0; pointer-events: none; transition: opacity 0.5s ease;
   }
   .menu-overlay.active { opacity: 1; pointer-events: all; }
   
   .menu-close {
-    position: absolute; top: 32px; right: 48px;
-    font-family: var(--font-mono); font-size: 12px; letter-spacing: 2px;
-    text-transform: uppercase; color: #888;
-    background: transparent; border: 1px solid #333;
-    padding: 12px 24px; transition: border-color 0.3s, color 0.3s;
+    position: absolute; top: 40px; right: 48px;
+    font-family: var(--font-mono); font-size: 14px; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--fg); background: transparent; border: none;
+    transition: color 0.3s;
   }
   @media (pointer: fine) { .menu-close { cursor: none; } }
-  .menu-close:hover { border-color: var(--blue-light); color: #FFF; }
+  .menu-close:hover { color: var(--blue); }
   
-  .menu-container {
-    display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 120px;
-    width: 100%; max-width: 1200px; margin: 0 auto;
+  .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; max-width: 1200px; margin: 0 auto; width: 100%; }
+  .menu-links { display: flex; flex-direction: column; gap: 16px; }
+  .menu-links a {
+    font-family: var(--font-head); font-size: clamp(48px, 6vw, 80px); line-height: 1;
+    color: var(--border); text-decoration: none; text-transform: uppercase; letter-spacing: 1px;
+    transition: color 0.4s ease, padding-left 0.4s ease;
   }
-  .menu-column-main { display: flex; flex-direction: column; gap: 16px; }
-  .menu-column-main .menu-label { font-family: var(--font-mono); font-size: 11px; color: var(--blue-light); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px;}
-  .menu-column-main a {
-    font-family: var(--font-head); font-size: clamp(48px, 6vw, 84px); line-height: 0.9;
-    color: #555; text-decoration: none; text-transform: uppercase; letter-spacing: 1px;
-    transition: color 0.3s, padding-left 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-  }
-  .menu-column-main a:hover { color: #FFF; padding-left: 24px; }
+  .menu-links a:hover { color: var(--blue); padding-left: 20px; }
   
-  .menu-column-pillars { display: flex; flex-direction: column; gap: 32px; justify-content: center; border-left: 1px solid #333; padding-left: 64px; }
-  .menu-column-pillars .menu-label { font-family: var(--font-mono); font-size: 11px; color: #888; letter-spacing: 3px; text-transform: uppercase; }
-  .menu-pillar-links { display: flex; flex-direction: column; gap: 20px; }
-  .menu-pillar-links a { font-family: var(--font-body); font-size: 18px; color: #BBB; text-decoration: none; transition: color 0.3s; }
-  .menu-pillar-links a:hover { color: var(--blue-light); }
+  .menu-sub { display: flex; flex-direction: column; justify-content: center; gap: 24px; border-left: 1px solid var(--border); padding-left: 60px; }
+  .menu-sub a { font-family: var(--font-body); font-size: 20px; color: var(--muted); text-decoration: none; transition: color 0.3s; }
+  .menu-sub a:hover { color: var(--blue); }
 
-  /* LIGHT HERO SECTION */
-  .hero {
-    position: relative; min-height: 100vh;
-    display: flex; flex-direction: column; justify-content: flex-end;
-    padding: 0 48px 100px; overflow: hidden;
-    border-bottom: 1px solid var(--border);
-  }
-  .hero-bg {
-    position: absolute; inset: 0;
-    /* Clean, bright water image */
-    background: url('https://images.unsplash.com/photo-1548839140-29a749e1cf4d?q=80&w=1800&auto=format&fit=crop') center/cover no-repeat;
-    filter: brightness(1.15) contrast(1.05);
-  }
-  .hero-bg::after {
-    content:''; position: absolute; inset: 0;
-    /* White gradient overlay fading up */
-    background: linear-gradient(to top, rgba(255,255,255,1) 0%, rgba(255,255,255,0.8) 50%, rgba(255,255,255,0.2) 100%);
-  }
-  .hero-meta-panel {
-    position: relative; z-index: 2; display: flex; align-items: center; gap: 24px; margin-bottom: 32px;
-  }
-  .hero-meta-tag { font-family: var(--font-mono); font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: var(--blue); font-weight: 700; }
-  .hero-meta-line { flex: 1; height: 1px; background: var(--border); max-width: 200px; }
-  .hero-meta-sys { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+  /* -------------------------------------- */
+  /* ANIMATION CLASSES FOR DIFFERENT FLOWS  */
+  /* -------------------------------------- */
+  /* 1. Fade & Slide Up */
+  .anim-fade-up { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .anim-fade-up.visible { opacity: 1; transform: translateY(0); }
   
-  .hero-title {
-    position: relative; z-index: 2; font-family: var(--font-head);
-    font-size: clamp(64px, 11vw, 160px); line-height: 0.9; letter-spacing: 1px; margin-bottom: 48px;
-    color: var(--fg);
+  /* 2. Blur Reveal (Cinematic text) */
+  .anim-blur { opacity: 0; filter: blur(10px); transform: scale(0.95); transition: opacity 1s ease, filter 1s ease, transform 1s ease; }
+  .anim-blur.visible { opacity: 1; filter: blur(0); transform: scale(1); }
+  
+  /* 3. Slide In Left/Right */
+  .anim-slide-left { opacity: 0; transform: translateX(-60px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .anim-slide-left.visible { opacity: 1; transform: translateX(0); }
+  .anim-slide-right { opacity: 0; transform: translateX(60px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .anim-slide-right.visible { opacity: 1; transform: translateX(0); }
+
+  /* 4. Scale In (For Images) */
+  .anim-scale-in { opacity: 0; clip-path: inset(10% 10% 10% 10%); transform: scale(1.1); transition: opacity 1s ease, clip-path 1.2s cubic-bezier(0.19, 1, 0.22, 1), transform 1.2s ease; }
+  .anim-scale-in.visible { opacity: 1; clip-path: inset(0 0 0 0); transform: scale(1); }
+
+  /* -------------------------------------- */
+  /* COMMON SECTION STYLES                  */
+  /* -------------------------------------- */
+  section { padding: 120px 48px; border-bottom: 1px solid var(--border); position: relative; }
+  .section-tag { font-family: var(--font-mono); font-size: 12px; color: var(--blue); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 24px; display: block; font-weight: 700; }
+  .section-title { font-family: var(--font-head); font-size: clamp(40px, 5vw, 72px); line-height: 1.1; color: var(--fg); letter-spacing: 1px; margin-bottom: 24px; text-transform: uppercase; }
+  .section-desc { font-size: 17px; line-height: 1.8; color: var(--muted); max-width: 650px; }
+
+  /* -------------------------------------- */
+  /* HERO SECTION                           */
+  /* -------------------------------------- */
+  .hero { position: relative; min-height: 100vh; display: flex; flex-direction: column; justify-content: flex-end; padding: 0 48px 80px; overflow: hidden; background: var(--bg-alt); }
+  .hero-img { position: absolute; top: 0; right: 0; width: 55%; height: 100%; object-fit: cover; border-bottom-left-radius: 40px; }
+  .hero-content { position: relative; z-index: 2; max-width: 800px; background: rgba(255,255,255,0.8); backdrop-filter: blur(12px); padding: 60px; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.03); }
+  .hero-title { font-size: clamp(56px, 8vw, 110px); margin-bottom: 24px; }
+  .hero-stats { display: flex; gap: 40px; margin-top: 40px; padding-top: 40px; border-top: 1px solid var(--border); }
+  .stat-num { font-family: var(--font-head); font-size: 48px; color: var(--blue); line-height: 1; }
+  .stat-label { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; color: var(--muted); letter-spacing: 2px; margin-top: 8px; font-weight: 700;}
+
+  /* -------------------------------------- */
+  /* ABOUT US                               */
+  /* -------------------------------------- */
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .about-image-wrapper { position: relative; border-radius: 24px; overflow: hidden; }
+  .about-image { width: 100%; aspect-ratio: 4/5; object-fit: cover; }
+  .about-points { margin-top: 40px; display: flex; flex-direction: column; gap: 24px; }
+  .point { display: flex; gap: 20px; align-items: flex-start; }
+  .point-icon { width: 48px; height: 48px; background: var(--blue-pale); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--blue); font-family: var(--font-head); font-size: 24px; flex-shrink: 0; }
+  .point-text h4 { font-size: 18px; margin-bottom: 8px; color: var(--fg); }
+  .point-text p { font-size: 15px; color: var(--muted); line-height: 1.6; }
+
+  /* -------------------------------------- */
+  /* SERVICES / SOLUTIONS                   */
+  /* -------------------------------------- */
+  .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: var(--border); margin-top: 60px; border: 1px solid var(--border); }
+  .service-card { background: var(--bg); padding: 56px 40px; transition: all 0.4s ease; display: flex; flex-direction: column; gap: 20px; }
+  .service-card:hover { background: var(--blue); color: #FFF; transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0, 102, 255, 0.15); z-index: 2; border-radius: 12px; }
+  .service-card:hover .svc-num, .service-card:hover .svc-desc, .service-card:hover .svc-title { color: #FFF; }
+  .svc-num { font-family: var(--font-mono); font-size: 14px; font-weight: 700; color: var(--blue); transition: color 0.3s; }
+  .svc-title { font-family: var(--font-head); font-size: 32px; letter-spacing: 1px; color: var(--fg); transition: color 0.3s; }
+  .svc-desc { font-size: 15px; color: var(--muted); line-height: 1.7; transition: color 0.3s; }
+
+  /* -------------------------------------- */
+  /* NEW: THE PROCESS                       */
+  /* -------------------------------------- */
+  .process-section { background: var(--bg-alt); }
+  .process-container { display: flex; flex-direction: column; gap: 40px; margin-top: 60px; }
+  .process-step { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+  .process-step:nth-child(even) { direction: rtl; }
+  .process-step:nth-child(even) > * { direction: ltr; }
+  .process-img { width: 100%; height: 300px; object-fit: cover; border-radius: 20px; }
+  .process-text h3 { font-family: var(--font-head); font-size: 40px; color: var(--fg); margin-bottom: 16px; letter-spacing: 1px; }
+  .process-text p { font-size: 16px; color: var(--muted); line-height: 1.7; }
+
+  /* -------------------------------------- */
+  /* PROJECTS GALLERY                       */
+  /* -------------------------------------- */
+  .projects-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; margin-top: 60px; }
+  .project-item { position: relative; border-radius: 24px; overflow: hidden; aspect-ratio: 16/10; group; }
+  .project-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+  .project-item:hover img { transform: scale(1.05); }
+  .project-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); display: flex; flex-direction: column; justify-content: flex-end; padding: 40px; }
+  .project-overlay h3 { font-family: var(--font-head); font-size: 32px; color: #FFF; letter-spacing: 1px; }
+  .project-overlay span { font-family: var(--font-mono); font-size: 12px; color: var(--blue-light); text-transform: uppercase; margin-top: 8px; }
+
+  /* -------------------------------------- */
+  /* NEW: AMC PRICING PLANS                 */
+  /* -------------------------------------- */
+  .plans-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-top: 60px; }
+  .plan-card { border: 1px solid var(--border); border-radius: 24px; padding: 48px; background: var(--bg); display: flex; flex-direction: column; transition: box-shadow 0.3s; }
+  .plan-card:hover { box-shadow: 0 20px 40px rgba(0,0,0,0.05); }
+  .plan-card.featured { border-color: var(--blue); box-shadow: 0 20px 40px rgba(0, 102, 255, 0.08); position: relative; }
+  .plan-badge { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: var(--blue); color: #FFF; font-family: var(--font-mono); font-size: 11px; padding: 6px 16px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; }
+  .plan-name { font-family: var(--font-head); font-size: 32px; color: var(--fg); margin-bottom: 8px; }
+  .plan-desc { font-size: 14px; color: var(--muted); margin-bottom: 32px; }
+  .plan-features { flex: 1; list-style: none; margin-bottom: 40px; }
+  .plan-features li { font-size: 15px; color: var(--muted); margin-bottom: 16px; display: flex; align-items: center; gap: 12px; }
+  .plan-features li::before { content: '✓'; color: var(--blue); font-weight: bold; }
+
+  /* -------------------------------------- */
+  /* NEW: TESTIMONIALS                      */
+  /* -------------------------------------- */
+  .testimonials { background: var(--bg-alt); }
+  .test-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; margin-top: 60px; }
+  .test-card { background: var(--bg); padding: 48px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); }
+  .stars { color: #FFB800; font-size: 20px; margin-bottom: 24px; }
+  .test-quote { font-size: 18px; color: var(--fg); font-style: italic; line-height: 1.6; margin-bottom: 24px; }
+  .test-author { font-family: var(--font-mono); font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+
+  /* -------------------------------------- */
+  /* FAQS & CONTACT                         */
+  /* -------------------------------------- */
+  .faq-list { max-width: 800px; margin-top: 40px; }
+  .faq-item { border-bottom: 1px solid var(--border); padding: 32px 0; }
+  .faq-q { font-family: var(--font-head); font-size: 24px; color: var(--fg); margin-bottom: 12px; letter-spacing: 1px; }
+  .faq-a { font-size: 16px; color: var(--muted); line-height: 1.7; }
+
+  .contact-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 80px; margin-top: 60px; }
+  .contact-details { display: flex; flex-direction: column; gap: 40px; }
+  .c-block h4 { font-family: var(--font-mono); font-size: 12px; color: var(--blue); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 2px; }
+  .c-block p, .c-block a { font-size: 20px; color: var(--fg); text-decoration: none; font-weight: 500; }
+  
+  .contact-form { display: flex; flex-direction: column; gap: 24px; background: var(--bg-alt); padding: 48px; border-radius: 24px; }
+  .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .form-group { display: flex; flex-direction: column; gap: 8px; }
+  .form-group label { font-family: var(--font-mono); font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+  .form-group input, .form-group textarea, .form-group select { background: var(--bg); border: 1px solid var(--border); padding: 16px; border-radius: 12px; font-family: var(--font-body); font-size: 16px; color: var(--fg); outline: none; transition: border-color 0.3s; }
+  .form-group input:focus, .form-group textarea:focus { border-color: var(--blue); }
+  .form-group textarea { resize: none; min-height: 120px; }
+
+  /* BUTTONS */
+  .btn-primary {
+    display: inline-flex; align-items: center; justify-content: center; gap: 12px;
+    font-family: var(--font-mono); font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+    color: #FFF; background: var(--blue); padding: 20px 40px; border-radius: 12px;
+    text-decoration: none; border: none; transition: background 0.3s, transform 0.3s;
   }
-  .hero-title span.accent-line { display: block; color: var(--blue); }
-  
-  .hero-footer-grid { position: relative; z-index: 2; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 80px; align-items: flex-end; }
-  .hero-description { font-size: 18px; line-height: 1.7; color: var(--muted); max-width: 520px; font-weight: 400; }
-  .hero-metrics-row { display: flex; gap: 64px; justify-content: flex-end; }
-  .hero-metric-item { text-align: right; }
-  .hero-metric-num { font-family: var(--font-head); font-size: 64px; line-height: 1; color: var(--fg); }
-  .hero-metric-label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-top: 8px; font-weight: 700;}
+  @media (pointer: fine) { .btn-primary { cursor: none; } }
+  .btn-primary:hover { background: var(--blue-light); transform: translateY(-4px); }
 
-  /* ADVANCED MARQUEE TICKER */
-  .ticker-wrap {
-    width: 100%; overflow: hidden; background: var(--blue); color: var(--bg);
-    padding: 20px 0; display: flex; align-items: center; border-bottom: 1px solid var(--border);
-  }
-  .ticker {
-    display: flex; white-space: nowrap; font-family: var(--font-mono); font-size: 14px;
-    letter-spacing: 3px; text-transform: uppercase; animation: ticker 25s linear infinite;
-  }
-  .ticker span { padding-right: 48px; display: inline-flex; align-items: center; gap: 48px; }
-  .ticker span::after { content: '✦'; font-size: 10px; color: var(--blue-light); }
-  @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-50%, 0, 0); } }
+  /* FOOTER */
+  footer { padding: 80px 48px 40px; background: var(--fg); color: #FFF; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 60px; margin-bottom: 60px; }
+  .footer-logo { font-family: var(--font-head); font-size: 32px; letter-spacing: 2px; color: #FFF; text-decoration: none; display: block; margin-bottom: 20px; }
+  .footer-logo span { color: var(--blue-light); }
+  .footer-grid p { color: #AAA; font-size: 15px; line-height: 1.7; max-width: 300px; }
+  .f-col h5 { font-family: var(--font-mono); font-size: 12px; color: var(--blue-light); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 24px; }
+  .f-col a { display: block; color: #DDD; text-decoration: none; margin-bottom: 16px; font-size: 15px; transition: color 0.3s; }
+  .f-col a:hover { color: #FFF; }
+  .footer-bottom { padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 1px; }
 
-  /* GLOBAL SECTION ARCHITECTURE */
-  section { padding: 140px 48px; border-bottom: 1px solid var(--border); position: relative; }
-  .section-sys-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 64px; }
-  .section-blueprint-tag { font-family: var(--font-mono); font-size: 12px; color: var(--blue); letter-spacing: 4px; text-transform: uppercase; font-weight: 700; }
-  .section-blueprint-num { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
-  
-  .section-layout-split { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: flex-start; }
-  .section-main-title { font-family: var(--font-head); font-size: clamp(48px, 6vw, 84px); line-height: 1; text-transform: uppercase; letter-spacing: 1px; color: var(--fg); }
-  .section-body { font-size: 17px; line-height: 1.8; color: var(--muted); font-weight: 400; max-width: 600px; }
-
-  /* INTERACTIVE TECHNOLOGY CORE (NEW SECTION) */
-  .tech-core-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); margin-top: 80px; border: 1px solid var(--border); }
-  .tech-step { background: var(--bg); padding: 48px 32px; display: flex; flex-direction: column; gap: 24px; transition: background 0.4s, transform 0.4s; position: relative; }
-  .tech-step:hover { background: var(--bg2); z-index: 2; box-shadow: 0 20px 40px rgba(0,0,0,0.05); }
-  .tech-num { font-family: var(--font-head); font-size: 64px; color: var(--border); line-height: 0.8; transition: color 0.4s; }
-  .tech-step:hover .tech-num { color: var(--blue); }
-  .tech-title { font-family: var(--font-mono); font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: var(--fg); font-weight: 700; }
-  .tech-desc { font-size: 14px; color: var(--muted); line-height: 1.6; }
-
-  /* SOLUTIONS INDUSTRIALIZED GRID */
-  .solutions-structural-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); margin-top: 80px; border: 1px solid var(--border); }
-  .solution-matrix-cell { background: var(--bg2); padding: 56px 48px; position: relative; overflow: hidden; transition: background 0.4s; }
-  .solution-matrix-cell:hover { background: var(--bg); }
-  .solution-matrix-cell::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 3px; background: var(--blue); transform: scaleX(0); transform-origin: right; transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1); }
-  .solution-matrix-cell:hover::after { transform: scaleX(1); transform-origin: left; }
-  
-  .s-cell-num { font-family: var(--font-mono); font-size: 12px; font-weight: 700; color: var(--blue); display: block; margin-bottom: 40px; }
-  .s-cell-title { font-family: var(--font-head); font-size: 36px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 16px; color: var(--fg); }
-  .s-cell-desc { font-size: 15px; color: var(--muted); line-height: 1.7; }
-
-  /* COMPANY / LABELED IMAGE FRAMEWORK */
-  .company-grid-visual { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 80px; align-items: center; }
-  .blueprint-image-container { position: relative; padding: 24px; background: var(--bg2); border: 1px solid var(--border); }
-  .blueprint-raw-img { width: 100%; aspect-ratio: 4/3; object-fit: cover; filter: grayscale(100%); transition: filter 0.6s cubic-bezier(0.25, 1, 0.5, 1), transform 0.6s; }
-  .blueprint-image-container:hover .blueprint-raw-img { filter: grayscale(0%); transform: scale(1.02); }
-  .blueprint-img-metadata { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 11px; color: var(--muted); margin-top: 20px; text-transform: uppercase; font-weight: 700; }
-  .blueprint-img-metadata span strong { color: var(--blue); font-weight: 700; }
-
-  /* PROJECTS / CATALOG STRIP */
-  .catalog-strip-list { display: flex; flex-direction: column; margin-top: 64px; border-top: 1px solid var(--border); }
-  .catalog-item-row { display: grid; grid-template-columns: 120px 2fr 1.5fr 1fr; align-items: center; padding: 48px 24px; border-bottom: 1px solid var(--border); transition: background 0.3s; }
-  .catalog-item-row:hover { background: var(--bg2); }
-  .cat-id { font-family: var(--font-mono); font-size: 13px; font-weight: 700; color: var(--muted); }
-  .cat-name { font-family: var(--font-head); font-size: 36px; letter-spacing: 1px; text-transform: uppercase; color: var(--fg); transition: color 0.3s; }
-  .catalog-item-row:hover .cat-name { color: var(--blue); transform: translateX(8px); }
-  .cat-spec { font-family: var(--font-body); font-size: 15px; color: var(--muted); }
-  .cat-tag { font-family: var(--font-mono); font-size: 12px; font-weight: 700; color: var(--blue); text-transform: uppercase; text-align: right; }
-
-  /* STRATEGIC PILLARS MATRIX */
-  .pillars-layout-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-top: 64px; }
-  .pillar-structural-box { border: 1px solid var(--border); background: var(--bg); padding: 56px 48px; display: flex; flex-direction: column; justify-content: space-between; min-height: 420px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); transition: box-shadow 0.4s; }
-  .pillar-structural-box:hover { box-shadow: 0 20px 50px rgba(0,0,0,0.06); }
-  .p-box-header h3 { font-family: var(--font-head); font-size: 40px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; color: var(--fg); }
-  .p-box-header p { font-size: 15px; color: var(--muted); line-height: 1.7; }
-  .p-box-metric { border-top: 1px solid var(--border); padding-top: 24px; margin-top: 40px; }
-  .p-box-metric-val { font-family: var(--font-head); font-size: 48px; color: var(--blue); line-height: 1; }
-  .p-box-metric-lbl { font-family: var(--font-mono); font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; margin-top: 8px; }
-
-  /* FAQS SUPPORT SYSTEM */
-  .faq-accordion-block { display: flex; flex-direction: column; margin-top: 48px; border-top: 1px solid var(--border); }
-  .faq-node { border-bottom: 1px solid var(--border); padding: 40px 0; }
-  .faq-node-query { font-family: var(--font-head); font-size: 28px; letter-spacing: 1px; text-transform: uppercase; color: var(--fg); margin-bottom: 16px; }
-  .faq-node-response { font-size: 16px; color: var(--muted); line-height: 1.7; max-width: 850px; }
-
-  /* CONTACT / INPUT MATRIX */
-  .console-form-container { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 80px; margin-top: 64px; }
-  .console-info-pane { display: flex; flex-direction: column; gap: 48px; padding: 48px; background: var(--bg2); border: 1px solid var(--border); }
-  .pane-block h4 { font-family: var(--font-mono); font-size: 12px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--blue); margin-bottom: 12px; }
-  .pane-block p, .pane-block a { font-size: 24px; color: var(--fg); text-decoration: none; font-family: var(--font-head); letter-spacing: 1px; text-transform: uppercase; transition: color 0.3s;}
-  .pane-block a:hover { color: var(--blue); }
-  .pane-block .pane-subtext { font-family: var(--font-body); font-size: 14px; color: var(--muted); text-transform: none; letter-spacing: 0; margin-top: 8px; }
-  
-  .console-inputs-pane { display: flex; flex-direction: column; gap: 32px; padding: 24px 0; }
-  .console-input-group { display: flex; flex-direction: column; gap: 12px; }
-  .console-input-group label { font-family: var(--font-mono); font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
-  .console-inputs-pane input, .console-inputs-pane textarea, .console-inputs-pane select {
-    background: transparent; border: none; border-bottom: 2px solid var(--border); color: var(--fg); font-family: var(--font-body); font-size: 16px;
-    padding: 16px 0; outline: none; transition: border-color 0.3s; appearance: none;
-  }
-  .console-inputs-pane input:focus, .console-inputs-pane textarea:focus, .console-inputs-pane select:focus { border-color: var(--blue); }
-  .console-inputs-pane textarea { resize: none; min-height: 120px; }
-  
-  /* SYSTEM BUTTONS */
-  .btn-system-primary {
-    display: inline-flex; align-items: center; justify-content: center; gap: 16px;
-    font-family: var(--font-mono); font-size: 13px; letter-spacing: 3px; text-transform: uppercase;
-    color: var(--bg); background: var(--fg); padding: 20px 40px; text-decoration: none;
-    font-weight: 700; border: 1px solid var(--fg); transition: background 0.3s, color 0.3s, border-color 0.3s;
-  }
-  @media (pointer: fine) { .btn-system-primary { cursor: none; } }
-  .btn-system-primary:hover { background: var(--blue); border-color: var(--blue); color: var(--bg); }
-  .btn-system-primary span { font-size: 16px; transition: transform 0.3s; }
-  .btn-system-primary:hover span { transform: translateX(4px); }
-
-  /* LIGHT FOOTER MATRIX */
-  footer { padding: 100px 48px 40px; background: var(--bg2); border-top: 1px solid var(--border); }
-  .footer-structural-top { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 60px; margin-bottom: 80px; }
-  .footer-col-brand .nav-logo { font-size: 36px; display: block; margin-bottom: 24px; color: var(--fg); }
-  .footer-col-brand p { font-size: 15px; color: var(--muted); line-height: 1.7; max-width: 300px; }
-  .footer-structural-top h5 { font-family: var(--font-mono); font-size: 12px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--fg); margin-bottom: 28px; }
-  .footer-structural-top a { display: block; font-family: var(--font-body); font-size: 15px; color: var(--muted); text-decoration: none; margin-bottom: 16px; transition: color 0.2s; }
-  .footer-structural-top a:hover { color: var(--blue); }
-  
-  .footer-structural-bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 40px; border-top: 1px solid var(--border); font-family: var(--font-mono); font-size: 12px; font-weight: 700; color: var(--muted); }
-  .footer-structural-bottom span.highlight { color: var(--blue); }
-
-  /* ADVANCED ANIMATIONS (CLIP-PATH & TRANSFORM REVEALS) */
-  .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1); }
-  .reveal.visible { opacity: 1; transform: none; }
-  
-  .reveal-clip { clip-path: polygon(0 0, 100% 0, 100% 0, 0 0); transition: clip-path 1s cubic-bezier(0.25, 1, 0.5, 1); }
-  .reveal-clip.visible { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
-
-  /* RESPONSIVE DESIGN FOR MOBILE & TABLET */
+  /* RESPONSIVE */
   @media (max-width: 1024px) {
-    nav { padding: 24px; }
-    section { padding: 100px 24px; }
-    .hero { padding: 0 24px 80px; }
-    .hero-footer-grid { grid-template-columns: 1fr; gap: 40px; }
-    .hero-metrics-row { justify-content: flex-start; gap: 40px; }
-    .section-layout-split, .company-grid-visual, .pillars-layout-grid, .console-form-container, .footer-structural-top { grid-template-columns: 1fr; gap: 48px; }
-    .tech-core-grid { grid-template-columns: repeat(2, 1fr); }
-    .solutions-structural-grid { grid-template-columns: 1fr; }
-    .catalog-item-row { grid-template-columns: 80px 1fr; gap: 16px; padding: 32px 16px; }
-    .cat-spec, .cat-tag { display: none; }
-    .menu-container { grid-template-columns: 1fr; gap: 60px; }
-    .menu-column-pillars { border-left: none; padding-left: 0; }
-    .console-info-pane { padding: 32px; }
+    nav, section, .hero, footer { padding-left: 24px; padding-right: 24px; }
+    .about-grid, .process-step, .projects-grid, .test-grid, .contact-grid { grid-template-columns: 1fr; gap: 48px; }
+    .services-grid { grid-template-columns: 1fr 1fr; }
+    .plans-grid { grid-template-columns: 1fr; }
+    .hero-img { display: none; }
+    .hero-content { background: transparent; box-shadow: none; padding: 0; margin-top: 120px; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
   }
-  
   @media (max-width: 768px) {
-    .tech-core-grid { grid-template-columns: 1fr; }
-    .ticker span { padding-right: 24px; gap: 24px; }
-    .section-main-title { font-size: 40px; }
-    .s-cell-title, .p-box-header h3, .cat-name, .faq-node-query { font-size: 28px; }
-    .hero-title { font-size: 56px; margin-bottom: 32px; margin-top: 120px; }
-    .footer-structural-bottom { flex-direction: column; gap: 16px; align-items: flex-start; }
+    .services-grid, .input-row, .footer-grid { grid-template-columns: 1fr; }
+    .section-title, .hero-title { font-size: 48px; }
+    .menu-grid { grid-template-columns: 1fr; }
+    .menu-sub { border-left: none; padding-left: 0; border-top: 1px solid var(--border); padding-top: 24px; }
   }
 </style>
 </head>
@@ -349,22 +299,20 @@
 
 <div class="menu-overlay" id="menuOverlay">
   <button class="menu-close" id="menuClose">Close ✕</button>
-  <div class="menu-container">
-    <div class="menu-column-main">
-      <div class="menu-label">Navigation Model</div>
-      <a href="#home">Home</a>
-      <a href="#technology">Technology</a>
-      <a href="#solutions">Solutions</a>
-      <a href="#company">Company</a>
-      <a href="#contact">Contact</a>
+  <div class="menu-grid">
+    <div class="menu-links">
+      <a href="#home" class="menu-item">Home</a>
+      <a href="#about" class="menu-item">About Us</a>
+      <a href="#services" class="menu-item">Services</a>
+      <a href="#process" class="menu-item">Process</a>
+      <a href="#projects" class="menu-item">Projects</a>
+      <a href="#contact" class="menu-item">Contact</a>
     </div>
-    <div class="menu-column-pillars">
-      <div class="menu-label">Strategic Pillars</div>
-      <div class="menu-pillar-links">
-        <a href="#projects">Project Registry</a>
-        <a href="#pillars">System Certifications</a>
-        <a href="#faqs">Engineering FAQs</a>
-      </div>
+    <div class="menu-sub">
+      <a href="#plans">AMC Plans & Pricing</a>
+      <a href="#testimonials">Client Testimonials</a>
+      <a href="#faqs">Frequently Asked Questions</a>
+      <a href="tel:+919893888224" style="color: var(--blue); font-weight: 600; margin-top: 24px;">+91 98938 88224</a>
     </div>
   </div>
 </div>
@@ -381,328 +329,296 @@
 </nav>
 
 <section class="hero" id="home">
-  <div class="hero-bg"></div>
-  <div class="hero-meta-panel reveal">
-    <span class="hero-meta-tag">Advanced Water Engineering</span>
-    <div class="hero-meta-line"></div>
-    <span class="hero-meta-sys">SYS. EST 2025</span>
-  </div>
-  <h1 class="hero-title reveal">
-    The future of water care is<br>
-    <span class="accent-line">Industrialized & Digital.</span>
-  </h1>
-  <div class="hero-footer-grid reveal">
-    <p class="hero-description">The industrialized and high-fidelity purification system that brings absolute certainty to regional water parameters, ensuring clean, compliant, and strictly measurable output.</p>
-    <div class="hero-metrics-row">
-      <div class="hero-metric-item">
-        <div class="hero-metric-num" data-target="5.0">0.0</div>
-        <div class="hero-metric-label">System Rating</div>
+  <img src="https://images.unsplash.com/photo-1548839140-29a749e1cf4d?q=80&w=1800&auto=format&fit=crop" alt="Water splash" class="hero-img anim-fade-up" style="transition-delay: 0.2s;">
+  <div class="hero-content">
+    <span class="section-tag anim-slide-right">Aayu Water Solution</span>
+    <h1 class="hero-title anim-blur">
+      Every Drop <br>
+      <span style="color: var(--blue);">Perfectly Pure.</span>
+    </h1>
+    <p class="section-desc anim-fade-up" style="transition-delay: 0.2s;">
+      Delivering premium water purification systems, expert repair, and comprehensive maintenance to ensure your family or business always has access to crystal clear, safe drinking water.
+    </p>
+    <div class="hero-stats anim-fade-up" style="transition-delay: 0.4s;">
+      <div>
+        <div class="stat-num" data-target="5.0">0.0</div>
+        <div class="stat-label">Average Rating</div>
       </div>
-      <div class="hero-metric-item">
-        <div class="hero-metric-num" data-target="500">0+</div>
-        <div class="hero-metric-label">Systems Placed</div>
+      <div>
+        <div class="stat-num" data-target="500">0</div>
+        <div class="stat-label">Happy Clients</div>
       </div>
     </div>
   </div>
 </section>
 
-<div class="ticker-wrap">
-  <div class="ticker">
-    <span>ADVANCED RO PURIFICATION</span><span>ZERO WASTE METRICS</span><span>DIGITAL TRACEABILITY</span>
-    <span>COMMERCIAL CALIBRATION</span><span>ISI CERTIFIED HARDWARE</span><span>RESIDENTIAL INTEGRATION</span>
-    <span>ADVANCED RO PURIFICATION</span><span>ZERO WASTE METRICS</span><span>DIGITAL TRACEABILITY</span>
-    <span>COMMERCIAL CALIBRATION</span><span>ISI CERTIFIED HARDWARE</span><span>RESIDENTIAL INTEGRATION</span>
+<section id="about">
+  <div class="about-grid">
+    <div class="about-image-wrapper anim-scale-in">
+      <img src="https://images.unsplash.com/photo-1579899388316-5b4c1071de8d?q=80&w=800&auto=format&fit=crop" alt="Clean water installation" class="about-image">
+    </div>
+    <div>
+      <span class="section-tag anim-slide-left">Who We Are</span>
+      <h2 class="section-title anim-fade-up">Setting the standard<br>in water purity.</h2>
+      <p class="section-desc anim-fade-up" style="transition-delay: 0.1s;">
+        Based in Raipur, Aayu Water Solution is driven by a single mission: to eliminate compromised drinking water. Founded and operated by Rajesh Rawte, we bring over a decade of technical expertise directly to your doorstep. We don't just fix machines; we engineer healthy environments.
+      </p>
+      <div class="about-points anim-fade-up" style="transition-delay: 0.2s;">
+        <div class="point">
+          <div class="point-icon">1</div>
+          <div class="point-text">
+            <h4>Certified Technicians</h4>
+            <p>Our team understands the complex molecular filtration required for local water TDS levels, ensuring precision in every install.</p>
+          </div>
+        </div>
+        <div class="point">
+          <div class="point-icon">2</div>
+          <div class="point-text">
+            <h4>100% Genuine Parts</h4>
+            <p>We refuse to use sub-standard spares. Every membrane, carbon block, and sediment filter we install is strictly ISI certified.</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
+</section>
 
-<section id="technology">
-  <div class="section-sys-header reveal">
-    <span class="section-blueprint-tag">Execution Matrix</span>
-    <span class="section-blueprint-num">[ SYS.TEC.01 ]</span>
-  </div>
-  <div class="section-layout-split">
-    <div class="reveal">
-      <h2 class="section-main-title">A certified model<br>to scale certainty.</h2>
-    </div>
-    <div class="reveal">
-      <p class="section-body">Water processing is often subject to uncalibrated variances, component degradation, and low traceability. Our technology workflow standardizes installation and lifecycle management through real-time data tracing.</p>
-    </div>
-  </div>
+<section id="services" style="background: var(--bg-alt);">
+  <span class="section-tag anim-slide-right">Our Expertise</span>
+  <h2 class="section-title anim-blur">Comprehensive Water Care</h2>
+  <p class="section-desc anim-fade-up">From installing intelligent reverse osmosis systems to emergency breakdown repairs, we provide end-to-end lifecycle management for all major purifier brands.</p>
   
-  <div class="tech-core-grid reveal-clip">
-    <div class="tech-step">
-      <div class="tech-num">01</div>
-      <div class="tech-title">TDS Extraction</div>
-      <div class="tech-desc">We sample local raw metrics from your supply lines to engineer custom molecular filtration scaling.</div>
+  <div class="services-grid anim-fade-up" style="transition-delay: 0.2s;">
+    <div class="service-card">
+      <span class="svc-num">01 / INSTALLATION</span>
+      <h3 class="svc-title">RO System Setup</h3>
+      <p class="svc-desc">Professional installation of RO, UV, and UF systems. We calibrate the pressure and TDS controllers specifically for your home's incoming water quality.</p>
     </div>
-    <div class="tech-step">
-      <div class="tech-num">02</div>
-      <div class="tech-title">Hardware Alignment</div>
-      <div class="tech-desc">Integration of high-pressure pumps and multi-tier filtration beds into a continuous matrix.</div>
+    <div class="service-card">
+      <span class="svc-num">02 / MAINTENANCE</span>
+      <h3 class="svc-title">Filter Replacement</h3>
+      <p class="svc-desc">Timely replacement of pre-filters, carbon blocks, and RO membranes to maintain peak output, flavor, and microbial safety.</p>
     </div>
-    <div class="tech-step">
-      <div class="tech-num">03</div>
-      <div class="tech-title">Digital Diagnostics</div>
-      <div class="tech-desc">Continuous sensor tracking for membrane integrity, micro-leakages, and output deviations.</div>
-    </div>
-    <div class="tech-step">
-      <div class="tech-num">04</div>
-      <div class="tech-title">Verified Output</div>
-      <div class="tech-desc">Post-installation execution requires verified digital testing parameters for long-term compliance.</div>
+    <div class="service-card">
+      <span class="svc-num">03 / DIAGNOSTICS</span>
+      <h3 class="svc-title">Repair & Servicing</h3>
+      <p class="svc-desc">Rapid-response repairs for motor failures, micro-leakages, electrical faults, and foul-tasting water. We carry spares for Kent, Aquaguard, and Pureit.</p>
     </div>
   </div>
 </section>
 
-<section id="solutions" style="background: var(--bg2);">
-  <div class="section-sys-header reveal">
-    <span class="section-blueprint-tag">Hardware Architecture</span>
-    <span class="section-blueprint-num">[ SYS.SOL.02 ]</span>
-  </div>
-  <div class="reveal">
-    <h2 class="section-main-title" style="margin-bottom: 24px;">Validated solutions<br>built to perform.</h2>
-  </div>
-  <div class="solutions-structural-grid reveal-clip">
-    <div class="solution-matrix-cell">
-      <span class="s-cell-num">01. ENER-RO PANEL</span>
-      <h3 class="s-cell-title">RO Systems</h3>
-      <p class="s-cell-desc">High-fidelity Multi-stage Reverse Osmosis units equipped with dynamic TDS controllers optimized for critical environments.</p>
-    </div>
-    <div class="solution-matrix-cell">
-      <span class="s-cell-num">02. APPLIED SERVICE</span>
-      <h3 class="s-cell-title">Precision Repair</h3>
-      <p class="s-cell-desc">Calibrated system diagnostic mechanisms resolving pressure deviations, micro-leakages, and structural integrity.</p>
-    </div>
-    <div class="solution-matrix-cell">
-      <span class="s-cell-num">03. SMART REPLACEMENT</span>
-      <h3 class="s-cell-title">Filter Exchanges</h3>
-      <p class="s-cell-desc">Systematic carbon block, micron-sediment block, and high-flux active membrane renewal execution.</p>
-    </div>
-    <div class="solution-matrix-cell">
-      <span class="s-cell-num">04. FIXED AMC MATRIX</span>
-      <h3 class="s-cell-title">Lifecycle Contracts</h3>
-      <p class="s-cell-desc">Structured Annual Maintenance Contracts introducing scheduled hardware validation cycles and zero hidden overheads.</p>
-    </div>
-    <div class="solution-matrix-cell">
-      <span class="s-cell-num">05. CHEMICAL LOGIC</span>
-      <h3 class="s-cell-title">Water Profiling</h3>
-      <p class="s-cell-desc">Laboratory grade quantitative analysis tracking organic loading, dynamic scale levels, and heavy metal logic.</p>
-    </div>
-    <div class="solution-matrix-cell">
-      <span class="s-cell-num">06. 2D HIGH VOLUME</span>
-      <h3 class="s-cell-title">Commercial Arrays</h3>
-      <p class="s-cell-desc">High-throughput structural processing configurations engineered specifically for dynamic commercial zones.</p>
-    </div>
-  </div>
-</section>
-
-<section id="company">
-  <div class="section-sys-header reveal">
-    <span class="section-blueprint-tag">Enterprise Profile</span>
-    <span class="section-blueprint-num">[ SYS.EMP.03 ]</span>
-  </div>
-  <div class="company-grid-visual">
-    <div class="blueprint-image-container reveal-clip">
-      <img class="blueprint-raw-img" src="https://images.unsplash.com/photo-1579899388316-5b4c1071de8d?q=80&w=800&auto=format&fit=crop" alt="Advanced water system installation">
-      <div class="blueprint-img-metadata">
-        <span>Head Tech / <strong>Rajesh Rawte</strong></span>
-        <span>SYS. ID / +91 98938 88224</span>
+<section id="process" class="process-section">
+  <span class="section-tag anim-slide-left">How It Works</span>
+  <h2 class="section-title anim-fade-up">Seamless Service.</h2>
+  <div class="process-container">
+    <div class="process-step">
+      <div class="anim-scale-in"><img src="https://images.unsplash.com/photo-1584905066893-7d5c142ba4e1?q=80&w=800&auto=format&fit=crop" alt="Testing" class="process-img"></div>
+      <div class="process-text anim-slide-left">
+        <h3>1. Water Profiling</h3>
+        <p>Before any hardware is mounted, we test your supply line. By analyzing Total Dissolved Solids (TDS) and hardness, we determine the exact filtration sequence required to make your water perfect.</p>
       </div>
     </div>
-    <div class="reveal">
-      <h2 class="section-main-title" style="margin-bottom: 24px;">Eliminating industrial data gaps.</h2>
-      <p class="section-body">Aayu Water Solution is a performance-backed system integrator in Raipur, Chhattisgarh. We eliminate information loss and traditional structural vulnerabilities in fluid purification. We align asset procurement, mechanical assembly, and deployment validation into a singular unified execution model.</p>
+    <div class="process-step">
+      <div class="anim-scale-in"><img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800&auto=format&fit=crop" alt="Installation" class="process-img"></div>
+      <div class="process-text anim-slide-right">
+        <h3>2. Precision Execution</h3>
+        <p>Whether fixing a leak or installing a new commercial plant, our execution is neat, rapid, and transparent. We explain exactly what parts are being used and why.</p>
+      </div>
     </div>
   </div>
 </section>
 
 <section id="projects">
-  <div class="section-sys-header reveal">
-    <span class="section-blueprint-tag">Project Registry</span>
-    <span class="section-blueprint-num">[ SYS.REG.04 ]</span>
-  </div>
-  <div class="reveal">
-    <h2 class="section-main-title">Replicating standards<br>with absolute trace control.</h2>
-  </div>
-  <div class="catalog-strip-list reveal">
-    <div class="catalog-item-row">
-      <div class="cat-id">#P-102</div>
-      <div class="cat-name">Corporate Hub System</div>
-      <div class="cat-spec">Commercial Multi-Tier Setup</div>
-      <div class="cat-tag">500 LPH Capacity</div>
+  <span class="section-tag anim-slide-right">Portfolio</span>
+  <h2 class="section-title anim-blur">Recent Installations</h2>
+  <p class="section-desc anim-fade-up">A glimpse into our residential and commercial purification setups across Raipur.</p>
+  
+  <div class="projects-grid">
+    <div class="project-item anim-scale-in">
+      <img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?q=80&w=800&auto=format&fit=crop" alt="Kitchen setup">
+      <div class="project-overlay">
+        <h3>Smart Under-Sink RO</h3>
+        <span>Residential / Space-Saving</span>
+      </div>
     </div>
-    <div class="catalog-item-row">
-      <div class="cat-id">#P-158</div>
-      <div class="cat-name">Under-Sink Matrix Node</div>
-      <div class="cat-spec">Residential High TDS Profile</div>
-      <div class="cat-tag">Zero-Leak Footprint</div>
-    </div>
-    <div class="catalog-item-row">
-      <div class="cat-id">#P-204</div>
-      <div class="cat-name">Clinical Processing Unit</div>
-      <div class="cat-spec">Medical Grade Purification</div>
-      <div class="cat-tag">UF + UV Active Core</div>
+    <div class="project-item anim-scale-in" style="transition-delay: 0.2s;">
+      <img src="https://images.unsplash.com/photo-1548839140-29a749e1cf4d?q=80&w=800&auto=format&fit=crop" alt="Commercial system">
+      <div class="project-overlay">
+        <h3>Corporate Multi-Tier System</h3>
+        <span>Commercial / 500 LPH</span>
+      </div>
     </div>
   </div>
 </section>
 
-<section id="pillars" style="background: var(--bg2);">
-  <div class="section-sys-header reveal">
-    <span class="section-blueprint-tag">Strategic Core</span>
-    <span class="section-blueprint-num">[ SYS.PIL.05 ]</span>
-  </div>
-  <div class="reveal">
-    <h2 class="section-main-title">Guarantees embedded<br>within the methodology.</h2>
-  </div>
-  <div class="pillars-layout-grid reveal-clip">
-    <div class="pillar-structural-box">
-      <div class="p-box-header">
-        <h3>Digitalization</h3>
-        <p>Continuous flow alignment. We map design inputs with component selection to avoid uncalibrated parameter errors, building dynamic real-time tracing into networks.</p>
-      </div>
-      <div class="p-box-metric">
-        <div class="p-box-metric-val">100%</div>
-        <div class="p-box-metric-lbl">Data Log Traceability</div>
-      </div>
+<section id="plans">
+  <span class="section-tag anim-fade-up">Pricing</span>
+  <h2 class="section-title anim-fade-up">Annual Maintenance Contracts</h2>
+  <p class="section-desc anim-fade-up">Protect your investment and guarantee year-round pure water with our straightforward AMC plans.</p>
+  
+  <div class="plans-grid">
+    <div class="plan-card anim-slide-up">
+      <h3 class="plan-name">Basic Care</h3>
+      <p class="plan-desc">Essential maintenance for low-usage home purifiers.</p>
+      <ul class="plan-features">
+        <li>2 Scheduled Service Visits</li>
+        <li>Basic Filter Cleaning</li>
+        <li>TDS Level Check</li>
+        <li>On-call breakdown support (parts extra)</li>
+      </ul>
+      <a href="#contact" class="btn-primary" style="margin-top: auto;">Enquire Now</a>
     </div>
-    <div class="pillar-structural-box">
-      <div class="p-box-header">
-        <h3>Sustainability</h3>
-        <p>Embedded efficiency matrices. Reclaiming wastewater paths and integrating advanced power conservation nodes to lower overall footprint thresholds.</p>
-      </div>
-      <div class="p-box-metric">
-        <div class="p-box-metric-val">-40%</div>
-        <div class="p-box-metric-lbl">Effluent Fluid Runoff</div>
-      </div>
+    <div class="plan-card featured anim-scale-in">
+      <div class="plan-badge">Most Popular</div>
+      <h3 class="plan-name">Comprehensive</h3>
+      <p class="plan-desc">Total peace of mind for standard households.</p>
+      <ul class="plan-features">
+        <li>4 Scheduled Service Visits</li>
+        <li>1 Free Pre-filter Replacement</li>
+        <li>1 Free Carbon/Sediment Change</li>
+        <li>Zero Service Charges on Breakdowns</li>
+        <li>Priority 24hr Response</li>
+      </ul>
+      <a href="#contact" class="btn-primary" style="margin-top: auto;">Enquire Now</a>
     </div>
-    <div class="pillar-structural-box">
-      <div class="p-box-header">
-        <h3>Certification</h3>
-        <p>Fully compliant material allocation. Standardized parameters conforming directly with local regulatory codes to eliminate structural risk profiles.</p>
-      </div>
-      <div class="p-box-metric">
-        <div class="p-box-metric-val">ISI/ISO</div>
-        <div class="p-box-metric-lbl">Component Baseline</div>
-      </div>
+    <div class="plan-card anim-slide-up">
+      <h3 class="plan-name">Commercial</h3>
+      <p class="plan-desc">Heavy-duty support for offices and clinics.</p>
+      <ul class="plan-features">
+        <li>Monthly Scheduled Visits</li>
+        <li>Full Membrane & Filter Coverage</li>
+        <li>Water Quality Profiling</li>
+        <li>Same-day Emergency Resolution</li>
+      </ul>
+      <a href="#contact" class="btn-primary" style="margin-top: auto; background: var(--bg-alt); color: var(--fg); border: 1px solid var(--border);">Contact Sales</a>
+    </div>
+  </div>
+</section>
+
+<section id="testimonials" class="testimonials">
+  <span class="section-tag anim-slide-left">Testimonials</span>
+  <h2 class="section-title anim-blur">What Our Clients Say</h2>
+  
+  <div class="test-grid">
+    <div class="test-card anim-fade-up">
+      <div class="stars">★★★★★</div>
+      <p class="test-quote">"Rajesh was incredibly professional. My Kent RO stopped working completely, and he diagnosed the motor issue in minutes. Replaced with genuine parts and it's working better than before."</p>
+      <p class="test-author">Ankita S. — Raipur</p>
+    </div>
+    <div class="test-card anim-fade-up" style="transition-delay: 0.2s;">
+      <div class="stars">★★★★★</div>
+      <p class="test-quote">"We opted for the Comprehensive AMC for our office. Aayu Water Solution tracks the filter replacement schedule so we don't have to. The water tastes fantastic and service is always prompt."</p>
+      <p class="test-author">Vikas Trade Links — Commercial Client</p>
     </div>
   </div>
 </section>
 
 <section id="faqs">
-  <div class="section-sys-header reveal">
-    <span class="section-blueprint-tag">Knowledge Validation</span>
-    <span class="section-blueprint-num">[ SYS.FAQ.06 ]</span>
-  </div>
-  <div class="reveal">
-    <h2 class="section-main-title">Support Matrices</h2>
-  </div>
-  <div class="faq-accordion-block reveal">
-    <div class="faq-node">
-      <h4 class="faq-node-query">What dictates dynamic filter lifecycle metrics?</h4>
-      <p class="faq-node-response">Component longevity depends entirely on inlet water chemical data profiles and throughput pressures. Sediment and active carbon blocks maintain structural limits for 6 to 8 months, while the high-rejection RO membrane safely functions for 18 to 24 months.</p>
+  <span class="section-tag anim-slide-right">Knowledge Base</span>
+  <h2 class="section-title anim-fade-up">Frequently Asked Questions</h2>
+  
+  <div class="faq-list anim-fade-up">
+    <div class="faq-item">
+      <h4 class="faq-q">How often do I really need to change the filters?</h4>
+      <p class="faq-a">For typical city water, the outer spun (pre-filter) should be changed every 3-4 months. Internal sediment and carbon blocks last 6-8 months. The main RO membrane typically lasts 1.5 to 2 years, depending on input TDS.</p>
     </div>
-    <div class="faq-node">
-      <h4 class="faq-node-query">Are components compatible with multi-brand systems?</h4>
-      <p class="faq-node-response">Yes. Our replacement profiles utilize generalized geometric baselines conforming directly to Kent, Aquaguard, Pureit, Livpure, and Blue Star system metrics without structural modifications or leakage vulnerabilities.</p>
+    <div class="faq-item">
+      <h4 class="faq-q">Do you service out-of-warranty Aquaguard or Kent systems?</h4>
+      <p class="faq-a">Absolutely. We are brand-agnostic and carry universal, high-grade certified components that perfectly fit and often outperform standard manufacturer replacements in out-of-warranty machines.</p>
     </div>
-    <div class="faq-node">
-      <h4 class="faq-node-query">How does the Maintenance Contract framework function?</h4>
-      <p class="faq-node-response">The standard lifecycle contract coordinates routine scheduled engineering validation visits throughout a 365-day phase, eliminating uncalibrated component failure risks and breakdown costs completely.</p>
+    <div class="faq-item">
+      <h4 class="faq-q">Is my water wasting too much through the reject pipe?</h4>
+      <p class="faq-a">Standard RO systems reject about 60-70% of water. If you notice an unusually high rejection rate, it could mean your membrane is choked or the flow restrictor is malfunctioning. We can test and optimize this during a service visit.</p>
     </div>
   </div>
 </section>
 
 <section id="contact">
-  <div class="section-sys-header reveal">
-    <span class="section-blueprint-tag">System Interface</span>
-    <span class="section-blueprint-num">[ SYS.CON.07 ]</span>
-  </div>
-  <div class="reveal">
-    <h2 class="section-main-title">Initialize a Project System</h2>
-  </div>
-  <div class="console-form-container reveal">
-    <div class="console-info-pane">
-      <div class="pane-block">
-        <h4>Operations Command</h4>
-        <p>Rajesh Rawte</p>
-        <div class="pane-subtext">Founder & Technical Specialist</div>
-      </div>
-      <div class="pane-block">
-        <h4>Communication Terminal</h4>
+  <span class="section-tag anim-slide-left">Get in Touch</span>
+  <h2 class="section-title anim-blur">Book a Service Visit</h2>
+  
+  <div class="contact-grid">
+    <div class="contact-details anim-fade-up">
+      <div class="c-block">
+        <h4>Direct Contact</h4>
         <a href="tel:+919893888224">+91 98938 88224</a>
-        <div class="pane-subtext">Voice Link / Secure WhatsApp Protocol</div>
       </div>
-      <div class="pane-block">
-        <h4>Geographic Matrix Coordinate</h4>
-        <p>Vikash Vihaar, Raipura</p>
-        <div class="pane-subtext">Near Mahadev Ghat Mandir, Raipur, CG 492013</div>
+      <div class="c-block">
+        <h4>Owner & Head Technician</h4>
+        <p>Rajesh Rawte</p>
+      </div>
+      <div class="c-block">
+        <h4>Location</h4>
+        <p>Vikash Vihaar, Raipura<br>Near Mahadev Ghat Mandir<br>Raipur, CG - 492013</p>
       </div>
     </div>
     
-    <div class="console-inputs-pane">
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px;">
-        <div class="console-input-group">
-          <label>Operator / Name</label>
+    <div class="contact-form anim-scale-in">
+      <div class="input-row">
+        <div class="form-group">
+          <label>Your Name</label>
           <input type="text" placeholder="Full Name">
         </div>
-        <div class="console-input-group">
-          <label>Data Destination / Phone</label>
+        <div class="form-group">
+          <label>Mobile Number</label>
           <input type="tel" placeholder="+91 00000 00000">
         </div>
       </div>
-      <div class="console-input-group">
-        <label>System Parameter Target</label>
+      <div class="form-group">
+        <label>Service Required</label>
         <select>
-          <option>Industrial Volume Configuration</option>
-          <option>Standard Core Matrix Installation</option>
-          <option>System Diagnostic / Maintenance</option>
+          <option>New RO Installation</option>
+          <option>General Servicing / Repair</option>
+          <option>Filter Replacement</option>
+          <option>AMC Enquiry</option>
         </select>
       </div>
-      <div class="console-input-group">
-        <label>Project Log Brief</label>
-        <textarea placeholder="Describe technical requirements, baseline chemical parameters, or component anomalies..."></textarea>
+      <div class="form-group">
+        <label>Message / Address</label>
+        <textarea placeholder="Please describe the issue or provide your address..."></textarea>
       </div>
-      <button class="btn-system-primary" style="align-self: flex-start;">
-        Initialize Integration <span>→</span>
-      </button>
+      <button class="btn-primary" style="align-self: flex-start; margin-top: 16px;">Send Request</button>
     </div>
   </div>
 </section>
 
 <footer>
-  <div class="footer-structural-top">
-    <div class="footer-col-brand">
-      <a href="#home" class="nav-logo">AAYU<span>.</span></a>
-      <p>The transformation of fluid refinement through an industrialized, scalable, digital approach that guarantees structural results.</p>
-    </div>
+  <div class="footer-grid">
     <div>
-      <h5>Enterprise Nodes</h5>
-      <a href="#technology">Technology Matrix</a>
-      <a href="#solutions">Core Solutions</a>
-      <a href="#company">Company Profile</a>
-      <a href="#projects">Project Registry</a>
+      <a href="#home" class="footer-logo">AAYU<span>.</span></a>
+      <p>Premium water purification solutions ensuring clean, safe, and healthy drinking water for every household and business in Raipur.</p>
     </div>
-    <div>
-      <h5>Pillars</h5>
-      <a href="#pillars">Digitalization Flow</a>
-      <a href="#pillars">Fluid Sustainability</a>
-      <a href="#pillars">Asset Certification</a>
-      <a href="#faqs">Engineering FAQs</a>
+    <div class="f-col">
+      <h5>Services</h5>
+      <a href="#services">RO Installation</a>
+      <a href="#services">Repair & Servicing</a>
+      <a href="#services">Filter Change</a>
+      <a href="#plans">AMC Plans</a>
     </div>
-    <div>
-      <h5>Operational Link</h5>
+    <div class="f-col">
+      <h5>Company</h5>
+      <a href="#about">About Us</a>
+      <a href="#projects">Our Work</a>
+      <a href="#testimonials">Reviews</a>
+      <a href="#faqs">FAQs</a>
+    </div>
+    <div class="f-col">
+      <h5>Contact</h5>
       <a href="tel:+919893888224">+91 98938 88224</a>
-      <a href="mailto:systems@aayuwater.com">systems@aayuwater.com</a>
-      <p style="color: var(--muted); font-family: var(--font-body); font-size: 14px; margin-top: 16px;">Raipur, Chhattisgarh</p>
+      <a href="#contact">Book Service</a>
+      <p style="color: #888; font-size: 14px; margin-top: 16px; line-height: 1.6;">Vikash Vihaar, Raipura,<br>Raipur, CG</p>
     </div>
   </div>
-  <div class="footer-structural-bottom">
-    <p>©2026 <span class="highlight">AAYU WATER SYSTEM INTEGRATION</span></p>
-    <p>MANAGING PROCESS END-TO-END</p>
+  <div class="footer-bottom">
+    <p>© 2026 Aayu Water Solution</p>
+    <p>Operated by Rajesh Rawte</p>
   </div>
 </footer>
 
 <script>
-// Liquid Teardrop Cursor Execution Logic (Only active on fine pointers/desktop)
+// ----------------------------------------------------
+// CUSTOM CURSOR LOGIC (Runs only on non-touch devices)
+// ----------------------------------------------------
 if (window.matchMedia("(pointer: fine)").matches) {
   const cursor = document.getElementById('cursor');
   const ring = document.getElementById('cursorRing');
@@ -714,85 +630,102 @@ if (window.matchMedia("(pointer: fine)").matches) {
   });
 
   function animRing() { 
-    rx += (mx - rx) * 0.16; ry += (my - ry) * 0.16; 
+    rx += (mx - rx) * 0.15; ry += (my - ry) * 0.15; 
     ring.style.left = rx + 'px'; ring.style.top = ry + 'px'; 
     requestAnimationFrame(animRing); 
   }
   animRing();
 
-  // Advanced Morphing Matrix for Cursor Interactions
-  document.querySelectorAll('a, button, .solution-matrix-cell, .tech-step, .catalog-item-row, input, select, textarea').forEach(el => {
+  // Morphing effect for interactive elements
+  const interactives = document.querySelectorAll('a, button, .service-card, .plan-card, .project-item, input, select, textarea');
+  interactives.forEach(el => {
     el.addEventListener('mouseenter', () => { 
-      cursor.style.borderRadius = '50%'; cursor.style.background = 'rgba(0, 85, 204, 0.1)';
-      cursor.style.width = '64px'; cursor.style.height = '64px'; 
-      cursor.style.marginLeft = '-32px'; cursor.style.marginTop = '-32px'; 
-      cursor.style.boxShadow = 'inset 0 0 12px rgba(0, 85, 204, 0.3)';
-      ring.style.width = '84px'; ring.style.height = '84px'; 
-      ring.style.marginLeft = '-42px'; ring.style.marginTop = '-42px';
+      cursor.style.borderRadius = '50%'; cursor.style.background = 'rgba(0, 102, 255, 0.1)';
+      cursor.style.width = '60px'; cursor.style.height = '60px'; 
+      cursor.style.boxShadow = 'inset 0 0 12px rgba(0, 102, 255, 0.3)';
+      ring.style.width = '80px'; ring.style.height = '80px'; 
       ring.style.borderColor = 'transparent';
     });
     el.addEventListener('mouseleave', () => { 
       cursor.style.borderRadius = '0 50% 50% 50%'; cursor.style.background = 'var(--blue)';
       cursor.style.width = '12px'; cursor.style.height = '12px'; 
-      cursor.style.marginLeft = '-6px'; cursor.style.marginTop = '-6px'; 
-      cursor.style.boxShadow = '0 4px 10px rgba(0, 85, 204, 0.4)';
+      cursor.style.boxShadow = '0 4px 10px rgba(0, 102, 255, 0.4)';
       ring.style.width = '40px'; ring.style.height = '40px'; 
-      ring.style.marginLeft = '-20px'; ring.style.marginTop = '-20px';
-      ring.style.borderColor = 'rgba(0, 85, 204, 0.3)';
+      ring.style.borderColor = 'rgba(0, 102, 255, 0.3)';
     });
   });
 }
 
-// Fullscreen Slide Overlay Controls
+// ----------------------------------------------------
+// NAVIGATION SCROLL EFFECT
+// ----------------------------------------------------
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => { 
+  nav.classList.toggle('scrolled', window.scrollY > 50); 
+});
+
+// ----------------------------------------------------
+// FULLSCREEN GLASSMORPHIC MENU
+// ----------------------------------------------------
 const menuOpen = document.getElementById('menuOpen');
 const menuClose = document.getElementById('menuClose');
 const menuOverlay = document.getElementById('menuOverlay');
-const menuLinks = document.querySelectorAll('.menu-container a');
+const menuItems = document.querySelectorAll('.menu-overlay a');
 
 menuOpen.addEventListener('click', () => menuOverlay.classList.add('active'));
 menuClose.addEventListener('click', () => menuOverlay.classList.remove('active'));
-menuLinks.forEach(link => link.addEventListener('click', () => menuOverlay.classList.remove('active')));
+menuItems.forEach(item => item.addEventListener('click', () => menuOverlay.classList.remove('active')));
 
-// Scrolled Navigation Boundary Tracking
-const nav = document.getElementById('nav');
-window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 60); });
+// ----------------------------------------------------
+// MULTI-STYLE SCROLL REVEAL ANIMATIONS
+// ----------------------------------------------------
+const revealElements = document.querySelectorAll('.anim-fade-up, .anim-blur, .anim-slide-left, .anim-slide-right, .anim-scale-in');
 
-// Component Fluid Entrance Execution (Scroll Reveal + Clip-path)
-const reveals = document.querySelectorAll('.reveal, .reveal-clip');
-const obs = new IntersectionObserver((entries) => {
-  entries.forEach((e, i) => {
-    if (e.isIntersecting) {
-      e.target.style.transitionDelay = (i % 3 * 0.1) + 's';
-      e.target.classList.add('visible');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
     }
   });
-}, { threshold: 0.1 });
-reveals.forEach(r => obs.observe(r));
+}, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
 
-// Micro-Counter Interpolation Engine
-function animCount(el, target) {
-  let start = 0; const duration = 2000; const stepTime = 16;
-  const increment = target / (duration / stepTime);
+revealElements.forEach(el => observer.observe(el));
+
+// ----------------------------------------------------
+// NUMBER COUNTER ANIMATION
+// ----------------------------------------------------
+function animateCounter(el, target) {
+  let current = 0;
+  const duration = 2000;
+  const step = 16;
+  const increment = target / (duration / step);
+  
   const timer = setInterval(() => {
-    start += increment;
-    if (start >= target) { 
-      el.textContent = target % 1 !== 0 ? target.toFixed(1) : target + '+'; 
-      clearInterval(timer); 
+    current += increment;
+    if (current >= target) {
+      el.textContent = target % 1 !== 0 ? target.toFixed(1) : target + '+';
+      clearInterval(timer);
     } else {
-      el.textContent = target % 1 !== 0 ? start.toFixed(1) : Math.floor(start) + '+';
+      el.textContent = target % 1 !== 0 ? current.toFixed(1) : Math.floor(current) + '+';
     }
-  }, stepTime);
+  }, step);
 }
 
-const statNums = document.querySelectorAll('.hero-metric-num');
-const statsObs = new IntersectionObserver(entries => {
+const statNumbers = document.querySelectorAll('.stat-num');
+const statsObserver = new IntersectionObserver(entries => {
   if (entries[0].isIntersecting) {
-    animCount(statNums[0], parseFloat(statNums[0].getAttribute('data-target')));
-    animCount(statNums[1], parseFloat(statNums[1].getAttribute('data-target')));
-    statsObs.disconnect();
+    animCount(statNumbers[0], parseFloat(statNumbers[0].getAttribute('data-target')));
+    animCount(statNumbers[1], parseFloat(statNumbers[1].getAttribute('data-target')));
+    statsObserver.disconnect();
   }
-}, { threshold: 0.2 });
-if(statNums.length > 0) statsObs.observe(statNums[0]);
+}, { threshold: 0.5 });
+
+// Aliasing function to match call
+function animCount(el, target) { animateCounter(el, target); }
+
+if(statNumbers.length > 0) {
+  statsObserver.observe(statNumbers[0]);
+}
 </script>
 </body>
 </html>
